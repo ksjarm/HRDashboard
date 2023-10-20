@@ -16,7 +16,7 @@
         Employees
       </router-link>
       <router-link
-        to="/"
+        to="/shedule"
         class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 text-sm font-medium"
         active-class="bg-gray-900 text-white"
       >
