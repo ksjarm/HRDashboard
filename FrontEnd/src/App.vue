@@ -1,35 +1,33 @@
 <template>
-  <nav class="bg-gray-800">
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-      <div class="relative flex h-16 items-center justify-between">
-        <div
-          class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
-        >
-          <div class="hidden sm:ml-6 sm:block">
-            <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-
-              <router-link
-                to="/"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                active-class="bg-gray-900 text-white"
-                aria-current="page"
-                >Harjutused</router-link
-              >
-              <router-link
-                to="/newexercise"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                active-class="bg-gray-900 text-white"
-                >Lisa harjutus</router-link
-              >
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="flex h-screen bg-gray-800">
+    <nav class="w-48 bg-gray-800 flex flex-col justify-center items-center">
+      <router-link
+        to="/"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 text-sm font-medium"
+        active-class="bg-gray-900 text-white"
+      >
+        Dashboard
+      </router-link>
+      <router-link
+        to="/newexercise"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 text-sm font-medium"
+        active-class="bg-gray-900 text-white"
+      >
+        Employees
+      </router-link>
+      <router-link
+        to="/"
+        class="text-gray-300 hover:bg-gray-700 hover:text-white px-4 py-2 text-sm font-medium"
+        active-class="bg-gray-900 text-white"
+      >
+        Shedule
+      </router-link>
+    </nav>
+    <div class="flex-1 p-8">
+      <router-view />
     </div>
-  </nav>
-
-  <router-view />
+    
+  </div>
 </template>
 
 <script setup lang="ts"></script>
