@@ -2,8 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace employeeproject.Model;
 
-public record Shift
-{
+public record Shift {
     public int Id { get; init; }
     public string? Title {get; init;}
     public DateTime Date {get; init;}

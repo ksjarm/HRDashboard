@@ -2,8 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace employeeproject.Model;
 
-public class EmployeeShift
-{
+public class EmployeeShift {
     public int EmployeeId { get; set; }
     public int ShiftId { get; set; }
 
