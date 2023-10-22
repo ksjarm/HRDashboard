@@ -23,6 +23,13 @@ public record Exercise
     public int RecommendedTimeInSecondsAfterExercise { get; init; }
     [Column("rest_time_instructions")]
     public string? RestTimeInstructions {get; init; }
+    public string? Name {get;set;}
+    public string? Surname {get;set;}
+    public string? Email {get; set;}
+    public string? PhoneNumber {get;set;}
+    public string? Adress {get;set;}
+    public int? Salary {get;set;}
+    public Status Status {get;set;}
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ExerciseIntensity
@@ -32,3 +39,11 @@ public record Exercise
         High = 3,
     }
 }
+[JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum Status {
+        Active = 1,
+        OnVaction = 2,
+        OnMaternityLeave = 3,
+        OnLeaveProcess = 4
+    }
+

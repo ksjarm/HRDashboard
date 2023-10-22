@@ -61,6 +61,12 @@ const submitForm = () => {
 
   props.exercise.title = '';
   props.exercise.description = '';
+  props.exercise.name = '';
+  props.exercise.surname = '';
+  props.exercise.adress = '';
+  props.exercise.phoneNumber = '';
+  props.exercise.salary = 0;
+  props.exercise.status = '';
 
   router.push({ name: 'Harjutused' });
 };

@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-gray-800">
+  <nav class="bg-purple-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div
@@ -46,5 +46,13 @@
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.bg-purple-800 {
+  position: fixed; /* Position the nav element */
+  left: 0; /* Position it to the left */
+  top: 0; /* Adjust top if needed */
+  width: 350px; /* Set the desired width */
+  height: 100%; /* Set the desired height */
+  background-color: #ccccff; /* Add your background color */
 }
 </style>

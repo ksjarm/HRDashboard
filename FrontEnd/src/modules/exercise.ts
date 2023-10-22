@@ -7,6 +7,13 @@ export interface Exercise {
   recommendedRestTimeInSecondsBeforeExercies: number;
   recommendedRestTimeInSecondsAfterExercise: number;
   restTimeInstructions?: string;
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+  adress: string;
+  salary: number;
+  status: string;
 }
 
 export interface State {

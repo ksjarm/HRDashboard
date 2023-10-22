@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using WorkoutApplication.Model;
 using static WorkoutApplication.Model.Exercise;
-
+                       
 var builder = WebApplication.CreateBuilder(args);
 
 // build postgresql data source
