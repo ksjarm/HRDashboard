@@ -2,6 +2,7 @@ import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
 import ExercisesVue from '@/views/Exercises.vue';
 import AddExerciseVue from '@/views/AddExercise.vue';
 import UpdateExerciseVue from '@/views/UpdateExercise.vue';
+import SheduleVue from '@/components/Shedule.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/update/:id',
     name: 'Uuenda harjutust',
     component: UpdateExerciseVue,
+  },
+  {
+    path: '/shedule',
+    name: 'Shedule',
+    component: SheduleVue,
   },
 ];
 
