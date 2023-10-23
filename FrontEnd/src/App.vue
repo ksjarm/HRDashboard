@@ -1,10 +1,10 @@
 <template>
   <nav class="bg-purple-800 p-5 text-white flex items-center">
     <div class="text-3xl text-purple-600 font-bold ml-4">HR Dashboard</div>
-    <div class="bg-white rounded-full p-2 flex items-center ml-4">
+    <div class="bg-white rounded-full p-2 flex items-center ml-20">
       <input
         type="text"
-        class="bg-transparent outline-none w-110 pl-2 text-gray-500"
+        class="bg-transparent outline-none w-110 pl-4 text-gray-500"
         placeholder="Search"
       />
     </div>
