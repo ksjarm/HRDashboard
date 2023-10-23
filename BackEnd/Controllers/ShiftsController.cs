@@ -1,6 +1,6 @@
 using employeeproject.Model;
-using Microsoft.AspNetCore.Mvc;
 using WorkoutApplication.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers;
 
