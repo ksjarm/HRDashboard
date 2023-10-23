@@ -1,3 +1,4 @@
+using employeeproject.Model;
 using Microsoft.EntityFrameworkCore;
 using static WorkoutApplication.Model.Exercise;
 
@@ -9,7 +10,7 @@ public class DataContext : DbContext
     { }
 
     public DbSet<Exercise>? ExerciseList { get; set; }
-
+    public DbSet<Shift>? ShiftList { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
