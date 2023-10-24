@@ -15,5 +15,12 @@ const exercise: Ref<Exercise> = ref({
   recommendedDurationInSeconds: 40,
   recommendedRestTimeInSecondsAfterExercise: 10,
   recommendedRestTimeInSecondsBeforeExercies: 10,
+  name: '',
+  surname: '',
+  email: '',
+  phoneNumber: '',
+  adress: '',
+  salary: 0,
+  status: '',
 });
 </script>

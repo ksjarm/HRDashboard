@@ -3,10 +3,17 @@ import ExercisesVue from '@/views/Exercises.vue';
 import AddExerciseVue from '@/views/AddExercise.vue';
 import UpdateExerciseVue from '@/views/UpdateExercise.vue';
 import SheduleVue from '@/components/Shedule.vue';
+import Dashboard from '@/views/Dashboard.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
+    name: 'Dashboard',
+    component: Dashboard,
+    props: { title: 'Dashboard' },
+  },
+  {
+    path: '/exercises',
     name: 'Harjutused',
     component: ExercisesVue,
     props: { title: 'Harjutused' },
