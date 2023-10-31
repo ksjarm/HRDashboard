@@ -1,3 +1,4 @@
+using BackEnd.Model;
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ public class DataContext : DbContext
     { }
     public DbSet<Employee>? EmployeeList { get; set; }
     public DbSet<Shift>? ShiftList { get; set; }
+    public DbSet<Notification> NotificationsList { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -84,5 +86,22 @@ public class DataContext : DbContext
         modelBuilder.Entity<EmployeeShift>().HasData(
             new EmployeeShift() { EmployeeId = 1, ShiftId = 1 },
             new EmployeeShift() { EmployeeId = 2, ShiftId = 2 });
+
+        
+        modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 3);
+
+        modelBuilder.Entity<Notification>().HasData(
+            new Notification {
+                NotificationId = 1,
+                Message = "what happened",
+                Date = new DateTime(),
+                Type = "Employee Update"
+            },
+            new Notification {
+                NotificationId = 2,
+                Message = "what",
+                Date = new DateTime(),
+                Type = "Shift Change"
+            });
     }
 }
