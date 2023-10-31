@@ -1,9 +1,7 @@
 <template>
   <div>
-    <nav class="bg-purple-800 p-5 text-white flex items-center">
-      <div class="text-3xl text-purple-600 font-bold ml-1 flex">
-        HR Dashboard
-      </div>
+    <nav class="bg-indigo-200 p-5 text-white flex items-center">
+      <div class="text-3xl text-dark-600 font-bold ml-1 flex">HR Dashboard</div>
       <div class="bg-white rounded-full p-2 flex items-center ml-4 flex-grow">
         <input
           type="text"
@@ -24,7 +22,7 @@
     </nav>
     <div class="flex">
       <nav
-        class="w-14 sm:w-60 sm:h-250 bg-purple-800 flex flex-col justify-start items-start"
+        class="w-14 sm:w-60 sm:h-250 bg-indigo-200 flex flex-col justify-start items-start"
       >
         <router-link
           to="/"
@@ -34,7 +32,7 @@
           Dashboard
         </router-link>
         <router-link
-          to="/newexercise"
+          to="/employees"
           class="text-dark-300 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-12 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >
@@ -77,7 +75,7 @@ const router = useRouter();
 const secondNavClass = ref('sm:w-60 sm:h-250'); // Default class for second nav
 
 const redirectToAccountSettings = () => {
-  router.push('/newexercise'); // Adjust the route as needed
+  router.push('/newemployee'); // Adjust the route as needed
 };
 const updateSecondNavClass = () => {
   if (window.innerWidth < 640) {

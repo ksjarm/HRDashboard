@@ -1,6 +1,5 @@
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore;
-using static WorkoutApplication.Model.Exercise;
 
 namespace WorkoutApplication.Model;
 
@@ -8,48 +7,58 @@ public class DataContext : DbContext
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     { }
-
-    public DbSet<Exercise>? ExerciseList { get; set; }
+    public DbSet<Employee>? EmployeeList { get; set; }
     public DbSet<Shift>? ShiftList { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasPostgresEnum<ExerciseIntensity>();
+        modelBuilder.HasPostgresEnum<Status>();
 
-        modelBuilder.Entity<Exercise>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
+        modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
 
-        modelBuilder.Entity<Exercise>().HasData(
-            new Exercise
+        modelBuilder.Entity<Employee>().HasData(
+            new Employee
             {
                 Id = 1,
-                Title = "Kätekõverdused jala tõstega",
-                Description = "Tavalised kätekõverdused korda mööda jalga tõstes",
-                Intensity = Exercise.ExerciseIntensity.Normal,
-                RecommendedDurationInSeconds = 40,
-                RecommendedTimeInSecondsBeforeExercise = 10,
-                RecommendedTimeInSecondsAfterExercise = 10
+                Name = "Erik",
+                Surname = "Taam",
+                Gender = Gender.Male,
+                DateOfBirth = "13.09.1997",
+                Email = "erik.taam@company.com",
+                PhoneNumber = "55648836",
+                Adress = "A.H.Tammsaare tee 56-13",
+                Position = "Warehouse worker",
+                Salary = 1200,
+                Status = Status.Active
             },
-            new Exercise
+            new Employee
             {
                 Id = 2,
-                Title = "Slaalomhüpped",
-                Description = "Kükist hüpped küljelt küljele",
-                Intensity = Exercise.ExerciseIntensity.High,
-                RecommendedDurationInSeconds = 40,
-                RecommendedTimeInSecondsBeforeExercise = 10,
-                RecommendedTimeInSecondsAfterExercise = 10,
-                RestTimeInstructions = "Venita reie esikülge"
+                Name = "Mari",
+                Surname = "Saar",
+                Gender = Gender.Female,
+                DateOfBirth = "18.03.1984",
+                Email = "mari.saar@company.com",
+                PhoneNumber = "56789432",
+                Adress = "Akadeemia tee 23-15",
+                Position = "Vendor",
+                Salary = 1500,
+                Status = Status.OnMaternityLeave
             },
-            new Exercise
+            new Employee
             {
                 Id = 3,
-                Title = "Alt läbi jooks",
-                Description = "Toenglamangus jooksmine",
-                Intensity = Exercise.ExerciseIntensity.Normal,
-                RecommendedDurationInSeconds = 40,
-                RecommendedTimeInSecondsBeforeExercise = 10,
-                RecommendedTimeInSecondsAfterExercise = 10
+                Name = "Rene",
+                Surname = "Dall",
+                Email = "rene.dall@company.com",
+                Gender = Gender.Male,
+                DateOfBirth = "06.01.2001",
+                PhoneNumber = "58762309",
+                Adress = "E.Vilde tee 56-12",
+                Position = "Vendor",
+                Salary = 1500,
+                Status = Status.Active
             });
         
         modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 3);

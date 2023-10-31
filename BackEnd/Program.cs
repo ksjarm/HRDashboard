@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using WorkoutApplication.Model;
-using static WorkoutApplication.Model.Exercise;
+using static WorkoutApplication.Model.Employee;
                        
 var builder = WebApplication.CreateBuilder(args);
 
 // build postgresql data source
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("default"));
-dataSourceBuilder.MapEnum<ExerciseIntensity>();
+dataSourceBuilder.MapEnum<Status>();
+//dataSourceBuilder.MapEnum<Gender>();
 var dataSource = dataSourceBuilder.Build();
 
 // Add services to the container.

@@ -1,9 +1,9 @@
 <template>
-  <ExerciseList :title="title" />
+  <EmployeeList :title="title" />
 </template>
 
 <script setup lang="ts">
-import ExerciseList from '@/components/ExerciseList.vue';
+import EmployeeList from '@/components/EmployeeList.vue';
 
 defineProps<{ title: String }>();
 </script>

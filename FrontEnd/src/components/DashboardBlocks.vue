@@ -20,20 +20,20 @@
 </template>
 
 <script setup lang="ts">
-import { useExercisesStore } from '@/stores/exercisesStore';
+import { useEmployeesStore } from '@/stores/employeesStore';
 import { onMounted, ref, watch } from 'vue';
 
-defineProps<{ title: String }>();
+defineProps<{ name: String }>();
 
-const exercisesStore = useExercisesStore();
-const exerciseTitleFilter = ref<string>('');
+const employeesStore = useEmployeesStore();
+const employeesNameFilter = ref<string>('');
 
 onMounted(() => {
-  exercisesStore.load();
+  employeesStore.load();
 });
 
-watch(exerciseTitleFilter, (title) => {
-  exercisesStore.filterExercisesByTitle(title);
+watch(employeesNameFilter, (name) => {
+  employeesStore.filterEmployeesByName(name);
 });
 </script>
 

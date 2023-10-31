@@ -1,7 +1,7 @@
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router';
-import ExercisesVue from '@/views/Exercises.vue';
-import AddExerciseVue from '@/views/AddExercise.vue';
-import UpdateExerciseVue from '@/views/UpdateExercise.vue';
+import EmployeesVue from '@/views/Employees.vue';
+import AddEmployeeVue from '@/views/AddEmployee.vue';
+import UpdateEmployeeVue from '@/views/UpdateEmployee.vue';
 import SheduleVue from '@/components/Shedule.vue';
 import Dashboard from '@/views/Dashboard.vue';
 
@@ -13,20 +13,20 @@ const routes: Array<RouteRecordRaw> = [
     props: { title: 'Dashboard' },
   },
   {
-    path: '/exercises',
-    name: 'Harjutused',
-    component: ExercisesVue,
-    props: { title: 'Harjutused' },
+    path: '/employees',
+    name: 'Employees',
+    component: EmployeesVue,
+    props: { title: 'Employees' },
   },
   {
-    path: '/newexercise',
-    name: 'Lisa harjutus',
-    component: AddExerciseVue,
+    path: '/newemployee',
+    name: 'Add employee',
+    component: AddEmployeeVue,
   },
   {
     path: '/update/:id',
-    name: 'Uuenda harjutust',
-    component: UpdateExerciseVue,
+    name: 'Update employee ',
+    component: UpdateEmployeeVue,
   },
   {
     path: '/shedule',
