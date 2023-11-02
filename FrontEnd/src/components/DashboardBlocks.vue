@@ -12,7 +12,7 @@
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
         <div v-for="shift in todayShifts" :key="shift.id">
-          {{ shift.title }}: {{ shift.startTime }} - {{ shift.endTime }}
+          Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{ shift.title }})
         </div>
         </div>
       </div>
@@ -113,6 +113,10 @@ watch(employeesNameFilter, (name) => {
   background-color:rgba(199, 210, 254); 
   text-align: center; 
   font-size: 150%;
+}
+.shifts {
+  font-weight: normal;
+  margin-left: 20px;
 }
 
 @media (max-width: 1900px) {
