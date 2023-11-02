@@ -4,8 +4,8 @@ export interface Shift {
     id: number;
     title: string;
     date: Date;
-    startTime: Date;
-    endTime: Date;
+    startTime: String;
+    endTime: String;
     employeeShifts: EmployeeShift 
   }
   
