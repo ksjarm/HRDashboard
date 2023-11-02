@@ -8,7 +8,5 @@ public record Shift {
     public DateTime Date {get; init;}
     public TimeSpan StartTime {get; init; }
     public TimeSpan EndTime {get; init; }
-
-    [JsonIgnore]
-    public virtual EmployeeShift? EmployeeShifts { get; set; }
+    [JsonIgnore] public virtual EmployeeShift? EmployeeShifts { get; set; }
 }
