@@ -68,16 +68,16 @@ public class DataContext : DbContext
             new Shift {
                 Id = 1,
                 Title = "Evening shift",
-                Date = new DateTime(),
-                StartTime = new DateTime(),
-                EndTime = new DateTime()
+                Date = DateTime.Now.Date,
+                StartTime = new TimeSpan(13, 0, 0),
+                EndTime = new TimeSpan(21, 0, 0)
             },
             new Shift {
                 Id = 2,
                 Title = "Morning shift",
-                Date = new DateTime(),
-                StartTime = new DateTime(),
-                EndTime = new DateTime()
+                Date = DateTime.Now.Date,
+                StartTime = new TimeSpan(8, 0, 0),
+                EndTime = new TimeSpan(16, 0, 0)
             });
 
         modelBuilder.Entity<EmployeeShift>()

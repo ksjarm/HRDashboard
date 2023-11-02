@@ -31,6 +31,8 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
 
 var app = builder.Build();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 using (var scope = ((IApplicationBuilder) app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 using (var context = scope.ServiceProvider.GetService<DataContext>()) {
 
