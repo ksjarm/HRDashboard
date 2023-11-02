@@ -12,7 +12,7 @@
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
         <div v-for="shift in todayShifts" :key="shift.id">
-          {{ shift.title }}: {{ shift.startTime }} - {{ shift.endTime }} {{ shift. }}
+          {{ shift.title }}: {{ shift.startTime }} - {{ shift.endTime }}
         </div>
         </div>
       </div>
