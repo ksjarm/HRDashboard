@@ -4,6 +4,8 @@ import AddEmployeeVue from '@/views/AddEmployee.vue';
 import UpdateEmployeeVue from '@/views/UpdateEmployee.vue';
 import SheduleVue from '@/components/Shedule.vue';
 import Dashboard from '@/views/Dashboard.vue';
+import NotificationHistoryVue from '@/views/NotificationHistory.vue';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -32,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/shedule',
     name: 'Shedule',
     component: SheduleVue,
+  },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    component: NotificationHistoryVue,
   },
 ];
 
