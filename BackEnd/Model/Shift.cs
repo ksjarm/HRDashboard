@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using WorkoutApplication.Model;
 
 namespace employeeproject.Model;
 
@@ -9,6 +8,5 @@ public record Shift {
     public DateTime Date { get; init;}
     public TimeSpan StartTime { get; init; }
     public TimeSpan EndTime { get; init; }
-    public int? EmployeeId { get; set; }
-    [JsonIgnore] public Employee? Employee { get; set; }
+    [JsonIgnore] public virtual EmployeeShift? EmployeeShifts { get; set; }
 }
