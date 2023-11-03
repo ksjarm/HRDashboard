@@ -5,6 +5,21 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fullcalendar/core':
+    specifier: ^6.1.9
+    version: 6.1.9
+  '@fullcalendar/daygrid':
+    specifier: ^6.1.9
+    version: 6.1.9(@fullcalendar/core@6.1.9)
+  '@fullcalendar/interaction':
+    specifier: 6.1.9
+    version: 6.1.9(@fullcalendar/core@6.1.9)
+  '@fullcalendar/timegrid':
+    specifier: 6.1.9
+    version: 6.1.9(@fullcalendar/core@6.1.9)
+  '@fullcalendar/vue3':
+    specifier: ^6.1.9
+    version: 6.1.9(@fullcalendar/core@6.1.9)(vue@3.3.4)
   pinia:
     specifier: ^2.1.6
     version: 2.1.6(typescript@5.2.2)(vue@3.3.4)
@@ -333,6 +348,47 @@ packages:
     resolution: {integrity: sha512-NCC3zz2+nvYd+Ckfh87rA47zfu2QsQpvc6k1yzTk+b9KzRj0wkGa8LSoGOXN6Zv4lRf/EIoZ80biDh9HOI+RNQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@fullcalendar/core@6.1.9:
+    resolution: {integrity: sha512-eeG+z9BWerdsU9Ac6j16rpYpPnE0wxtnEHiHrh/u/ADbGTR3hCOjCD9PxQOfhOTHbWOVs7JQunGcksSPu5WZBQ==}
+    dependencies:
+      preact: 10.12.1
+    dev: false
+
+  /@fullcalendar/daygrid@6.1.9(@fullcalendar/core@6.1.9):
+    resolution: {integrity: sha512-o/6joH/7lmVHXAkbaa/tUbzWYnGp/LgfdiFyYPkqQbjKEeivNZWF1WhHqFbhx0zbFONSHtrvkjY2bjr+Ef2quQ==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.9
+    dependencies:
+      '@fullcalendar/core': 6.1.9
+    dev: false
+
+  /@fullcalendar/interaction@6.1.9(@fullcalendar/core@6.1.9):
+    resolution: {integrity: sha512-I3FGnv0kKZpIwujg3HllbKrciNjTqeTYy3oJG226oAn7lV6wnrrDYMmuGmA0jPJAGN46HKrQqKN7ItxQRDec4Q==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.9
+    dependencies:
+      '@fullcalendar/core': 6.1.9
+    dev: false
+
+  /@fullcalendar/timegrid@6.1.9(@fullcalendar/core@6.1.9):
+    resolution: {integrity: sha512-le7UV05wVE1Trdr054kgJXTwa+A1pEI8nlCBnPWdcyrL+dTLoPvQ4AWEVCnV7So+4zRYaCqnqGXfCJsj0RQa0g==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.9
+    dependencies:
+      '@fullcalendar/core': 6.1.9
+      '@fullcalendar/daygrid': 6.1.9(@fullcalendar/core@6.1.9)
+    dev: false
+
+  /@fullcalendar/vue3@6.1.9(@fullcalendar/core@6.1.9)(vue@3.3.4):
+    resolution: {integrity: sha512-nuEEb/6uRhD0AH3PzU4Mtod3dD7S729nA1oYorMdCYMgUvXoHJlz2wOKK8w4LGZIn6K2R8Yzo8ol33ElBjHo3A==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.9
+      vue: ^3.0.11
+    dependencies:
+      '@fullcalendar/core': 6.1.9
+      vue: 3.3.4
+    dev: false
 
   /@humanwhocodes/config-array@0.11.11:
     resolution: {integrity: sha512-N2brEuAadi0CcdeMXUkhbZB84eskAc8MEX1By6qEchoVywSgXPIjou4rYsl0V3Hj0ZnuGycGCjdNgockbzeWNA==}
@@ -1417,6 +1473,10 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /preact@10.12.1:
+    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
