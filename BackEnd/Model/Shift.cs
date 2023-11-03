@@ -1,12 +1,13 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace employeeproject.Model;
 
-public record Shift {
-    public int Id { get; init; }
-    public string? Title { get; init;}
-    public DateTime Date { get; init;}
-    public TimeSpan StartTime { get; init; }
-    public TimeSpan EndTime { get; init; }
-    [JsonIgnore] public virtual EmployeeShift? EmployeeShifts { get; set; }
+[Table("Shift")] public record Shift {
+    [Column("Id")] public int Id { get; init; }
+    [Column("Title")] public string? Title { get; init;}
+    [Column("Date")] public DateTime Date { get; init;}
+    [Column("StartTime")] public TimeSpan StartTime { get; init; }
+    [Column("EndTime")] public TimeSpan EndTime { get; init; }
+    [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
 }

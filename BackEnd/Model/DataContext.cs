@@ -4,24 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WorkoutApplication.Model;
 
-public class DataContext : DbContext
-{
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    { }
+public class DataContext : DbContext {
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
     public DbSet<Employee>? EmployeeList { get; set; }
     public DbSet<Shift>? ShiftList { get; set; }
     public DbSet<Notification> NotificationsList { get; set; }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasPostgresEnum<Status>();
-
         modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
-
         modelBuilder.Entity<Employee>().HasData(
-            new Employee
-            {
+            new Employee {
                 Id = 1,
                 Name = "Erik",
                 Surname = "Taam",
@@ -34,8 +28,7 @@ public class DataContext : DbContext
                 Salary = 1200,
                 Status = Status.Active,
             },
-            new Employee
-            {
+            new Employee {
                 Id = 2,
                 Name = "Mari",
                 Surname = "Saar",
@@ -48,8 +41,7 @@ public class DataContext : DbContext
                 Salary = 1500,
                 Status = Status.OnMaternityLeave,
             },
-            new Employee
-            {
+            new Employee {
                 Id = 3,
                 Name = "Rene",
                 Surname = "Dall",
@@ -88,14 +80,12 @@ public class DataContext : DbContext
             });
 
         modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
-
         modelBuilder.Entity<EmployeeShift>().HasData(
             new EmployeeShift() { EmployeeId = 1, ShiftId = 1 },
-            new EmployeeShift() { EmployeeId = 2, ShiftId = 2 });
-
+            new EmployeeShift() { EmployeeId = 2, ShiftId = 2 },
+            new EmployeeShift() { EmployeeId = 3, ShiftId = 3 });
         
         modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 3);
-
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
                 NotificationId = 1,

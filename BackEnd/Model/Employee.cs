@@ -29,8 +29,7 @@ public record Employee
     public int? Salary {get;init;}
     [Column("Status")]
     public Status Status {get;init;}
-    [JsonIgnore] public virtual EmployeeShift? EmployeeShifts { get; set; }
-
+    [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
 }
 [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Status {
