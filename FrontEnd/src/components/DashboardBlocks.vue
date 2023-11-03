@@ -11,9 +11,10 @@
       <div class="schedule">
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
-        <div v-for="shift in todayShifts" :key="shift.id">
-          Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{ shift.title }})
-        </div>
+          <div v-for="shift in todayShifts" :key="shift.id">
+            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{ shift.title }})
+          </div>
+          <div v-if="todayShifts.length === 0">No shifts for today.</div>
         </div>
       </div>
     </div>
