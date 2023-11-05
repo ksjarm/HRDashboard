@@ -9,10 +9,17 @@ public class ShiftsController : ControllerBase {
     private readonly DataContext _context;
     public ShiftsController(DataContext context) => _context = context;   
 
-    [HttpGet] public IActionResult Get(DateTime? date) {
-        if(date == null) return Ok(_context.ShiftList);
-        else return Ok(_context.ShiftList!.Where(s => s.Date == date).ToList());;
+    [HttpGet]
+public IActionResult Get(string? date)
+{
+    if (date == null)
+    {
+        return Ok(_context.ShiftList);
     }
+
+    var shiftsOnDate = _context.ShiftList!.Where(s => s.Date == date).ToList();
+    return Ok(shiftsOnDate);
+}
     [HttpGet("{id}")] public IActionResult GetDetails(int? id) {
         var shift = _context.ShiftList!.Find(id);
         if (shift == null) return NotFound();
