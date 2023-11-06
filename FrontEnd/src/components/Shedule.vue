@@ -53,7 +53,9 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Shift } from '@/modules/shift';
 import { watch } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const shiftsStore = useShiftsStore();
 const { shifts } = storeToRefs(shiftsStore);
 defineProps<{ title: String }>();
@@ -84,23 +86,31 @@ const addNewShift = () => {
 
   // Use the 'addShift' method to add the new shift
   shiftsStore.addShift(newShiftData);
-
+  router.push({ name: 'Shedule' });
   shiftModalVisible.value = false;
   resetNewShiftForm();
   updateCalendarEvents();
 };
 const removeShift = (shift: Shift) => {
-  // Check if the shift is in the list (the user clicked on an event)
-  const index = shifts.value.findIndex((s) => s.id === shift.id);
-  if (index !== -1) {
-    // Remove the shift from the list
-    shifts.value.splice(index, 1);
-  }
+  console.log('Removing shift with ID:', shift.id);
+  const shiftIndex = shifts.value.findIndex((s) => s.id === shift.id);
 
-  // Call a method to remove the shift from the store
-  shiftsStore.deleteShift(shift);
-  updateCalendarEvents();
+  if (shiftIndex !== -1) {
+    // The shift exists in the store, so you can proceed to remove it
+    shiftsStore.deleteShift(shift);
+    router.push({ name: 'Shedule' });
+    // Remove the shift from the browser view
+    shifts.value.splice(shiftIndex, 1);
+  } else {
+    // Handle the case where the shift is not found in the store
+    console.log(`Shift with ID ${shift.id} not found in the store.`);
+    // You can also display an error message or perform other actions
+  }
 };
+
+
+
+
 
 const resetNewShiftForm = () => {
   newShift.value.title = '';
