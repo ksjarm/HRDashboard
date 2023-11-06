@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="div1">
-      <div class="div1Text">Welcome to HR Dashboard!👋</div>
+      <h1 class="div1Text">Welcome to HR Dashboard!👋</h1>
     </div>
     <div class="div2">
       <h1 class="div2Text">⚡Employees work status statistics:</h1>
@@ -15,22 +15,23 @@
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
           <div v-for="shift in todayShifts" :key="shift.id">
-            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{ shift.title }})
+            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{
+              shift.title
+            }})
           </div>
           <div v-if="todayShifts.length === 0">No shifts for today.</div>
         </div>
       </div>
     </div>
     <div class="div2">
-      <div class="div2Text">EmployeeStat2</div>
+      <h1 class="div2Text">⚡Employees salary statistics:</h1>
+      <div class="chart-container">
+        <Bar :data="barchartData" :options="baroptions" />
+      </div>
     </div>
     <div class="div2">
       <div class="div2Text">Notifications</div>
     </div>
-    <div class="div6">
-      <div class="div1Text">Smth else</div>
-    </div>
-    <div class="div5"><div class="div5Text">Notifications</div></div>
   </div>
 </template>
 
@@ -38,6 +39,28 @@
 import { useEmployeesStore } from '@/stores/employeesStore';
 import { useShiftsStore } from '@/stores/shiftsStore';
 import { onMounted, ref, watch, computed } from 'vue';
+import { Pie } from 'vue-chartjs';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+} from 'chart.js';
+import { Bar } from 'vue-chartjs';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 defineProps<{ name: String }>();
 
@@ -174,7 +197,6 @@ const baroptions = {
 watch(employeesNameFilter, (name) => {
   employeesStore.filterEmployeesByName(name);
 });
-
 </script>
 
 <style scoped>
@@ -193,6 +215,7 @@ watch(employeesNameFilter, (name) => {
   border-color: #ccccff;
   font-size: x-large;
   font-weight: bold;
+  text-align: center;
 }
 .div6 {
   grid-column: 1 / 4;
@@ -204,15 +227,16 @@ watch(employeesNameFilter, (name) => {
   font-weight: bold;
 }
 .div1Text {
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: xx-large;
   text-align: center;
-  margin-top: 25px;
 }
 .div2 {
   background-color: white;
   border: solid;
   border-radius: 25px;
   border-color: #ccccff;
-  height: 180px;
   font-size: x-large;
   font-weight: bold;
   background-color: white;
@@ -230,8 +254,8 @@ watch(employeesNameFilter, (name) => {
   height: 100px;
 }
 .today-date {
-  background-color:rgba(199, 210, 254); 
-  text-align: center; 
+  background-color: rgba(199, 210, 254);
+  text-align: center;
   font-size: 150%;
 }
 .shifts {
