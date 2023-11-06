@@ -77,4 +77,11 @@ public class EmployeesController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("currentEmployeeCount")]
+    public IActionResult GetCurrentEmployeeCount()
+    {
+        int currentEmployeeCount = _context.EmployeeList!.Count();
+        return Ok(currentEmployeeCount);
+    }
+
 }

@@ -11,13 +11,13 @@ const employee: Ref<Employee> = ref({
   id: 0,
   name: '',
   surname: '',
-  gender: '',
+  gender: 'Male',
   dateOfBirth: '',
   email: '',
   phoneNumber: '',
   adress: '',
   position: '',
   salary: 0,
-  status: '',
+  status: 'Active',
 });
 </script>

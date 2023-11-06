@@ -53,7 +53,7 @@
           Notifications
         </router-link>
         <router-link
-          to="/exercises"
+          to="/notifications"
           class="text-dark-300 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-17 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >

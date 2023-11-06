@@ -10,14 +10,11 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
 
   const loadEmployees = async () => {
     await apiGetEmployees.request();
-
     if (apiGetEmployees.response.value) {
       return apiGetEmployees.response.value!;
     }
-
     return [];
   };
-
   const load = async () => {
     allEmployees = await loadEmployees();
     employees.value = allEmployees;
@@ -88,6 +85,18 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     );
   };
 
+  const apiGetCurrentEmployeeCount = useApi<number>(
+    'employees/currentEmployeeCount',
+  );
+
+  const getCurrentEmployeeCount = async () => {
+    await apiGetCurrentEmployeeCount.request();
+    if (apiGetCurrentEmployeeCount.response.value) {
+      return apiGetCurrentEmployeeCount.response.value!;
+    }
+    return 0;
+  };
+
   return {
     employees,
     load,
@@ -96,5 +105,6 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     updateEmployee,
     deleteEmployee,
     filterEmployeesByName,
+    getCurrentEmployeeCount,
   };
 });
