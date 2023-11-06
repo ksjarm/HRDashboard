@@ -1,5 +1,5 @@
 using employeeproject.Model;
-using WorkoutApplication.Model;
+using HRDashboardApplication.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd.Controllers;

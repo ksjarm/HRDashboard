@@ -1,6 +1,6 @@
 using BackEnd.Model;
 using Microsoft.AspNetCore.Mvc;
-using WorkoutApplication.Model;
+using HRDashboardApplication.Model;
 
 namespace BackEnd.Controllers;
 

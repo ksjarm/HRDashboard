@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using WorkoutApplication.Model;
+using HRDashboardApplication.Model;
 
 namespace employeeproject.Model;
 

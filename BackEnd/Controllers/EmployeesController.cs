@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using WorkoutApplication.Model;
-using static WorkoutApplication.Model.Employee;
+using HRDashboardApplication.Model;
+using static HRDashboardApplication.Model.Employee;
 
-namespace WorkoutApplication.Controllers;
+namespace HRDashboardApplication.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

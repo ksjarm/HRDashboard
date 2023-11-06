@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace WorkoutApplication.Model;
+namespace HRDashboardApplication.Model;
 [Table("employee")]
 public record Employee
 {

@@ -2,7 +2,7 @@ using BackEnd.Model;
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace WorkoutApplication.Model;
+namespace HRDashboardApplication.Model;
 
 public class DataContext : DbContext {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
