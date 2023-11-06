@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using WorkoutApplication.Model;
-using static WorkoutApplication.Model.Employee;
+using HRDashboardApplication.Model;
+using static HRDashboardApplication.Model.Employee;
                        
 var builder = WebApplication.CreateBuilder(args);
 

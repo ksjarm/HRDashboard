@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["@fullcalendar/vue3"],
     "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",

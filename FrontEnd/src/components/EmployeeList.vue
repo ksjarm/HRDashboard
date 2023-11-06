@@ -24,6 +24,7 @@
         <Column field="name" header="Name" />
         <Column field="surname" header="Surname" />
         <Column field="position" header="Position" />
+        <Column field="status" header="Status"></Column>
         <Column>
           <template #body="{ data }">
             <div>
@@ -38,6 +39,12 @@
                 @click="remove(data)"
               >
                 X
+              </button>
+              <button
+                class="border bg-green-400 text-green-900 py-0 px-3 ml-2 border-green-900 font-bold"
+                @click="remove(data)"
+              >
+                ...
               </button>
             </div>
           </template>
@@ -57,8 +64,8 @@ import { useRouter } from 'vue-router';
 const employeesStore = useEmployeesStore();
 const { employees } = storeToRefs(employeesStore);
 const employeesNameFilter = ref<string>('');
-
 defineProps<{ title: String }>();
+
 
 onMounted(() => {
   employeesStore.load();

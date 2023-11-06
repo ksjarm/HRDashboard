@@ -34,5 +34,6 @@ getRuntimeConf().then((json) => {
   app.component('DataTable', DataTable);
   app.component('Column', Column);
 
+
   app.mount('#app');
 });

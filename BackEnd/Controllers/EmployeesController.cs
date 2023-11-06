@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using WorkoutApplication.Model;
-using static WorkoutApplication.Model.Employee;
+using HRDashboardApplication.Model;
+using static HRDashboardApplication.Model.Employee;
 
-namespace WorkoutApplication.Controllers;
+namespace HRDashboardApplication.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -77,4 +77,11 @@ public class EmployeesController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("currentEmployeeCount")]
+    public IActionResult GetCurrentEmployeeCount()
+    {
+        int currentEmployeeCount = _context.EmployeeList!.Count();
+        return Ok(currentEmployeeCount);
+    }
+
 }

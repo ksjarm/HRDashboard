@@ -2,7 +2,7 @@ using BackEnd.Model;
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace WorkoutApplication.Model;
+namespace HRDashboardApplication.Model;
 
 public class DataContext : DbContext {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
@@ -60,23 +60,23 @@ public class DataContext : DbContext {
             new Shift {
                 Id = 1,
                 Title = "Evening shift",
-                Date = DateTime.Now.Date,
-                StartTime = new TimeSpan(13, 0, 0),
-                EndTime = new TimeSpan(21, 0, 0),
+                Date = "2023-11-21",
+                StartTime = "13:00",
+                EndTime = "21:00",
             },
             new Shift {
                 Id = 2,
                 Title = "Morning shift",
-                Date = DateTime.Now.Date,
-                StartTime = new TimeSpan(8, 0, 0),
-                EndTime = new TimeSpan(16, 0, 0),
+                Date = "2023-11-16",
+                StartTime = "8:00",
+                EndTime = "16:00",
             },
             new Shift {
                 Id = 3,
                 Title = "All day shift",
-                Date = new DateTime(2023, 12, 1).Date,
-                StartTime = new TimeSpan(13, 0, 0),
-                EndTime = new TimeSpan(21, 0, 0),
+                Date = "2023-11-09",
+                StartTime = "13:00",
+                EndTime = "21:00",
             });
 
         modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });

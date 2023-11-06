@@ -1,5 +1,5 @@
 <template>
-  <div class="addemployeeLabel">Add Employee</div>
+  <div class="flex justify-center labelDiv bg-indigo-200">Add Employee</div>
   <div
     class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-6 minusmargin"
   >
@@ -13,7 +13,7 @@
               name="name"
               v-model="props.employee.name"
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Nimi"
+              placeholder="Name"
             />
           </div>
           <div>
@@ -42,6 +42,7 @@
             <label for="dateOfBirth">Date of birth</label>
             <input
               id="dateOfBirth"
+              type="date"
               name="dateOfBirth"
               v-model="props.employee.dateOfBirth"
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -67,7 +68,7 @@
             />
           </div>
           <div>
-            <label for="adress">Address</label>
+            <label for="adress">Adress</label>
             <input
               id="adress"
               name="adress"
@@ -83,11 +84,11 @@
               v-model="props.employee.position"
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             >
-              <option value="1">Vendor</option>
-              <option value="2">Shift Manager</option>
-              <option value="3">Warehouse worker</option>
-              <option value="4">Accountant</option>
-              <option value="5">Consultant</option>
+              <option>Vendor</option>
+              <option>Shift Manager</option>
+              <option>Warehouse worker</option>
+              <option>Accountant</option>
+              <option>Consultant</option>
             </select>
           </div>
           <div>
@@ -109,6 +110,9 @@
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             >
               <option value="1">Active</option>
+              <option value="2">On vacation</option>
+              <option value="3">On Maternity Leave</option>
+              <option value="4">On Leave process</option>
             </select>
           </div>
         </div>
@@ -116,7 +120,7 @@
         <div>
           <button
             @click.prevent="submitForm"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-200 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
             </span>
@@ -147,13 +151,13 @@ const submitForm = () => {
 
   props.employee.name = '';
   props.employee.surname = '';
-  props.employee.gender = '';
+  props.employee.gender = 'Male';
   props.employee.dateOfBirth = '';
   props.employee.adress = '';
   props.employee.phoneNumber = '';
   props.employee.position = '';
   props.employee.salary = 0;
-  props.employee.status = '';
+  props.employee.status = 'Active';
 
   router.push({ name: 'Employees' });
 };
@@ -167,6 +171,12 @@ const submitForm = () => {
   align-items: center;
 }
 .minusmargin {
-  margin-top: -50px;
+  margin-top: -80px;
+}
+.labelDiv {
+  font-size: xx-large;
+  border: solid;
+  border-color: black;
+  border-radius: 25px;
 }
 </style>

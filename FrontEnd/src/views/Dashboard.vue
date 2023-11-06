@@ -1,8 +1,9 @@
 <template>
-  <DashboardBlocks :title="title" />
+  <DashboardBlocks :name="name" />
 </template>
 
 <script setup lang="ts">
 import DashboardBlocks from '@/components/DashboardBlocks.vue';
-defineProps<{ title: String }>();
+
+defineProps<{ name: String }>();
 </script>

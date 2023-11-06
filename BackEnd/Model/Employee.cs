@@ -3,31 +3,31 @@ using System.Text.Json.Serialization;
 using employeeproject.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace WorkoutApplication.Model;
+namespace HRDashboardApplication.Model;
 [Table("employee")]
 public record Employee
 {
     [Column("id")]
     public int Id { get; init; }
-    [Column("Name")]
+    [Column("name")]
     public string? Name {get;init;}
-    [Column("Surname")]
+    [Column("surname")]
     public string? Surname {get;init;}
-    [Column("Gender")]
+    [Column("gender")]
     public Gender? Gender {get;init;}
-    [Column("DateOfBirth")]
+    [Column("dateOfBirth")]
     public string? DateOfBirth {get;init;}
-    [Column("Email")]
+    [Column("email")]
     public string? Email {get; init;}
-    [Column("Phonenumber")]
+    [Column("phonenumber")]
     public string? PhoneNumber {get;init;}
-    [Column("Adress")]
+    [Column("adress")]
     public string? Adress {get;init;}
-    [Column("Position")]
+    [Column("position")]
     public string? Position {get;init;}
-     [Column("Salary")]
+     [Column("salary")]
     public int? Salary {get;init;}
-    [Column("Status")]
+    [Column("status")]
     public Status Status {get;init;}
     [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
 }
