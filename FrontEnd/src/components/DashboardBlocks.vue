@@ -31,13 +31,13 @@
     </div>
     <div class="div2">
       <div class="div2Text">Notifications</div>
-    </div>
-
       <div class="notification-block" v-for="notification in lastTwoNotifications" :key="notification.notificationId">
         <div>{{notification.date}}  {{ notification.type }}</div>
       </div>
-    </div>   
-  </div>
+    </div>
+
+     
+    </div>  
 </template>
 
 <script setup lang="ts">
