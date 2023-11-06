@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using employeeproject.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WorkoutApplication.Model;
@@ -28,7 +29,7 @@ public record Employee
     public int? Salary {get;init;}
     [Column("status")]
     public Status Status {get;init;}
-
+    [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
 }
 [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Status {

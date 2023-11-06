@@ -1,12 +1,11 @@
-import { EmployeeShift } from "./employeeShift";
 
 export interface Shift {
     id: number;
     title: string;
-    date: Date;
-    startTime: Date;
-    endTime: Date;
-    employeeShifts: EmployeeShift 
+    date: string;
+    startTime: string;
+    endTime: string;
+    //employeeShifts: EmployeeShift
   }
   
   export interface State {

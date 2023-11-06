@@ -64,8 +64,8 @@ import { useRouter } from 'vue-router';
 const employeesStore = useEmployeesStore();
 const { employees } = storeToRefs(employeesStore);
 const employeesNameFilter = ref<string>('');
-
 defineProps<{ title: String }>();
+
 
 onMounted(() => {
   employeesStore.load();

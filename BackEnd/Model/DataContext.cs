@@ -4,24 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WorkoutApplication.Model;
 
-public class DataContext : DbContext
-{
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    { }
+public class DataContext : DbContext {
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
     public DbSet<Employee>? EmployeeList { get; set; }
     public DbSet<Shift>? ShiftList { get; set; }
     public DbSet<Notification> NotificationsList { get; set; }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasPostgresEnum<Status>();
-
         modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
-
         modelBuilder.Entity<Employee>().HasData(
-            new Employee
-            {
+            new Employee {
                 Id = 1,
                 Name = "Erik",
                 Surname = "Taam",
@@ -32,10 +26,9 @@ public class DataContext : DbContext
                 Adress = "A.H.Tammsaare tee 56-13",
                 Position = "Warehouse worker",
                 Salary = 1200,
-                Status = Status.Active
+                Status = Status.Active,
             },
-            new Employee
-            {
+            new Employee {
                 Id = 2,
                 Name = "Mari",
                 Surname = "Saar",
@@ -46,10 +39,9 @@ public class DataContext : DbContext
                 Adress = "Akadeemia tee 23-15",
                 Position = "Vendor",
                 Salary = 1500,
-                Status = Status.OnMaternityLeave
+                Status = Status.OnMaternityLeave,
             },
-            new Employee
-            {
+            new Employee {
                 Id = 3,
                 Name = "Rene",
                 Surname = "Dall",
@@ -60,7 +52,7 @@ public class DataContext : DbContext
                 Adress = "E.Vilde tee 56-12",
                 Position = "Vendor",
                 Salary = 1500,
-                Status = Status.Active
+                Status = Status.Active,
             });
         
         modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
@@ -68,28 +60,32 @@ public class DataContext : DbContext
             new Shift {
                 Id = 1,
                 Title = "Evening shift",
-                Date = new DateTime(),
-                StartTime = new DateTime(),
-                EndTime = new DateTime()
+                Date = "2023-11-21",
+                StartTime = "13:00",
+                EndTime = "21:00",
             },
             new Shift {
                 Id = 2,
                 Title = "Morning shift",
-                Date = new DateTime(),
-                StartTime = new DateTime(),
-                EndTime = new DateTime()
+                Date = "2023-11-16",
+                StartTime = "8:00",
+                EndTime = "16:00",
+            },
+            new Shift {
+                Id = 3,
+                Title = "All day shift",
+                Date = "2023-11-09",
+                StartTime = "13:00",
+                EndTime = "21:00",
             });
 
-        modelBuilder.Entity<EmployeeShift>()
-            .HasKey(key => new { key.EmployeeId, key.ShiftId });
-
+        modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
         modelBuilder.Entity<EmployeeShift>().HasData(
             new EmployeeShift() { EmployeeId = 1, ShiftId = 1 },
-            new EmployeeShift() { EmployeeId = 2, ShiftId = 2 });
-
+            new EmployeeShift() { EmployeeId = 2, ShiftId = 2 },
+            new EmployeeShift() { EmployeeId = 3, ShiftId = 3 });
         
         modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 3);
-
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
                 NotificationId = 1,

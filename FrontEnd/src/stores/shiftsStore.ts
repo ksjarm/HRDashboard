@@ -3,11 +3,13 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
 
+
 export const useShiftsStore = defineStore('shiftsStore', () => {
     const apiGetShifts = useApi<Shift[]>('shifts');
   const shifts = ref<Shift[]>([]);
   let allShifts: Shift[] = [];
 
+  
   const loadShifts = async () => {
     await apiGetShifts.request();
 
@@ -44,21 +46,27 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   };
 
   const updateShift = async (shift: Shift) => {
-    const apiAddShift = useApi<Shift>('shifts/' + shift.id, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(shift),
-    });
-
-    await apiAddShift.request();
-    if (apiAddShift.response.value) {
-      load();
+    try {
+      const apiUpdateShift = useApi<Shift>('shifts/' + shift.id, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(shift),
+      });
+  
+      await apiUpdateShift.request();
+  
+      if (apiUpdateShift.response.value) {
+        load(); // Refresh the shifts after a successful update
+      }
+    } catch (error) {
+      console.error('Error updating shift:', error);
+      // Handle the error (e.g., display an error message)
     }
   };
-
+  
   const deleteShift = async (shift: Shift) => {
     const deleteShiftRequest = useApiRawRequest(`shifts/${shift.id}`, {
       method: 'DELETE',

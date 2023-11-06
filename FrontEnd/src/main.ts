@@ -6,6 +6,8 @@ import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/saga-blue/theme.css'; //theme
 import 'primevue/resources/primevue.min.css'; //core css
 import 'primeicons/primeicons.css'; //icons
+import FullCalendar from '@fullcalendar/vue3';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import router from './router/router';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -25,6 +27,9 @@ getRuntimeConf().then((json) => {
   app.use(createPinia());
   app.use(PrimeVue);
   app.use(router);
+  app.component('FullCalendar', FullCalendar);
+  app.component('daydayGrid', dayGridPlugin);
+  
 
   app.component('DataTable', DataTable);
   app.component('Column', Column);

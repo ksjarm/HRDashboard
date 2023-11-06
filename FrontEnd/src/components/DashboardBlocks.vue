@@ -9,14 +9,26 @@
         <Pie :data="piechartData" :options="pieoptions" />
       </div>
     </div>
-    <div class="div3">
-      <div class="div3Text">Scheldule</div>
+    <div class="div2">
+      <div class="div2Text">Schedule</div>
+      <div class="schedule">
+        <div class="today-date">{{ today.toLocaleDateString() }}</div>
+        <div class="shifts">
+          <div v-for="shift in todayShifts" :key="shift.id">
+            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{ shift.title }})
+          </div>
+          <div v-if="todayShifts.length === 0">No shifts for today.</div>
+        </div>
+      </div>
     </div>
     <div class="div2">
-      <h1 class="div2Text">⚡Employees salary statistics:</h1>
-      <div class="chart-container">
-        <Bar :data="barchartData" :options="baroptions" />
-      </div>
+      <div class="div2Text">EmployeeStat2</div>
+    </div>
+    <div class="div2">
+      <div class="div2Text">Notifications</div>
+    </div>
+    <div class="div6">
+      <div class="div1Text">Smth else</div>
     </div>
     <div class="div5"><div class="div5Text">Notifications</div></div>
   </div>
@@ -24,38 +36,26 @@
 
 <script setup lang="ts">
 import { useEmployeesStore } from '@/stores/employeesStore';
+import { useShiftsStore } from '@/stores/shiftsStore';
 import { onMounted, ref, watch, computed } from 'vue';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from 'chart.js';
-import { Pie } from 'vue-chartjs';
-import { Bar } from 'vue-chartjs';
-
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-);
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 defineProps<{ name: String }>();
 
 const employeesStore = useEmployeesStore();
 const employeesNameFilter = ref<string>('');
+const today = new Date();
+const shiftsStore = useShiftsStore();
+
+const todayShifts = computed(() => {
+  return shiftsStore.shifts.filter((shift) => {
+    const shiftDate = new Date(shift.date);
+    return shiftDate.toDateString() === today.toDateString();
+  });
+});
 
 onMounted(() => {
   employeesStore.load();
+  shiftsStore.load();
 });
 
 const piechartData = computed(() => {
@@ -174,6 +174,7 @@ const baroptions = {
 watch(employeesNameFilter, (name) => {
   employeesStore.filterEmployeesByName(name);
 });
+
 </script>
 
 <style scoped>
@@ -211,6 +212,7 @@ watch(employeesNameFilter, (name) => {
   border: solid;
   border-radius: 25px;
   border-color: #ccccff;
+  height: 180px;
   font-size: x-large;
   font-weight: bold;
   background-color: white;
@@ -225,6 +227,16 @@ watch(employeesNameFilter, (name) => {
 .div4,
 .div5 {
   background-color: #3399ff;
+  height: 100px;
+}
+.today-date {
+  background-color:rgba(199, 210, 254); 
+  text-align: center; 
+  font-size: 150%;
+}
+.shifts {
+  font-weight: normal;
+  margin-left: 20px;
 }
 
 @media (max-width: 1900px) {
