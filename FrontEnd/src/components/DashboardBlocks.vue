@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="div2">
-      <div class="div2Text">Schedule</div>
+      <div class="div2Text">⚡Schedule</div>
       <div class="schedule">
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
@@ -30,9 +30,9 @@
       </div>
     </div>
     <div class="div2">
-      <div class="div2Text">Notifications</div>
+      <div class="div2Text">⚡Notifications</div>
       <div class="notification-block" v-for="notification in lastTwoNotifications" :key="notification.notificationId">
-        <div>{{notification.date}}  {{ notification.type }}</div>
+        <div>{{new Date(notification.date).toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }) }}  {{ notification.type }}</div>
       </div>
     </div>
 
@@ -85,7 +85,7 @@ const todayShifts = computed(() => {
 });
 
 const lastTwoNotifications = computed(() => {
-  return notificationsStore.notifications.slice(-2).reverse(); 
+  return notificationsStore.notifications.slice(-3).reverse(); 
 });
 
 onMounted(() => {

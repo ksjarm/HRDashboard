@@ -89,20 +89,20 @@ public class DataContext : DbContext {
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
                 NotificationId = 1,
-                Message = "what happened",
-                Date = new DateTime(),
-                Type = "Employee Update"
+                Message = "Annual performance reviews coming up",
+                Date = new DateTime(2023, 11, 1, 14, 0, 0),
+                Type = "Reminder"
             },
             new Notification {
                 NotificationId = 2,
-                Message = "what happened",
-                Date = new DateTime(),
+                Message = "You changed employee{id} adress",
+                Date = new DateTime(2023, 11, 2, 9, 30, 0),
                 Type = "Employee Update"
             },
             new Notification {
                 NotificationId = 3,
-                Message = "what",
-                Date = new DateTime(),
+                Message = "You changed employee{id} shift ",
+                Date = new DateTime(2023, 11, 3, 16, 45, 0),
                 Type = "Shift Change"
             });
             
