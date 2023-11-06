@@ -1,12 +1,12 @@
-import { Notifications } from '@/modules/notifications';
+import { Notification } from '@/modules/notifications';
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
 
 export const useNotificationsStore = defineStore('notificationsStore', () => {
-  const apiGetNotifications = useApi<Notifications[]>('notifications');
-  const notifications = ref<Notifications[]>([]);
-  let allNotifications: Notifications[] = [];
+  const apiGetNotifications = useApi<Notification[]>('notifications');
+  const notifications = ref<Notification[]>([]);
+  let allNotifications: Notification[] = [];
 
   const loadNotifications = async () => {
     await apiGetNotifications.request();
@@ -20,48 +20,49 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
 
   const load = async () => {
     allNotifications = await loadNotifications();
+    console.log(allNotifications);
     notifications.value = allNotifications;
   };
 
   const getNotificationById = (id: number) => {
-    return allNotifications.find((notification) => notification.NotificationId === id);
+    return allNotifications.find((notification) => notification.notificationId === id);
   };
-//
-  // const addNotifications = async (notification: Notifications) => {
-  //   const apiNotification = useApi<Notifications>('notifications', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(notification),
-  //   });
 
-  //   await apiNotification.request();
-  //   if (apiNotification.response.value) {
-  //     allNotifications.push(apiNotification.response.value!);
-  //     notifications.value = allNotifications;
-  //   }
-  // };
+  const addNotifications = async (notification: Notification) => {
+    const apiNotification = useApi<Notification>('notifications', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(notification),
+    });
 
-  // const updateNotifications = async (notification: Notifications) => {
-  //   const apiAddExercise = useApi<Notifications>('notifications/' + notification.NotificationId, {
-  //     method: 'PUT',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(notification),
-  //   });
+    await apiNotification.request();
+    if (apiNotification.response.value) {
+      allNotifications.push(apiNotification.response.value!);
+      notifications.value = allNotifications;
+    }
+  };
 
-  //   await apiAddExercise.request();
-  //   if (apiAddExercise.response.value) {
-  //     load();
-  //   }
-  // };
-//
-  const deleteNotification = async (notification: Notifications) => {
-    const deleteExerciseRequest = useApiRawRequest(`exercises/${notification.NotificationId}`, {
+  const updateNotifications = async (notification: Notification) => {
+    const apiAddExercise = useApi<Notification>('notifications/' + notification.notificationId, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(notification),
+    });
+
+    await apiAddExercise.request();
+    if (apiAddExercise.response.value) {
+      load();
+    }
+  };
+
+  const deleteNotification = async (notification: Notification) => {
+    const deleteExerciseRequest = useApiRawRequest(`notifications/${notification.notificationId}`, {
       method: 'DELETE',
     });
 
@@ -84,7 +85,7 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
 
   const filterNotificationsByMessage = (employeesNameFilter: string) => {
     notifications.value = allNotifications.filter((x) =>
-      x.Message.startsWith(employeesNameFilter),
+      x.message.startsWith(employeesNameFilter),
     );
   };
 
@@ -93,8 +94,8 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
     notifications,
     load,
     getNotificationById,
-    // addNotifications,
-    // updateNotifications,
+    addNotifications,
+    updateNotifications,
     deleteNotification,
     filterNotificationsByMessage,
   };

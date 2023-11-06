@@ -1,11 +1,11 @@
-export interface Notifications {
-    NotificationId: number;
-    Message: string;
-    Date: Date;
-    Type: string;
+export interface Notification {
+    notificationId: number;
+    message: string;
+    date: Date;
+    type: string;
   }
   
   export interface State {
-    exercises: Notifications[];
+    exercises: Notification[];
   }
   

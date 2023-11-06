@@ -85,7 +85,7 @@ public class DataContext : DbContext {
             new EmployeeShift() { EmployeeId = 2, ShiftId = 2 },
             new EmployeeShift() { EmployeeId = 3, ShiftId = 3 });
         
-        modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 3);
+        modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
                 NotificationId = 1,
@@ -95,9 +95,17 @@ public class DataContext : DbContext {
             },
             new Notification {
                 NotificationId = 2,
+                Message = "what happened",
+                Date = new DateTime(),
+                Type = "Employee Update"
+            },
+            new Notification {
+                NotificationId = 3,
                 Message = "what",
                 Date = new DateTime(),
                 Type = "Shift Change"
             });
+            
     }
 }
+ 

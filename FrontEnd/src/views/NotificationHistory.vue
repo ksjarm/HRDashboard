@@ -7,4 +7,3 @@
   
   defineProps<{ title: String }>();
   </script>
-  

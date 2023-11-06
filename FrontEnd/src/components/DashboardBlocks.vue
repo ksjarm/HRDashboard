@@ -23,16 +23,18 @@
     </div>
     <div class="div2">
       <div class="div2Text">Notifications</div>
-    </div>
-    <div class="div6">
-      <div class="div1Text">Smth else</div>
-    </div>
+
+      <div class="notification-block" v-for="notification in lastTwoNotifications" :key="notification.notificationId">
+        <div>{{notification.date}}  {{ notification.type }}</div>
+      </div>
+    </div>   
   </div>
 </template>
 
 <script setup lang="ts">
 import { useEmployeesStore } from '@/stores/employeesStore';
 import { useShiftsStore } from '@/stores/shiftsStore';
+import { useNotificationsStore } from '@/stores/notificationsStore';
 import { onMounted, ref, watch, computed } from 'vue';
 
 defineProps<{ name: String }>();
@@ -42,6 +44,8 @@ const employeesNameFilter = ref<string>('');
 const today = new Date();
 const shiftsStore = useShiftsStore();
 
+const notificationsStore = useNotificationsStore();
+
 const todayShifts = computed(() => {
   return shiftsStore.shifts.filter((shift) => {
     const shiftDate = new Date(shift.date);
@@ -49,9 +53,14 @@ const todayShifts = computed(() => {
   });
 });
 
+const lastTwoNotifications = computed(() => {
+  return notificationsStore.notifications.slice(-2).reverse(); 
+});
+
 onMounted(() => {
   employeesStore.load();
   shiftsStore.load();
+  notificationsStore.load();
 });
 
 watch(employeesNameFilter, (name) => {
@@ -119,7 +128,12 @@ watch(employeesNameFilter, (name) => {
   font-weight: normal;
   margin-left: 20px;
 }
-
+.notification-block{
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
 @media (max-width: 1900px) {
   .container {
     grid-template-columns: 1fr 1fr;
