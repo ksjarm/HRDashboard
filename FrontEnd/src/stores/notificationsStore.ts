@@ -46,7 +46,7 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
   };
 
   const updateNotifications = async (notification: Notification) => {
-    const apiAddExercise = useApi<Notification>('notifications/' + notification.notificationId, {
+    const apiNotification = useApi<Notification>('notifications/' + notification.notificationId, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -55,18 +55,18 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
       body: JSON.stringify(notification),
     });
 
-    await apiAddExercise.request();
-    if (apiAddExercise.response.value) {
+    await apiNotification.request();
+    if (apiNotification.response.value) {
       load();
     }
   };
 
   const deleteNotification = async (notification: Notification) => {
-    const deleteExerciseRequest = useApiRawRequest(`notifications/${notification.notificationId}`, {
+    const deleteNotificationRequest = useApiRawRequest(`notifications/${notification.notificationId}`, {
       method: 'DELETE',
     });
 
-    const res = await deleteExerciseRequest();
+    const res = await deleteNotificationRequest();
 
     if (res.status === 204) {
       let id = allNotifications.indexOf(notification);

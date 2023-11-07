@@ -31,12 +31,11 @@
     </div>
     <div class="div2">
       <div class="div2Text">⚡Notifications</div>
+      <div v-if="lastTwoNotifications.length === 0"> Notifications not found </div>
       <div class="notification-block" v-for="notification in lastTwoNotifications" :key="notification.notificationId">
         <div>{{new Date(notification.date).toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }) }}  {{ notification.type }}</div>
       </div>
-    </div>
-
-     
+    </div>     
     </div>  
 </template>
 
@@ -276,7 +275,7 @@ watch(employeesNameFilter, (name) => {
   margin-left: 20px;
 }
 .notification-block{
-  background-color: #f0f0f0;
+  background-color: rgba(199, 210, 254, 0.294);
   padding: 10px;
   border-radius: 8px;
   margin-top: 10px;

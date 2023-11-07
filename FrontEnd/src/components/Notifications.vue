@@ -3,7 +3,7 @@
   <div>
     <div class="text-center">
       <div class="bg-indigo-200 flex-1">
-        <h1 class="font-bold mb-10 mt-10 heading"> Notifications History</h1>
+        <h1 class="font-bold mb-10 mt-10 heading">Notifications History</h1>
       </div>
     </div>
     <div class="notifications-container">
@@ -11,10 +11,15 @@
         <div v-for="notification in notifications" 
           :key="notification.notificationId" 
             class="notification-block">
-        <h3>{{ formatDate(notification.date) }}</h3>
-        <p><strong>Type:</strong> {{ notification.type }}</p>
-        <p><strong>Message:</strong> {{ notification.message }}</p>
-        
+          <div class="date-time">
+            <strong>{{ formatDate(notification.date) }}</strong>
+            <p>{{ formatTime(notification.date) }}</p>
+          </div>
+          <div class="type-message">
+            <strong>{{ notification.type }}:</strong>
+            <p> {{ notification.message }}</p>            
+          </div>
+          <button class="delete-button" @click="deleteNotification(notification)">X</button>
         </div>
       </div>
       <div v-else>
@@ -28,16 +33,20 @@
 import { onMounted } from 'vue';
 import { useNotificationsStore } from '@/stores/notificationsStore';
 
-const { notifications, load } = useNotificationsStore();
+
+const { notifications, load , deleteNotification} = useNotificationsStore();
 
 onMounted(async () => {
   await load(); 
-});
+  notifications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());});
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString();
 };
 
+const formatTime = (date: Date) => {
+  return new Date(date).toLocaleTimeString();
+};
 
 </script>
 
@@ -45,13 +54,48 @@ const formatDate = (date: Date) => {
 .notifications-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  
 }
 
 .notification-block {
+  display: flex;
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 16px;
   background-color: #f9f9f9;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.date-time {
+  padding: 16px;
+  border-right: 1px solid #ccc; 
+  flex-basis: 20%; 
+  text-align: center; 
+}
+
+.type-message {
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.date-time strong {
+  margin-bottom: 8px; 
+}
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: darkred;
 }
 </style>
