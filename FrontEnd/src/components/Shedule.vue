@@ -23,7 +23,7 @@
 
         <div>
         <ul class="event-list">
-          <li v-for="shift in shifts" :key="shift.id" class="event-list-item" @click="removeShift(shift)">
+          <li v-for="shift in shifts" :key="shift.id" class="event-list-item" >
             {{ shift.title }} - {{ shift.date }} ({{ shift.startTime }} - {{ shift.endTime }})
             <button @click="removeShift(shift)" class="btn-remove-shift">Remove Shift</button>
           </li>
@@ -33,7 +33,6 @@
       class='demo-app-calendar'
       :options='calendarOptions'
       :events='calendarOptions.events'
-      
     >
       <template v-slot:eventContent='arg'>
         <b>{{ arg.timeText }}</b>
@@ -53,11 +52,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Shift } from '@/modules/shift';
 import { watch } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
 const shiftsStore = useShiftsStore();
 const { shifts } = storeToRefs(shiftsStore);
+
 defineProps<{ title: String }>();
 
 const shiftModalVisible = ref(false);
@@ -69,9 +67,9 @@ const newShift = ref({
 });
 
 
-const addNewShift = () => {
+const addNewShift = async () => {
   const newShiftData: Shift = {
-    id: generateUniqueId(), // Generate a unique ID
+    id: generateUniqueId(),
     title: newShift.value.title,
     date: formatToISODate(newShift.value.date),
     startTime: formatTime(newShift.value.startTime),
@@ -79,38 +77,25 @@ const addNewShift = () => {
     // Add other properties for shift details as needed
   };
 
-  // Check if the ID is already in use and generate a new ID if needed
   while (shifts.value.some((shift) => shift.id === newShiftData.id)) {
     newShiftData.id = generateUniqueId();
   }
 
-  // Use the 'addShift' method to add the new shift
-  shiftsStore.addShift(newShiftData);
-  router.push({ name: 'Shedule' });
+  // Use async/await to ensure the shift is added before proceeding
+  await shiftsStore.addShift(newShiftData);
+
+  // After adding the shift, update the UI and perform other operations
+  updateCalendarEvents();
   shiftModalVisible.value = false;
   resetNewShiftForm();
-  updateCalendarEvents();
-};
-const removeShift = (shift: Shift) => {
-  console.log('Removing shift with ID:', shift.id);
-  const shiftIndex = shifts.value.findIndex((s) => s.id === shift.id);
-
-  if (shiftIndex !== -1) {
-    // The shift exists in the store, so you can proceed to remove it
-    shiftsStore.deleteShift(shift);
-    router.push({ name: 'Shedule' });
-    // Remove the shift from the browser view
-    shifts.value.splice(shiftIndex, 1);
-  } else {
-    // Handle the case where the shift is not found in the store
-    console.log(`Shift with ID ${shift.id} not found in the store.`);
-    // You can also display an error message or perform other actions
-  }
 };
 
+const removeShift = async (shift: Shift) => {
 
-
-
+    // Use await to ensure the asynchronous operation completes before proceeding
+    await shiftsStore.deleteShift(shift);
+    updateCalendarEvents();
+};
 
 const resetNewShiftForm = () => {
   newShift.value.title = '';
@@ -155,8 +140,6 @@ const calendarOptions = ref({
   weekends: false,
   events: [] as any[], // Explicitly set the type here as any[]
 });
-
-
 
 onMounted(() => {
   shiftsStore.load();
