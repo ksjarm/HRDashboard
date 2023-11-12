@@ -9,5 +9,18 @@ namespace employeeproject.Model;
     [Column("Date")] public string? Date { get; init;}
     [Column("StartTime")] public string? StartTime { get; init; }
     [Column("EndTime")] public string? EndTime { get; init; }
+     [Column("Valik")] public Valik Valik { get; init; }
+      [Column("StartDate")] public string? StartDate { get; init; }
+    [Column("EndDate")] public string? EndDate { get; init; }
+     [Column("SelectedWeekDay")] public string? SelectedWeekDay { get; init; }
    // [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
+
+   
+
 }
+[JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum Valik {
+        Onetime=1,
+        Recurring=2
+
+    }

@@ -8,33 +8,61 @@
     <div v-if="shiftModalVisible" class="shift-modal">
       <h2>Create New Shift</h2>
       <input v-model="newShift.title" placeholder="Title" />
-      <input v-model="newShift.date" type="date" placeholder="Date" />
+
+      <label>
+        <input v-model="newShift.valik" type="radio" value="Onetime" />
+        One-Time Shift
+      </label>
+
+      <label>
+        <input v-model="newShift.valik" type="radio" value="Recurring" />
+        Recurring Shift
+      </label>
+
+      <div v-if="newShift.valik === 'Recurring'">
+        <label>Start Date:</label>
+        <input v-model="newShift.startDate" type="date" />
+        <label>End Date:</label>
+        <input v-model="newShift.endDate" type="date" />
+
+        <!-- Dropdown list for selecting a single weekday -->
+        <label>Select Weekday:</label>
+        <select v-model="newShift.selectedWeekDay">
+          <option v-for="day in weekdays" :key="day" :value="day">{{ day }}</option>
+        </select>
+      </div>
+
+      <div v-if="newShift.valik === 'Onetime'">
+        <label>Date:</label>
+        <input v-model="newShift.date" type="date" />
+      </div>
+
+      <label>Shift Time:</label>
       <input v-model="newShift.startTime" type="time" placeholder="Start Time" />
       <input v-model="newShift.endTime" type="time" placeholder="End Time" />
-      <button
-            @click="addNewShift"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-            </span>
-            Add shift
-          </button>
-        </div>
 
-        <div>
-        <ul class="event-list">
-          <li v-for="shift in shifts" :key="shift.id" class="event-list-item" >
-            {{ shift.title }} - {{ shift.date }} ({{ shift.startTime }} - {{ shift.endTime }})
-            <button @click="removeShift(shift)" class="btn-remove-shift">Remove Shift</button>
-          </li>
-        </ul>
-      </div>
+      <button
+        @click="addNewShift"
+        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+        Add shift
+      </button>
+    </div>
+    <div>
+      <ul class="event-list">
+        <li v-for="shift in shifts" :key="shift.id" class="event-list-item">
+          {{ shift.title }} - {{ shift.date }} ({{ shift.startTime }} - {{ shift.endTime }})
+          <button @click="removeShift(shift)" class="btn-remove-shift">Remove Shift</button>
+        </li>
+      </ul>
+    </div>
     <FullCalendar
-      class='demo-app-calendar'
-      :options='calendarOptions'
-      :events='calendarOptions.events'
+      class="demo-app-calendar"
+      :options="calendarOptions"
+      :events="calendarOptions.events"
     >
-      <template v-slot:eventContent='arg'>
+      <template v-slot:eventContent="arg">
         <b>{{ arg.timeText }}</b>
         <i>{{ arg.event.title }}</i>
       </template>
@@ -44,7 +72,7 @@
 
 <script setup lang="ts">
 import { useShiftsStore } from '@/stores/shiftsStore';
-import { onMounted, ref} from 'vue';
+import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -64,37 +92,88 @@ const newShift = ref({
   date: new Date().toISOString().slice(0, 10),
   startTime: '',
   endTime: '',
+  valik: 'Onetime', // Default type is 'Onetime'
+  startDate: new Date().toISOString().slice(0, 10),
+  endDate: new Date().toISOString().slice(0, 10),
+  selectedWeekDay: '',
 });
 
+const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const addNewShift = async () => {
-  const newShiftData: Shift = {
-    id: generateUniqueId(),
-    title: newShift.value.title,
-    date: formatToISODate(newShift.value.date),
-    startTime: formatTime(newShift.value.startTime),
-    endTime: formatTime(newShift.value.endTime),
-    // Add other properties for shift details as needed
-  };
+  const { title, valik, startDate, endDate, selectedWeekDay, startTime, endTime } = newShift.value;
 
-  while (shifts.value.some((shift) => shift.id === newShiftData.id)) {
-    newShiftData.id = generateUniqueId();
+  if (valik === 'Onetime') {
+    const newShiftData = {
+      id: generateUniqueId(),
+      title,
+      date: formatToISODate(newShift.value.date),
+      startTime: formatTime(startTime),
+      endTime: formatTime(endTime),
+      valik: 'Onetime',
+    };
+
+    await addAndDisplayShift(newShiftData);
+  } else {
+    const selectedWeekdays = Array.isArray(selectedWeekDay) ? selectedWeekDay : [selectedWeekDay];
+    const recurringShifts = generateRecurringShifts(
+      title, // <-- Explicitly typing the title parameter
+      startDate,
+      endDate,
+      selectedWeekdays,
+      startTime,
+      endTime
+    );
+
+    for (const shift of recurringShifts) {
+      await addAndDisplayShift(shift);
+    }
   }
 
-  // Use async/await to ensure the shift is added before proceeding
-  await shiftsStore.addShift(newShiftData);
-
-  // After adding the shift, update the UI and perform other operations
-  updateCalendarEvents();
-  shiftModalVisible.value = false;
   resetNewShiftForm();
 };
 
-const removeShift = async (shift: Shift) => {
+const generateRecurringShifts = (
+  title: string, // <-- Explicitly typing the title parameter
+  startDate: string,
+  endDate: string,
+  selectedWeekdays: string[],
+  startTime: string,
+  endTime: string
+) => {
+  const shifts = [];
+  const currentDate = new Date(startDate);
+  const end = new Date(endDate);
 
-    // Use await to ensure the asynchronous operation completes before proceeding
-    await shiftsStore.deleteShift(shift);
-    updateCalendarEvents();
+  while (currentDate <= end) {
+    if (selectedWeekdays.includes(weekdays[currentDate.getDay()])) {
+      shifts.push({
+        id: generateUniqueId(),
+        title,
+        date: formatToISODate(currentDate.toISOString().slice(0, 10)),
+        startTime: formatTime(startTime),
+        endTime: formatTime(endTime),
+        valik: 'Recurring',
+      });
+    }
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return shifts;
+};
+const addAndDisplayShift = async (shift: Shift) => {
+  while (shifts.value.some((existingShift) => existingShift.id === shift.id)) {
+    shift.id = generateUniqueId();
+  }
+
+  await shiftsStore.addShift(shift);
+  updateCalendarEvents();
+};
+const removeShift = async (shift: Shift) => {
+  // Use await to ensure the asynchronous operation completes before proceeding
+  await shiftsStore.deleteShift(shift);
+  updateCalendarEvents();
 };
 
 const resetNewShiftForm = () => {
@@ -102,6 +181,10 @@ const resetNewShiftForm = () => {
   newShift.value.date = new Date().toISOString().substr(0, 10);
   newShift.value.startTime = '';
   newShift.value.endTime = '';
+  newShift.value.valik = 'Onetime'; // Default type is 'Onetime'
+  newShift.value.startDate = new Date().toISOString().substr(0, 10);
+  newShift.value.endDate = new Date().toISOString().substr(0, 10);
+  newShift.value.selectedWeekDay = '';
 };
 
 let counter = 0;
@@ -153,6 +236,7 @@ const updateCalendarEvents = () => {
     end: `${shift.date}T${shift.endTime}`,
   }));
 };
+
 const openShiftModal = () => {
   shiftModalVisible.value = true;
 };
