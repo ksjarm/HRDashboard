@@ -134,7 +134,7 @@ const addNewShift = async () => {
 };
 
 const generateRecurringShifts = (
-  title: string, // <-- Explicitly typing the title parameter
+  title: string, 
   startDate: string,
   endDate: string,
   selectedWeekdays: string[],
