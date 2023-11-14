@@ -60,8 +60,7 @@
       :events="calendarOptions.events"
     >
       <template v-slot:eventContent="arg">
-        <b>{{ arg.timeText }}</b>
-        <i @click="handleEventClick(arg)">{{ arg.event.title }}</i>
+        <b @click="handleEventClick(arg)">{{ arg.event.title }}</b>
       </template>
     </FullCalendar>
   </div>
@@ -239,7 +238,6 @@ const calendarOptions = ref({
   weekends: false,
   events: [] as any[], // Explicitly set the type here as any[]
   eventClick: handleEventClick,
-  eventColor: 'blue',
   
 });
 
