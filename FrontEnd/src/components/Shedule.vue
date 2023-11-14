@@ -3,6 +3,10 @@
     <div class="text-center">
       <h1 class="font-bold schedule-header">{{ title }}</h1>
     </div>
+    <div>
+      <button @click="toggleWeekends">Toggle Weekends</button>
+    </div>
+
     <button @click="openShiftModal" class="btn-create-shift">Create New Shift</button>
 
     <div v-if="shiftModalVisible" class="shift-modal">
@@ -125,7 +129,11 @@ const addNewShift = async () => {
 
   resetNewShiftForm();
 };
-
+const toggleWeekends = () => {
+  calendarOptions.value.weekends = !calendarOptions.value.weekends;
+  // You might want to refresh the events here if needed
+  updateCalendarEvents();
+};
 const generateRecurringShifts = (
   title: string, 
   startDate: string,
@@ -205,7 +213,6 @@ function formatTime(timeString: string): string {
   return timeString; // Return as is if invalid format
 }
 const handleEventClick = (arg: any) => {
-  console.log('Event clicked:', arg.event.title, 'ID:', arg.event.id);
 
   const confirmed = window.confirm(`Are you sure you want to delete the shift '${arg.event.title}'?`);
 
@@ -216,7 +223,6 @@ const handleEventClick = (arg: any) => {
     const shift = shifts.value.find((s) => s.id === eventId);
 
     if (shift) {
-      console.log('Removing shift:', shift);
       removeShift(shift);
     } else {
       console.log('Shift not found');
