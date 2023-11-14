@@ -49,14 +49,7 @@
         Add shift
       </button>
     </div>
-    <div>
-      <ul class="event-list">
-        <li v-for="shift in shifts" :key="shift.id" class="event-list-item">
-          {{ shift.title }} - {{ shift.date }} ({{ shift.startTime }} - {{ shift.endTime }})
-          <button @click="removeShift(shift)" class="btn-remove-shift">Remove Shift</button>
-        </li>
-      </ul>
-    </div>
+  
     <FullCalendar
       class="demo-app-calendar"
       :options="calendarOptions"
@@ -211,7 +204,25 @@ function formatTime(timeString: string): string {
   }
   return timeString; // Return as is if invalid format
 }
+const handleEventClick = (arg: any) => {
+  console.log('Event clicked:', arg.event.title, 'ID:', arg.event.id);
 
+  const confirmed = window.confirm(`Are you sure you want to delete the shift '${arg.event.title}'?`);
+
+  if (confirmed) {
+    // Convert the FullCalendar event ID to a number
+    const eventId = parseInt(arg.event.id);
+
+    const shift = shifts.value.find((s) => s.id === eventId);
+
+    if (shift) {
+      console.log('Removing shift:', shift);
+      removeShift(shift);
+    } else {
+      console.log('Shift not found');
+    }
+  }
+};
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   headerToolbar: {
@@ -222,6 +233,7 @@ const calendarOptions = ref({
   initialView: 'dayGridMonth',
   weekends: false,
   events: [] as any[], // Explicitly set the type here as any[]
+  eventClick: handleEventClick,
 });
 
 onMounted(() => {
@@ -231,11 +243,13 @@ onMounted(() => {
 
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
+    id: shift.id, // Set the event's id to the shift's id
     title: shift.title,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
   }));
 };
+
 
 const openShiftModal = () => {
   shiftModalVisible.value = true;
