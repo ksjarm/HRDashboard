@@ -61,7 +61,7 @@
     >
       <template v-slot:eventContent="arg">
         <b>{{ arg.timeText }}</b>
-        <i>{{ arg.event.title }}</i>
+        <i @click="handleEventClick(arg)">{{ arg.event.title }}</i>
       </template>
     </FullCalendar>
   </div>
@@ -218,9 +218,8 @@ const handleEventClick = (arg: any) => {
 
   if (confirmed) {
     // Convert the FullCalendar event ID to a number
-    const eventId = parseInt(arg.event.id);
+    const shift = shifts.value.find((s) => s.id === parseInt(arg.event.id));
 
-    const shift = shifts.value.find((s) => s.id === eventId);
 
     if (shift) {
       removeShift(shift);
@@ -240,6 +239,8 @@ const calendarOptions = ref({
   weekends: false,
   events: [] as any[], // Explicitly set the type here as any[]
   eventClick: handleEventClick,
+  eventColor: 'blue',
+  
 });
 
 onMounted(() => {
