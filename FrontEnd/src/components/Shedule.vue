@@ -9,18 +9,22 @@
 
     <button @click="openShiftModal" class="btn-create-shift">Create New Shift</button>
 
-    <div v-if="shiftModalVisible" class="shift-modal">
-      <h2>Create New Shift</h2>
+    <div v-if="shiftModalVisible" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+        <h2>Create New Shift</h2>
+      <button @click="closeShiftModal" class="close-button">Close</button>
+      </div>
       <input v-model="newShift.title" placeholder="Title" maxlength="50" />
-      
-      <label>
+
+      <label class="shift-type-label">
         <input v-model="newShift.valik" type="radio" value="Onetime" />
-        One-Time Shift
+        <span>One-Time Shift</span>
       </label>
 
-      <label>
+      <label class="shift-type-label">
         <input v-model="newShift.valik" type="radio" value="Recurring" />
-        Recurring Shift
+        <span>Recurring Shift</span>
       </label>
 
       <div v-if="newShift.valik === 'Recurring'">
@@ -30,10 +34,12 @@
         <input v-model="newShift.endDate" type="date" />
 
         <!-- Dropdown list for selecting a single weekday -->
-        <label>Select Weekday:</label>
-        <select v-model="newShift.selectedWeekDay">
+        <label class="weekday-label">Select Weekday:</label>
+        <div class="weekday-input">
+        <select v-model="newShift.selectedWeekDay" class="full-width">
           <option v-for="day in weekdays" :key="day" :value="day">{{ day }}</option>
         </select>
+        </div>
       </div>
 
       <div v-if="newShift.valik === 'Onetime'">
@@ -52,6 +58,7 @@
         <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
         Add shift
       </button>
+      </div>
     </div>
   
     <FullCalendar
@@ -60,7 +67,8 @@
       :events="calendarOptions.events"
     >
       <template v-slot:eventContent="arg">
-        <b @click="handleEventClick(arg)">{{ arg.event.title }}</b>
+        <b v-if="!shiftModalVisible" @click="handleEventClick(arg)">{{ arg.event.title }}</b>
+       <b v-else>{{ arg.event.title }}</b>
       </template>
     </FullCalendar>
   </div>
@@ -125,6 +133,7 @@ const addNewShift = async () => {
       await addAndDisplayShift(shift);
     }
   }
+  closeShiftModal();
   resetNewShiftForm();
 };
 const toggleWeekends = () => {
@@ -250,7 +259,14 @@ const updateCalendarEvents = () => {
 
 const openShiftModal = () => {
   shiftModalVisible.value = true;
+  document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
 };
+
+const closeShiftModal = () => {
+  shiftModalVisible.value = false;
+  document.body.style.overflow = ''; // Reset overflow to default
+};
+
 
 watch(shifts, () => {
   updateCalendarEvents();
@@ -258,11 +274,75 @@ watch(shifts, () => {
 </script>
 
 <style scoped>
+/* ... your existing styles ... */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+.blurred {
+  filter: blur(5px); /* Adjust the blur level as needed */
+}
+
+/* Add a style to prevent pointer events when the shift modal is open */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px); /* Add backdrop-filter for blur effect */
+  z-index: 2; /* Ensure the modal overlay is above the underlying content */
+  pointer-events: auto; /* Enable pointer events on the overlay */
+}
+
+.modal {
+    background: #f8f8f8; /* Light gray background */
+    padding: 15px;
+    border-radius: 12px; /* More rounded corners */
+    width: 500px;
+    z-index: 3; /* Ensure the modal is above the modal overlay */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Increased space between positions */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
+  }
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.close-button:hover {
+  color: #ff0000; /* Change color on hover if desired */
+}
+
+/* Ensure the FullCalendar is below the modal and modal overlay */
+.demo-app-calendar {
+  position: relative;
+  z-index: 1;
+}
 .schedule-header {
   font-size: 24px;
   color: #333;
   text-align: center;
 }
+
 .btn-create-shift {
   margin-top: 10px;
   background-color: rgb(76, 99, 175);
@@ -298,4 +378,56 @@ watch(shifts, () => {
 .event-list-item {
   margin-bottom: 10px; 
 }
+input {
+    padding: 12px; /* Increased padding */
+    background-color: #f0f0f0; /* Lighter gray background for input fields */
+    border: none; /* Remove the border */
+    border-radius: 8px; /* More rounded corners */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .radio-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .radio-label input {
+    margin-right: 5px;
+  }
+  .shift-type-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .shift-type-label input {
+    vertical-align: middle;
+    margin-right: -450px;
+  }
+
+  .shift-type-label span {
+    vertical-align: middle;
+  }
+  .weekday-label {
+    margin-top: 10px; /* Add space between the select weekday and the labels above */
+  }
+  .weekday-input {
+    margin-top: 5px; /* Adjust the margin as needed */
+  }
+  .full-width {
+    width: 100%; /* Adjust the width and consider any padding or margin */
+    padding: 6px; /* Add padding to match the input fields */
+    border-radius: 8px; /* Add border-radius for rounded corners */
+    background-color: #f0f0f0; /* Lighter gray background for consistency */
+    border: 1px solid #ccc; /* Remove the default border */
+  }
+
+  
 </style>
