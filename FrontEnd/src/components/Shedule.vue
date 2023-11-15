@@ -11,8 +11,8 @@
 
     <div v-if="shiftModalVisible" class="shift-modal">
       <h2>Create New Shift</h2>
-      <input v-model="newShift.title" placeholder="Title" />
-
+      <input v-model="newShift.title" placeholder="Title" maxlength="50" />
+      
       <label>
         <input v-model="newShift.valik" type="radio" value="Onetime" />
         One-Time Shift
@@ -113,7 +113,7 @@ const addNewShift = async () => {
   } else {
     const selectedWeekdays = Array.isArray(selectedWeekDay) ? selectedWeekDay : [selectedWeekDay];
     const recurringShifts = generateRecurringShifts(
-      title, // <-- Explicitly typing the title parameter
+      title, 
       startDate,
       endDate,
       selectedWeekdays,
@@ -125,12 +125,10 @@ const addNewShift = async () => {
       await addAndDisplayShift(shift);
     }
   }
-
   resetNewShiftForm();
 };
 const toggleWeekends = () => {
   calendarOptions.value.weekends = !calendarOptions.value.weekends;
-  // You might want to refresh the events here if needed
   updateCalendarEvents();
 };
 const generateRecurringShifts = (
@@ -171,7 +169,6 @@ const addAndDisplayShift = async (shift: Shift) => {
   updateCalendarEvents();
 };
 const removeShift = async (shift: Shift) => {
-  // Use await to ensure the asynchronous operation completes before proceeding
   await shiftsStore.deleteShift(shift);
   updateCalendarEvents();
 };
@@ -190,35 +187,30 @@ const resetNewShiftForm = () => {
 let counter = 0;
 
 function generateUniqueId() {
-  // Increment the counter and return the new ID as a number
   return ++counter;
 }
 
-// Helper function to convert date format to ISO 8601
 function formatToISODate(dateString: string): string {
   const parts = dateString.split('-');
   if (parts.length === 3) {
     return `${parts[0]}-${parts[1]}-${parts[2]}`;
   }
-  return dateString; // Return as is if invalid format
+  return dateString; 
 }
 
-// Helper function to convert time format to ISO 8601
 function formatTime(timeString: string): string {
   const parts = timeString.split(':');
   if (parts.length === 2) {
     return `${parts[0]}:${parts[1]}`;
   }
-  return timeString; // Return as is if invalid format
+  return timeString; 
 }
 const handleEventClick = (arg: any) => {
 
   const confirmed = window.confirm(`Are you sure you want to delete the shift '${arg.event.title}'?`);
 
   if (confirmed) {
-    // Convert the FullCalendar event ID to a number
     const shift = shifts.value.find((s) => s.id === parseInt(arg.event.id));
-
 
     if (shift) {
       removeShift(shift);
@@ -236,7 +228,7 @@ const calendarOptions = ref({
   },
   initialView: 'dayGridMonth',
   weekends: false,
-  events: [] as any[], // Explicitly set the type here as any[]
+  events: [] as any[],
   eventClick: handleEventClick,
   
 });
@@ -248,7 +240,7 @@ onMounted(() => {
 
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
-    id: shift.id, // Set the event's id to the shift's id
+    id: shift.id, 
     title: shift.title,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
@@ -286,8 +278,7 @@ watch(shifts, () => {
   background-color: #fff;
 }
 .calendar-container {
-  margin-top: 20px; /* Adjust margin as needed */
-  /* Add any additional CSS styles for the calendar container */
+  margin-top: 20px; 
 }
 .btn-remove-shift {
   background-color: red;
@@ -305,6 +296,6 @@ watch(shifts, () => {
 }
 
 .event-list-item {
-  margin-bottom: 10px; /* Adjust the margin to control the spacing */
+  margin-bottom: 10px; 
 }
 </style>
