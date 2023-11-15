@@ -106,14 +106,20 @@ const handleDateClick = (arg: any) => {
   openShiftModal();
 
   const dateStr = formatToISODate(arg.date);
+  const timeStr = formatToISOTime(arg.date); // Function to extract time from the date
   newShift.value.date = dateStr;
   newShift.value.startDate = dateStr;
   newShift.value.endDate = dateStr;
 
   newShift.value.valik = 'Onetime';
-
+  newShift.value.startTime = timeStr;
 };
-
+const formatToISOTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const validationError = ref('');
