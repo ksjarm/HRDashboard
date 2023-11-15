@@ -102,20 +102,29 @@ const newShift = ref({
   selectedWeekDay: '',
 });
 
+const handleDateClick = (arg: any) => {
+  openShiftModal();
+
+  const dateStr = formatToISODate(arg.date);
+  newShift.value.date = dateStr;
+  newShift.value.startDate = dateStr;
+  newShift.value.endDate = dateStr;
+
+  newShift.value.valik = 'Onetime';
+
+};
+
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const validationError = ref('');
 
 const validateAndAddShift = async () => {
-  // Reset previous validation error
   validationError.value = '';
 
-  // Validate input fields
   if (!validateInput()) {
     return;
   }
 
-  // Continue with adding a new shift
   addNewShift();
 };
 
@@ -223,11 +232,11 @@ function generateUniqueId() {
 }
 
 function formatToISODate(dateString: string): string {
-  const parts = dateString.split('-');
-  if (parts.length === 3) {
-    return `${parts[0]}-${parts[1]}-${parts[2]}`;
-  }
-  return dateString; 
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 function formatTime(timeString: string): string {
@@ -262,7 +271,7 @@ const calendarOptions = ref({
   weekends: false,
   events: [] as any[],
   eventClick: handleEventClick,
-  
+  dateClick:handleDateClick,
 });
 
 onMounted(() => {
@@ -280,15 +289,25 @@ const updateCalendarEvents = () => {
 };
 
 
-const openShiftModal = () => {
+const openShiftModal = (payload?: MouseEvent, defaultDate: string | null = null) => {
+  if (payload) {
+    payload.preventDefault();
+  }
   shiftModalVisible.value = true;
-  document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+  document.body.style.overflow = 'hidden'; 
+
+  newShift.value.date = defaultDate || new Date().toISOString().slice(0, 10);
+  newShift.value.startDate = defaultDate || new Date().toISOString().slice(0, 10);;
+  newShift.value.endDate = defaultDate || new Date().toISOString().slice(0, 10);;
+  newShift.value.valik = 'Onetime';
+
 };
+
 
 const closeShiftModal = () => {
   shiftModalVisible.value = false;
   validationError.value = '';
-  document.body.style.overflow = ''; // Reset overflow to default
+  document.body.style.overflow = ''; 
 };
 
 
@@ -298,7 +317,6 @@ watch(shifts, () => {
 </script>
 
 <style scoped>
-/* ... your existing styles ... */
 .validation-error {
   color: red;
   margin-bottom: 10px;
@@ -316,10 +334,9 @@ watch(shifts, () => {
   margin: 0;
 }
 .blurred {
-  filter: blur(5px); /* Adjust the blur level as needed */
+  filter: blur(5px); 
 }
 
-/* Add a style to prevent pointer events when the shift modal is open */
 
 .modal-overlay {
   position: fixed;
