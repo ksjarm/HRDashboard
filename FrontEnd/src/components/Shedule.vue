@@ -6,7 +6,7 @@
     <div>
       <button @click="toggleWeekends">Toggle Weekends</button>
     </div>
-
+   
     <button @click="openShiftModal" class="btn-create-shift">Create New Shift</button>
 
     <div v-if="shiftModalVisible" class="modal-overlay">
@@ -50,9 +50,9 @@
       <label>Shift Time:</label>
       <input v-model="newShift.startTime" type="time" placeholder="Start Time" />
       <input v-model="newShift.endTime" type="time" placeholder="End Time" />
-
+      <div v-if="validationError" class="validation-error">{{ validationError }}</div>
       <button
-        @click="addNewShift"
+      @click="validateAndAddShift"
         class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
@@ -104,6 +104,29 @@ const newShift = ref({
 
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+const validationError = ref('');
+
+const validateAndAddShift = async () => {
+  // Reset previous validation error
+  validationError.value = '';
+
+  // Validate input fields
+  if (!validateInput()) {
+    return;
+  }
+
+  // Continue with adding a new shift
+  addNewShift();
+};
+
+const validateInput = () => {
+  if (!newShift.value.title || !newShift.value.startTime || !newShift.value.endTime) {
+    validationError.value = 'Please fill in all required fields.';
+    return false;
+  }
+
+  return true;
+};
 const addNewShift = async () => {
   const { title, valik, startDate, endDate, selectedWeekDay, startTime, endTime } = newShift.value;
 
@@ -264,6 +287,7 @@ const openShiftModal = () => {
 
 const closeShiftModal = () => {
   shiftModalVisible.value = false;
+  validationError.value = '';
   document.body.style.overflow = ''; // Reset overflow to default
 };
 
@@ -275,6 +299,10 @@ watch(shifts, () => {
 
 <style scoped>
 /* ... your existing styles ... */
+.validation-error {
+  color: red;
+  margin-bottom: 10px;
+}
 .modal-header {
   display: flex;
   justify-content: space-between;
