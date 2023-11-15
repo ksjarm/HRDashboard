@@ -9,6 +9,20 @@
    
     <button @click="openShiftModal" class="btn-create-shift">Create New Shift</button>
 
+    <div v-if="confirmationModalVisible" class="modal-overlay">
+      <div class="modal ">
+        <div class="modal-header">
+          <h2>Confirm Action</h2>
+          <button @click="closeConfirmationModal" class="close-button">Close</button>
+        </div >
+        <p>Do you want to delete or edit the shift?</p>
+        <div class="button-container">
+          <button @click="deleteShift" class="btn-delete">Delete Shift</button>
+          <button @click="editShift" class="btn-edit">Edit Shift</button>
+        </div>
+      </div>
+    </div>
+
     <div v-if="shiftModalVisible" class="modal-overlay">
       <div class="modal">
         <div class="modal-header">
@@ -101,6 +115,36 @@ const newShift = ref({
   endDate: new Date().toISOString().slice(0, 10),
   selectedWeekDay: '',
 });
+const confirmationModalVisible = ref(false);
+let selectedShift: Shift | null = null;
+
+const handleEventClick = (arg: any) => {
+  selectedShift = shifts.value.find((s) => s.id === parseInt(arg.event.id)) || null;
+  openConfirmationModal();
+};
+
+const openConfirmationModal = () => {
+  confirmationModalVisible.value = true;
+  document.body.style.overflow = 'hidden';
+};
+
+const closeConfirmationModal = () => {
+  confirmationModalVisible.value = false;
+  document.body.style.overflow = '';
+};
+
+const deleteShift = () => {
+  if (selectedShift) {
+    removeShift(selectedShift);
+    closeConfirmationModal();
+  }
+};
+
+const editShift = () => {
+  // Implement your edit logic here
+  // You can redirect to a separate edit page or show another modal for editing
+  closeConfirmationModal();
+};
 
 const handleDateClick = (arg: any) => {
   openShiftModal();
@@ -252,20 +296,6 @@ function formatTime(timeString: string): string {
   }
   return timeString; 
 }
-const handleEventClick = (arg: any) => {
-
-  const confirmed = window.confirm(`Are you sure you want to delete the shift '${arg.event.title}'?`);
-
-  if (confirmed) {
-    const shift = shifts.value.find((s) => s.id === parseInt(arg.event.id));
-
-    if (shift) {
-      removeShift(shift);
-    } else {
-      console.log('Shift not found');
-    }
-  }
-};
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   headerToolbar: {
@@ -323,6 +353,20 @@ watch(shifts, () => {
 </script>
 
 <style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px); /* Add backdrop-filter for blur effect */
+  z-index: 2; /* Ensure the modal overlay is above the underlying content */
+  pointer-events: auto; /* Enable pointer events on the overlay */
+}
 .validation-error {
   color: red;
   margin-bottom: 10px;
@@ -344,20 +388,7 @@ watch(shifts, () => {
 }
 
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(5px); /* Add backdrop-filter for blur effect */
-  z-index: 2; /* Ensure the modal overlay is above the underlying content */
-  pointer-events: auto; /* Enable pointer events on the overlay */
-}
+
 
 .modal {
     background: #f8f8f8; /* Light gray background */
@@ -479,6 +510,25 @@ input {
     background-color: #f0f0f0; /* Lighter gray background for consistency */
     border: 1px solid #ccc; /* Remove the default border */
   }
+  button-container {
+  display: flex;
+  justify-content: center;
+}
 
+.btn-delete,
+.btn-edit {
+  background-color: #e53e3e;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.btn-edit {
+  background-color: #4299e1;
+}
   
 </style>
