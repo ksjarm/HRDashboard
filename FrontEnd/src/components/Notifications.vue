@@ -30,15 +30,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useNotificationsStore } from '@/stores/notificationsStore';
+import { Notification } from '@/modules/notifications'; 
 
-
-const { notifications, load , deleteNotification} = useNotificationsStore();
+const notificationsStore = useNotificationsStore();
+const notifications = ref(notificationsStore.notifications);
 
 onMounted(async () => {
-  await load(); 
-  notifications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());});
+  await notificationsStore.load(); 
+  notifications.value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+});
+
+const deleteNotification = async (notification: Notification) => {
+  await notificationsStore.deleteNotification(notification);
+  notifications.value = notifications.value.filter(n => n.notificationId !== notification.notificationId);
+};
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString();
