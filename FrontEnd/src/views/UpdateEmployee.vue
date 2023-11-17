@@ -24,6 +24,7 @@ const employee: Ref<Employee> = ref<Employee>({
   position: '',
   salary: 0,
   status: '',
+  photo: '',
 });
 
 onMounted(async () => {

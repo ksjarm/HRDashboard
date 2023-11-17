@@ -27,6 +27,7 @@ public class DataContext : DbContext {
                 Position = "Warehouse worker",
                 Salary = 1200,
                 Status = Status.Active,
+                Photo = "../assets/profileimg2.png"
             },
             new Employee {
                 Id = 2,
