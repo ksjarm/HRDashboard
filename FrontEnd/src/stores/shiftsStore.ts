@@ -2,6 +2,7 @@ import { Shift } from '@/modules/shift';
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
+import { useNotificationsStore } from '@/stores/notificationsStore';
 
 
 export const useShiftsStore = defineStore('shiftsStore', () => {
@@ -42,6 +43,13 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
     if (apiAddShift.response.value) {
       allShifts.push(apiAddShift.response.value!);
       shifts.value = allShifts;
+
+      const notificationsStore = useNotificationsStore();
+      await notificationsStore.addNotifications({
+        message: `Shift added: ${shift.title}`,
+        date: new Date(), 
+        type: 'Shift Added',
+      });
     }
   };
 
@@ -60,6 +68,13 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   
       if (apiUpdateShift.response.value) {
         load(); // Refresh the shifts after a successful update
+       
+        const notificationsStore = useNotificationsStore();
+        await notificationsStore.addNotifications({
+          message: `Shift updated: ${shift.title}`,
+          date: new Date(),
+          type: 'Shift Updated',
+        });
       }
     } catch (error) {
       console.error('Error updating shift:', error);
@@ -86,6 +101,13 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       if (id !== -1) {
         shifts.value.splice(id, 1);
       }
+      
+      const notificationsStore = useNotificationsStore();
+      await notificationsStore.addNotifications({
+        message: `Shift deleted: ${shift.title}`,
+        date: new Date(),
+        type: 'Shift Deleted',
+      });
     }
   };
 
