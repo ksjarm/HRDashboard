@@ -1,0 +1,159 @@
+.validation-error {
+    color: red;
+    margin-bottom: 10px;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+  }
+  .blurred {
+    filter: blur(5px); 
+  }
+  
+  .modal {
+      background: #f8f8f8; 
+      padding: 15px;
+      border-radius: 12px; 
+      width: 500px;
+      z-index: 3; 
+      display: flex;
+      flex-direction: column;
+      gap: 15px; 
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    }
+  
+  .close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .close-button:hover {
+    color: #ff0000; 
+  }
+  .demo-app-calendar {
+    position: relative;
+    z-index: 1;
+  }
+  .schedule-header {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .btn-create-shift {
+    margin-top: 10px;
+    background-color: rgb(76, 99, 175);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  .shift-modal {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+  .calendar-container {
+    margin-top: 20px; 
+  }
+  .btn-remove-shift {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .event-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .event-list-item {
+    margin-bottom: 10px; 
+  }
+  input {
+      padding: 12px; 
+      background-color: #f0f0f0; 
+      border: none; 
+      border-radius: 8px; 
+      width: 100%;
+      box-sizing: border-box;
+    }
+  
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  
+    .radio-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  
+    .radio-label input {
+      margin-right: 5px;
+    }
+    .shift-type-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  
+    .shift-type-label input {
+      vertical-align: middle;
+      margin-right: -450px;
+    }
+  
+    .shift-type-label span {
+      vertical-align: middle;
+    }
+    .weekday-label {
+      margin-top: 10px; 
+    }
+    .weekday-input {
+      margin-top: 5px; 
+    }
+    .full-width {
+      width: 100%; 
+      padding: 6px; 
+      border-radius: 8px; 
+      background-color: #f0f0f0; 
+      border: 1px solid #ccc; 
+    }
+    .button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .btn-delete,
+  .btn-edit {
+    background-color: #e53e3e;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .btn-edit {
+    background-color: #4299e1;
+  }
+    

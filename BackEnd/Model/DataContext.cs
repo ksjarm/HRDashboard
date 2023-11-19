@@ -64,6 +64,8 @@ public class DataContext : DbContext {
                 Date = "2023-11-21",
                 StartTime = "13:00",
                 EndTime = "21:00",
+                Valik=Valik.Onetime,
+                
             },
             new Shift {
                 Id = 2,
@@ -71,6 +73,7 @@ public class DataContext : DbContext {
                 Date = "2023-11-16",
                 StartTime = "8:00",
                 EndTime = "16:00",
+                Valik=Valik.Onetime,
             },
             new Shift {
                 Id = 3,
@@ -78,6 +81,7 @@ public class DataContext : DbContext {
                 Date = "2023-11-09",
                 StartTime = "13:00",
                 EndTime = "21:00",
+                Valik=Valik.Onetime,
             });
 
         modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });

@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "d54be43d-6e90-44b4-a8ac-b061ff5ad590",
+		"name": "hrapp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9319536"
+	},
+	"item": [
+		{
+		}
+		
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
