@@ -5,7 +5,7 @@ import UpdateEmployeeVue from '@/views/UpdateEmployee.vue';
 import SheduleVue from '@/components/Shedule.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import NotificationHistoryVue from '@/views/NotificationHistory.vue';
-
+import EmployeeFullInfo from '@/views/EmployeeFullInfo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/notifications',
     name: 'Notifications',
     component: NotificationHistoryVue,
+  },
+  {
+    path: '/fullinfo',
+    name: 'Get full info',
+    component: EmployeeFullInfo,
   },
 ];
 

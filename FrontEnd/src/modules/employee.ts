@@ -1,5 +1,3 @@
-
-
 export interface Employee {
   id: number;
   name: string;
@@ -12,7 +10,7 @@ export interface Employee {
   position: string;
   salary: number;
   status: string;
-  
+  photo: string;
 }
 
 export interface State {

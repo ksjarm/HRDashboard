@@ -42,7 +42,7 @@
               </button>
               <button
                 class="border bg-green-400 text-green-900 py-0 px-3 ml-2 border-green-900 font-bold"
-                @click="remove(data)"
+                @click="getFullInfo(data)"
               >
                 ...
               </button>
@@ -66,7 +66,6 @@ const { employees } = storeToRefs(employeesStore);
 const employeesNameFilter = ref<string>('');
 defineProps<{ title: String }>();
 
-
 onMounted(() => {
   employeesStore.load();
 });
@@ -78,6 +77,13 @@ watch(employeesNameFilter, (title) => {
 const remove = (employee: Employee) => {
   employeesStore.deleteEmployee(employee);
 };
+const getFullInfo = (employee: Employee) => {
+  router.push({
+    name: 'Get full info',
+    query: { id: String(employee.id) },
+  });
+};
+
 const router = useRouter();
 
 const submitForm = () => {
