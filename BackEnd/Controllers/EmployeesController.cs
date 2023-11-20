@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using HRDashboardApplication.Model;
 using static HRDashboardApplication.Model.Employee;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRDashboardApplication.Controllers;
 
@@ -18,13 +19,17 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(_context.EmployeeList);
-    }
+        var employees = _context.EmployeeList;
+        if (employees!.Include(s => s.Shifts) != null) {
+            var employeesWithShifts = employees!.Include(s => s.Shifts)!.ThenInclude(es => es.Shift).ToList();
+            return Ok(employeesWithShifts);
+        }
+        else return Ok(employees!.Include(s => s.Shifts).ToList());    }
 
     [HttpGet("{id}")]
     public IActionResult GetDetails(int? id)
     {
-        var employee = _context.EmployeeList!.Find(id);
+        var employee = _context.EmployeeList!.Include(s => s.Shifts).FirstOrDefault(s => s.Id == id);
         if (employee == null)
         {
             return NotFound();

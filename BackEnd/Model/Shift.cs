@@ -13,8 +13,7 @@ namespace employeeproject.Model;
       [Column("StartDate")] public string? StartDate { get; init; }
     [Column("EndDate")] public string? EndDate { get; init; }
      [Column("SelectedWeekDay")] public string? SelectedWeekDay { get; init; }
-   // [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
-
+    [JsonIgnore] [Column("Employees")] public ICollection<EmployeeShift>? Employees { get; init; }
    
 
 }
