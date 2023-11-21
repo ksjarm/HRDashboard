@@ -5,14 +5,14 @@ namespace employeeproject.Model;
 
 [Table("Shift")] public record Shift {
     [Column("id")] public int Id { get; init; }
-    [Column("Title")] public string? Title { get; init;}
-    [Column("Date")] public string? Date { get; init;}
-    [Column("StartTime")] public string? StartTime { get; init; }
-    [Column("EndTime")] public string? EndTime { get; init; }
-     [Column("Valik")] public Valik Valik { get; init; }
-      [Column("StartDate")] public string? StartDate { get; init; }
-    [Column("EndDate")] public string? EndDate { get; init; }
-     [Column("SelectedWeekDay")] public string? SelectedWeekDay { get; init; }
+    [Column("title")] public string? Title { get; init;}
+    [Column("date")] public string? Date { get; init;}
+    [Column("startTime")] public string? StartTime { get; init; }
+    [Column("endTime")] public string? EndTime { get; init; }
+     [Column("valik")] public Valik Valik { get; init; }
+      [Column("startDate")] public string? StartDate { get; init; }
+    [Column("endDate")] public string? EndDate { get; init; }
+     [Column("selectedWeekDay")] public string? SelectedWeekDay { get; init; }
     [JsonIgnore] [Column("Employees")] public ICollection<EmployeeShift>? Employees { get; init; }
    
 

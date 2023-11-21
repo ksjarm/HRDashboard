@@ -22,13 +22,15 @@
         </div>
       </div>
     </div>
+    
 
-    <div v-if="shiftModalVisible" class="modal-overlay">
-      <div class="modal">
-        <div class="modal-header">
-        <h2>Create New Shift</h2>
+
+<div v-if="shiftModalVisible || editShiftModalVisible" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>{{ editShiftModalVisible ? 'Edit Shift' : 'Create New Shift' }}</h2>
       <button @click="closeShiftModal" class="close-button">Close</button>
-      </div>
+    </div>
       <input v-model="newShift.title" placeholder="Title" maxlength="50" />
 
       <label class="shift-type-label">
@@ -66,12 +68,12 @@
       <input v-model="newShift.endTime" type="time" placeholder="End Time" />
       <div v-if="validationError" class="validation-error">{{ validationError }}</div>
       <button
-      @click="validateAndAddShift"
-        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-        Add shift
-      </button>
+      @click="validateAndAddOrEditShift"
+      class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    >
+      <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+      {{ editShiftModalVisible ? 'Save changes' : 'Add Shift' }}
+    </button>
       </div>
     </div>
   
@@ -117,6 +119,50 @@ const newShift = ref({
 });
 const confirmationModalVisible = ref(false);
 let selectedShift: Shift | null = null;
+const editShiftModalVisible = ref(false);
+
+const editShift = () => {
+  openEditShiftModal();
+  closeConfirmationModal();
+};
+
+const openEditShiftModal = () => {
+  if (selectedShift) {
+    // Populate the editing form with the details of the selected shift
+    newShift.value.title = selectedShift.title;
+    newShift.value.date = selectedShift.date || '';
+    newShift.value.startTime = selectedShift.startTime;
+    newShift.value.endTime = selectedShift.endTime;
+    newShift.value.valik = selectedShift.valik;
+    newShift.value.startDate = selectedShift.startDate || '';
+    newShift.value.endDate = selectedShift.endDate || '';
+    newShift.value.selectedWeekDay = selectedShift.selectedWeekDay || '';
+
+    // Show the editing modal
+    editShiftModalVisible.value = true;
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+
+const validateAndAddOrEditShift = async () => {
+  validationError.value = '';
+
+  if (!validateInput()) {
+    return;
+  }
+
+  if (editShiftModalVisible.value && selectedShift) {
+    
+    console.log('Update Payload:', selectedShift);
+    // Implement your logic to update the existing shift with the new details
+    shiftsStore.updateShift(selectedShift);
+    closeShiftModal(); // Close the modal after editing
+  } else {
+    // Implement your logic to add a new shift
+    addNewShift();
+  }
+};
 
 const handleEventClick = (arg: any) => {
   selectedShift = shifts.value.find((s) => s.id === parseInt(arg.event.id)) || null;
@@ -140,11 +186,6 @@ const deleteShift = () => {
   }
 };
 
-const editShift = () => {
-  // Implement your edit logic here
-  // You can redirect to a separate edit page or show another modal for editing
-  closeConfirmationModal();
-};
 
 const handleDateClick = (arg: any) => {
   openShiftModal();
@@ -168,15 +209,6 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 const validationError = ref('');
 
-const validateAndAddShift = async () => {
-  validationError.value = '';
-
-  if (!validateInput()) {
-    return;
-  }
-
-  addNewShift();
-};
 
 const validateInput = () => {
   if (!newShift.value.title || !newShift.value.startTime || !newShift.value.endTime) {
@@ -332,20 +364,25 @@ const openShiftModal = (payload?: MouseEvent, defaultDate: string | null = null)
   shiftModalVisible.value = true;
   document.body.style.overflow = 'hidden'; 
 
+  // Reset the form or set default values for adding a new shift
+  resetNewShiftForm();
+
   newShift.value.date = defaultDate || new Date().toISOString().slice(0, 10);
-  newShift.value.startDate = defaultDate || new Date().toISOString().slice(0, 10);;
-  newShift.value.endDate = defaultDate || new Date().toISOString().slice(0, 10);;
+  newShift.value.startDate = defaultDate || new Date().toISOString().slice(0, 10);
+  newShift.value.endDate = defaultDate || new Date().toISOString().slice(0, 10);
   newShift.value.valik = 'Onetime';
-
 };
-
 
 const closeShiftModal = () => {
-  shiftModalVisible.value = false;
-  validationError.value = '';
-  document.body.style.overflow = ''; 
+  if (editShiftModalVisible.value) {
+    editShiftModalVisible.value = false;
+  } else {
+    // Close the modal and reset validation error
+    shiftModalVisible.value = false;
+    validationError.value = '';
+    document.body.style.overflow = '';
+  }
 };
-
 
 watch(shifts, () => {
   updateCalendarEvents();

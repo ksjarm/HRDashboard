@@ -32,6 +32,8 @@ public class ShiftsController : ControllerBase {
         }
         return Conflict();
     }
+   
+
     [HttpPut("{id}")] public IActionResult Update(int? id, [FromBody] Shift shift) {
         if (id != shift.Id) return BadRequest("Invalid request. The ID in the URL does not match the ID in the request body.");
         var existingShift = _context.ShiftList!.Find(id);
