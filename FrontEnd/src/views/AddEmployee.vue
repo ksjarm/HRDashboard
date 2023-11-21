@@ -19,5 +19,6 @@ const employee: Ref<Employee> = ref({
   position: '',
   salary: 0,
   status: 'Active',
+  photo: '',
 });
 </script>

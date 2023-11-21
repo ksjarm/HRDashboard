@@ -1,5 +1,5 @@
 export interface Notification {
-    notificationId: number;
+    notificationId?: number;
     message: string;
     date: Date;
     type: string;

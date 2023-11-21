@@ -2,6 +2,8 @@ import { Employee } from '@/modules/employee';
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
+import { useNotificationsStore } from '@/stores/notificationsStore';
+
 
 export const useEmployeesStore = defineStore('employeesStore', () => {
   const apiGetEmployees = useApi<Employee[]>('employees');
@@ -38,6 +40,14 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     if (apiAddEmployee.response.value) {
       allEmployees.push(apiAddEmployee.response.value!);
       employees.value = allEmployees;
+
+      const notificationsStore = useNotificationsStore();
+      const newNotification = {
+        message: `New employee added: ${employee.name} ${employee.surname}`,
+        date: new Date(), 
+        type: 'Employee Added',
+      };
+      await notificationsStore.addNotifications(newNotification);
     }
   };
 
@@ -54,6 +64,14 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     await apiAddEmployee.request();
     if (apiAddEmployee.response.value) {
       load();
+
+      const notificationsStore = useNotificationsStore();
+      const updateNotification = {
+        message: `Employee updated: ${employee.name} ${employee.surname}`,
+        date: new Date(),
+        type: 'Employee Updated',
+      };
+      await notificationsStore.addNotifications(updateNotification);
     }
   };
 
@@ -76,6 +94,14 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
       if (id !== -1) {
         employees.value.splice(id, 1);
       }
+
+      const notificationsStore = useNotificationsStore();
+      const deleteNotification = {
+        message: `Employee deleted: ${employee.name} ${employee.surname}`,
+        date: new Date(),
+        type: 'Employee Deleted',
+      };
+      await notificationsStore.addNotifications(deleteNotification);
     }
   };
 

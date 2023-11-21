@@ -22,7 +22,7 @@
     </nav>
     <div class="flex">
       <nav
-        class="w-14 sm:w-60 sm:h-250 bg-indigo-200 flex flex-col justify-start items-start"
+        class="w-14 sm:w-60 sm:h-270 bg-indigo-200 flex flex-col justify-start items-start"
       >
         <router-link
           to="/"

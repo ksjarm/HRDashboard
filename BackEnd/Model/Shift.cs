@@ -11,10 +11,9 @@ namespace employeeproject.Model;
     [Column("endTime")] public string? EndTime { get; init; }
      [Column("valik")] public Valik Valik { get; init; }
       [Column("startDate")] public string? StartDate { get; init; }
-    [Column("sndDate")] public string? EndDate { get; init; }
+    [Column("endDate")] public string? EndDate { get; init; }
      [Column("selectedWeekDay")] public string? SelectedWeekDay { get; init; }
-   // [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
-
+    [JsonIgnore] [Column("Employees")] public ICollection<EmployeeShift>? Employees { get; init; }
    
 
 }
