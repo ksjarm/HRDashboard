@@ -56,10 +56,10 @@ api_test:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   image:
-    name: docker/compose:1.29.2
+    name: docker:dind
     entrypoint: ["/bin/sh", "-c"]
   services:
-    - docker:24.0.7-dind-alpine3.18
+    - docker:dind
   only:
     - master
     - main
