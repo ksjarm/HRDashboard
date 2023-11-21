@@ -56,7 +56,7 @@ public class DataContext : DbContext {
                 Status = Status.Active,
             });
         
-        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
             new Shift {
                 Id = 1,
@@ -70,7 +70,7 @@ public class DataContext : DbContext {
             new Shift {
                 Id = 2,
                 Title = "Morning shift",
-                Date = "2023-11-16",
+                Date = "2023-11-15",
                 StartTime = "8:00",
                 EndTime = "16:00",
                 Valik=Valik.Onetime,
