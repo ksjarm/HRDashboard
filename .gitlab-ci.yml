@@ -53,7 +53,7 @@ build:front-end:
     
 api_test:
   variables:
-    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
   image:
     name: docker/compose:1.29.2
