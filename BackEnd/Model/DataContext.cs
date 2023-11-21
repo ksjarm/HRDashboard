@@ -13,6 +13,14 @@ public class DataContext : DbContext {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasPostgresEnum<Status>();
+
+        modelBuilder.Entity<EmployeeShift>().ToTable("EmployeeShift")
+            .HasKey(key => new { key.EmployeeId, key.ShiftId });
+
+         modelBuilder.Entity<Employee>().ToTable("Employees").HasKey(x => x.Id);
+         modelBuilder.Entity<Shift>().ToTable("Shifts").HasKey(x => x.Id);
+         modelBuilder.Entity<Notification>().ToTable("Notifications").HasKey(x => x.NotificationId);
+
         modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Employee>().HasData(
             new Employee {
@@ -84,21 +92,15 @@ public class DataContext : DbContext {
                 Valik=Valik.Onetime,
             });
 
-        modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
-        modelBuilder.Entity<EmployeeShift>()
-            .HasOne(se => se.Employee)
-            .WithMany(e => e.Shifts)
-            .HasForeignKey(se => se.EmployeeId)
-            .OnDelete(DeleteBehavior.Cascade);        
-        modelBuilder.Entity<EmployeeShift>()
-            .HasOne(se => se.Shift)
-            .WithMany(s => s.Employees)
-            .HasForeignKey(se => se.ShiftId)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<EmployeeShift>().HasData(
-            new EmployeeShift() { EmployeeId = 1, ShiftId = 2 },
-            new EmployeeShift() { EmployeeId = 2, ShiftId = 1 }
-        );
+
+
+
+       modelBuilder.Entity<EmployeeShift>().HasData(
+       new EmployeeShift { EmployeeId = 1, ShiftId = 1 },
+       new EmployeeShift { EmployeeId = 2, ShiftId = 2 },
+       new EmployeeShift { EmployeeId = 3, ShiftId = 3 }
+       );
+
 
         modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Notification>().HasData(
@@ -120,7 +122,7 @@ public class DataContext : DbContext {
                 Date = new DateTime(2023, 11, 3, 16, 45, 0),
                 Type = "Shift Change"
             });
-            
+            modelBuilder.UseIdentityColumns();
     }
 }
  

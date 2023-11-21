@@ -10,7 +10,8 @@ export interface Shift {
     startDate?: string;
     endDate?: string;
     selectedWeekDay?:string;
-    employees?: EmployeeShift[];
+    employeeShifts?: EmployeeShift[];
+    assignedEmployeesNames?: string[];
   }
   
   export interface State {

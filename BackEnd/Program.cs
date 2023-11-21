@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using HRDashboardApplication.Model;
 using static HRDashboardApplication.Model.Employee;
-                       
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // build postgresql data source
@@ -16,6 +17,7 @@ var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(dataSource));
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

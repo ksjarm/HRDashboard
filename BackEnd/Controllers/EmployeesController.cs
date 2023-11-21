@@ -20,16 +20,16 @@ public class EmployeesController : ControllerBase
     public IActionResult Get()
     {
         var employees = _context.EmployeeList;
-        if (employees!.Include(s => s.Shifts) != null) {
-            var employeesWithShifts = employees!.Include(s => s.Shifts)!.ThenInclude(es => es.Shift).ToList();
+        if (employees!.Include(s => s.EmployeeShifts) != null) {
+            var employeesWithShifts = employees!.Include(s => s.EmployeeShifts)!.ThenInclude(es => es.Shift).ToList();
             return Ok(employeesWithShifts);
         }
-        else return Ok(employees!.Include(s => s.Shifts).ToList());    }
+        else return Ok(employees!.Include(s => s.EmployeeShifts).ToList());    }
 
     [HttpGet("{id}")]
     public IActionResult GetDetails(int? id)
     {
-        var employee = _context.EmployeeList!.Include(s => s.Shifts)!.ThenInclude(es => es.Shift).FirstOrDefault(s => s.Id == id);
+        var employee = _context.EmployeeList!.Include(s => s.EmployeeShifts)!.ThenInclude(es => es.Shift).FirstOrDefault(s => s.Id == id);
         if (employee == null)
         {
             return NotFound();
