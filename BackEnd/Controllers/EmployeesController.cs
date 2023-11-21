@@ -29,7 +29,7 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetDetails(int? id)
     {
-        var employee = _context.EmployeeList!.Include(s => s.Shifts).FirstOrDefault(s => s.Id == id);
+        var employee = _context.EmployeeList!.Include(s => s.Shifts)!.ThenInclude(es => es.Shift).FirstOrDefault(s => s.Id == id);
         if (employee == null)
         {
             return NotFound();

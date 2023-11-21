@@ -19,7 +19,7 @@ public class ShiftsController : ControllerBase {
         else return Ok(shifts!.Include(s => s.Employees).ToList());
     }
     [HttpGet("{id}")] public IActionResult GetDetails(int? id) {
-        var shift = _context.ShiftList!.Include(s => s.Employees).FirstOrDefault(s => s.Id == id);
+        var shift = _context.ShiftList!.Include(s => s.Employees)!.ThenInclude(es => es.Employee).FirstOrDefault(s => s.Id == id);
         if (shift == null) return NotFound();
         return Ok(shift);
     }
