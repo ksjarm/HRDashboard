@@ -1,3 +1,4 @@
+import { EmployeeShift } from "./employeeShift";
 
 export interface Shift {
     id: number;
@@ -9,7 +10,7 @@ export interface Shift {
     startDate?: string;
     endDate?: string;
     selectedWeekDay?:string;
-    //employeeShifts: EmployeeShift
+    employees?: EmployeeShift[];
   }
   
   export interface State {
