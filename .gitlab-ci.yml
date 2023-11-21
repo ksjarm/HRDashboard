@@ -53,13 +53,13 @@ build:front-end:
     
 api_test:
   variables:
-    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_HOST: tcp://thedockerhost:2375/
     DOCKER_TLS_CERTDIR: ""
   image:
-    name: docker/compose:1.29.2
-    entrypoint: ["/bin/sh", "-c"]
+    name: docker:stable
   services:
-    - docker:24.0.7-dind-alpine3.18
+    - name: docker:dind
+     alias: thedockerhost
   only:
     - master
     - main
