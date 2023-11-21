@@ -10,17 +10,42 @@ public class ShiftsController : ControllerBase {
     private readonly DataContext _context;
     public ShiftsController(DataContext context) => _context = context;   
 
-    [HttpGet] public IActionResult Get() {
-        var shifts = _context.ShiftList;
-        if (shifts!.Include(s => s.Employees) != null) {
-            var shiftsWithEmployees = shifts!.Include(s => s.Employees)!.ThenInclude(es => es.Employee).ToList();
-            return Ok(shiftsWithEmployees);
-        }
-        else return Ok(shifts!.Include(s => s.Employees).ToList());
+     [HttpGet]
+    public IActionResult Get()
+    {
+        var shifts = _context.ShiftList!
+            .Include(s => s.EmployeeShift)
+            .ThenInclude(es => es.Employee)
+            .ToList();
+
+        // Convert the shifts to a DTO or an anonymous type to include AssignedEmployeesNames
+        var shiftsResponse = shifts.Select(shift => new
+        {
+            shift.Id,
+            shift.Title,
+            shift.Date,
+            shift.StartTime,
+            shift.EndTime,
+            shift.Valik,
+            shift.StartDate,
+            shift.EndDate,
+            shift.SelectedWeekDay,
+            AssignedEmployeesNames = shift.AssignedEmployeesNames.ToList()
+        });
+
+        return Ok(shiftsResponse);
     }
-    [HttpGet("{id}")] public IActionResult GetDetails(int? id) {
-        var shift = _context.ShiftList!.Include(s => s.Employees)!.ThenInclude(es => es.Employee).FirstOrDefault(s => s.Id == id);
-        if (shift == null) return NotFound();
+   [HttpGet("{id}")]
+    public IActionResult GetDetails(int? id)
+    {
+        var shift = _context.ShiftList!
+            .Include(s => s.EmployeeShift)
+            .ThenInclude(es => es.Employee)
+            .FirstOrDefault(s => s.Id == id);
+
+        if (shift == null)
+            return NotFound();
+
         return Ok(shift);
     }
     [HttpPost] public IActionResult Create([FromBody] Shift shift) {

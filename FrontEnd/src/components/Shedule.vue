@@ -82,10 +82,16 @@
       :options="calendarOptions"
       :events="calendarOptions.events"
     >
-      <template v-slot:eventContent="arg">
-        <b v-if="!shiftModalVisible" @click="handleEventClick(arg)">{{ arg.event.title }}</b>
-       <b v-else>{{ arg.event.title }}</b>
-      </template>
+    <template v-slot:eventContent="arg">
+  <b v-if="!shiftModalVisible" @click="handleEventClick(arg)">
+    {{ arg.event.title }} - <br>
+    Assigned Employees: {{ arg.event.extendedProps.assignedEmployeesNames?.join(', ') || 'None' }}
+  </b>
+  <b v-else>{{ arg.event.title }}</b>
+</template>
+
+
+
     </FullCalendar>
   </div>
 </template>
@@ -125,6 +131,10 @@ const editShift = () => {
   openEditShiftModal();
   closeConfirmationModal();
 };
+
+
+
+
 
 const openEditShiftModal = () => {
   if (selectedShift) {
@@ -353,6 +363,7 @@ const updateCalendarEvents = () => {
     title: shift.title,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
+    assignedEmployeesNames: shift.assignedEmployeesNames, 
   }));
 };
 
