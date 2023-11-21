@@ -22,6 +22,7 @@ build:back-end:
     - pip install awscli
     - aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
   script:
+  - docker info
     - docker build -t ${DOCKER_REGISTRY}/back:${CI_COMMIT_SHA} ./BackEnd/
     - docker push ${DOCKER_REGISTRY}/back:${CI_COMMIT_SHA}
   after_script:
@@ -43,6 +44,7 @@ build:front-end:
     - pip install awscli
     - aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
   script:
+  - docker info
     - docker build -t ${DOCKER_REGISTRY}/front:${CI_COMMIT_SHA} ./FrontEnd/
     - docker push ${DOCKER_REGISTRY}/front:${CI_COMMIT_SHA}
   after_script:
@@ -56,10 +58,10 @@ api_test:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   image:
-    name: docker:dind
+    name: docker/compose:1.29.2
     entrypoint: ["/bin/sh", "-c"]
   services:
-    - docker:dind
+    - docker:24.0.7-dind-alpine3.18
   only:
     - master
     - main
@@ -68,6 +70,7 @@ api_test:
     - pip install awscli
     - aws ecr get-login-password | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
   script:
+  - docker info
     - cd ApiTests
     - docker-compose up --abort-on-container-exit --exit-code-from newman
     - docker-compose down -v
