@@ -7,13 +7,46 @@
 	},
 	"item": [
 		{
+			"name": "POST NEW SHIFT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"sId\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"New Year Shift\",\n    \"date\": \"2023-12-31\",\n    \"startTime\": 12:00\",\n  \"endTime\": 22:00\",\n \"valik\": OneTime\",\n }"
+				},
+				"url": {
+					"raw": "{{url}}/api/shifts",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"shifts"
+					]
+				}
+			},
+			"response": []
 		}
-		
-	],
-	"variable": [
-		{
-			"key": "token",
-			"value": ""
-		}
+
 	]
 }
