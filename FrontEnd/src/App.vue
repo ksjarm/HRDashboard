@@ -75,7 +75,7 @@ const router = useRouter();
 const secondNavClass = ref('sm:w-60 sm:h-250'); // Default class for second nav
 
 const redirectToAccountSettings = () => {
-  router.push('/newemployee'); // Adjust the route as needed
+  router.push('/hrfullinfo'); // Adjust the route as needed
 };
 const updateSecondNavClass = () => {
   if (window.innerWidth < 640) {

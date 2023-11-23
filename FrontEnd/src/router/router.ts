@@ -6,6 +6,7 @@ import SheduleVue from '@/components/Shedule.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import NotificationHistoryVue from '@/views/NotificationHistory.vue';
 import EmployeeFullInfo from '@/views/EmployeeFullInfo.vue';
+import HRFullInfo from '@/views/HRFullInfo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/fullinfo',
     name: 'Get full info',
     component: EmployeeFullInfo,
+  },
+  {
+    path: '/hrfullinfo',
+    name: 'Get HR full info',
+    component: HRFullInfo,
   },
 ];
 
