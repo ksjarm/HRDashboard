@@ -21,13 +21,17 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(_context.EmployeeList);
-    }
+        var employees = _context.EmployeeList;
+        if (employees!.Include(s => s.EmployeeShifts) != null) {
+            var employeesWithShifts = employees!.Include(s => s.EmployeeShifts)!.ThenInclude(es => es.Shift).ToList();
+            return Ok(employeesWithShifts);
+        }
+        else return Ok(employees!.Include(s => s.EmployeeShifts).ToList());    }
 
     [HttpGet("{id}")]
     public IActionResult GetDetails(int? id)
     {
-        var employee = _context.EmployeeList!.Find(id);
+        var employee = _context.EmployeeList!.Include(s => s.EmployeeShifts)!.ThenInclude(es => es.Shift).FirstOrDefault(s => s.Id == id);
         if (employee == null)
         {
             return NotFound();

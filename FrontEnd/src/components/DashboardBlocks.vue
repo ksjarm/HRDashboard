@@ -14,12 +14,10 @@
       <div class="schedule">
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
-          <!-- <div v-for="shift in todayShifts" :key="shift.id">
-            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{
-              shift.title
-            }})
+          <div v-for="shift in todayShifts" :key="shift.id">
+            {{ shift.startTime }} - {{ shift.endTime }} {{ shift.title }}
           </div>
-          <div v-if="todayShifts.length === 0">No shifts for today.</div>-->
+          <div v-if="todayShifts.length === 0">No shifts for today.</div>
         </div>
       </div>
     </div>
@@ -97,12 +95,12 @@ const router = useRouter();
 
 const notificationsStore = useNotificationsStore();
 
-/*const todayShifts = computed(() => {
+const todayShifts = computed(() => {
   return shiftsStore.shifts.filter((shift) => {
-    const shiftDate = new Date(shift.date);
+    const shiftDate = new Date(shift.date as string);
     return shiftDate.toDateString() === today.toDateString();
   });
-});*/
+});
 
 const lastTwoNotifications = computed(() => {
   return notificationsStore.notifications.slice(-3).reverse();
@@ -296,6 +294,7 @@ watch(employeesNameFilter, (name) => {
 }
 .shifts {
   font-weight: normal;
+  text-align: left;
   margin-left: 20px;
 }
 .notification-block {

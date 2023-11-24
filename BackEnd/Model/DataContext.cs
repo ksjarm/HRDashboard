@@ -15,6 +15,14 @@ public class DataContext : DbContext {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.HasPostgresEnum<Status>();
+
+        modelBuilder.Entity<EmployeeShift>().ToTable("EmployeeShift")
+            .HasKey(key => new { key.EmployeeId, key.ShiftId });
+
+         modelBuilder.Entity<Employee>().ToTable("Employees").HasKey(x => x.Id);
+         modelBuilder.Entity<Shift>().ToTable("Shifts").HasKey(x => x.Id);
+         modelBuilder.Entity<Notification>().ToTable("Notifications").HasKey(x => x.NotificationId);
+
         modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Employee>().HasData(
             new Employee {
@@ -29,7 +37,7 @@ public class DataContext : DbContext {
                 Position = "Warehouse worker",
                 Salary = 1200,
                 Status = Status.Active,
-                Photo = "../assets/profileimg2.png"
+                //Photo = "../assets/profileimg2.png"
             },
             new Employee {
                 Id = 2,
@@ -58,7 +66,7 @@ public class DataContext : DbContext {
                 Status = Status.Active,
             });
         
-        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 3);
+        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
             new Shift {
                 Id = 1,
@@ -72,37 +80,13 @@ public class DataContext : DbContext {
             new Shift {
                 Id = 2,
                 Title = "Morning shift",
-                Date = "2023-12-16",
+                Date = "2023-11-15",
                 StartTime = "8:00",
                 EndTime = "16:00",
                 Valik=Valik.Onetime,
             },
             new Shift {
                 Id = 3,
-                Title = "Morning shift",
-                Date = "2023-11-16",
-                StartTime = "8:00",
-                EndTime = "16:00",
-                Valik=Valik.Onetime,
-            },
-            new Shift {
-                Id = 4,
-                Title = "Morning shift",
-                Date = "2023-11-04",
-                StartTime = "8:00",
-                EndTime = "16:00",
-                Valik=Valik.Onetime,
-            },
-            new Shift {
-                Id = 5,
-                Title = "All day shift",
-                Date = "2023-12-09",
-                StartTime = "13:00",
-                EndTime = "21:00",
-                Valik=Valik.Onetime,
-            },
-             new Shift {
-                Id = 6,
                 Title = "All day shift",
                 Date = "2023-12-09",
                 StartTime = "13:00",
@@ -110,15 +94,16 @@ public class DataContext : DbContext {
                 Valik=Valik.Onetime,
             });
 
-        modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
-        modelBuilder.Entity<EmployeeShift>().HasData(
-            new EmployeeShift { EmployeeId = 1, ShiftId = 1 },
-            new EmployeeShift { EmployeeId = 1, ShiftId = 3 },
-            new EmployeeShift { EmployeeId = 1, ShiftId = 4 },
-            new EmployeeShift { EmployeeId = 1, ShiftId = 5 },
-            new EmployeeShift { EmployeeId = 2, ShiftId = 2 },
-            new EmployeeShift { EmployeeId = 3, ShiftId = 6 });
-        
+
+
+
+       modelBuilder.Entity<EmployeeShift>().HasData(
+       new EmployeeShift { EmployeeId = 1, ShiftId = 1 },
+       new EmployeeShift { EmployeeId = 2, ShiftId = 2 },
+       new EmployeeShift { EmployeeId = 3, ShiftId = 3 }
+       );
+
+
         modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
@@ -139,34 +124,7 @@ public class DataContext : DbContext {
                 Date = new DateTime(2023, 11, 3, 16, 45, 0),
                 Type = "Shift Change"
             });
-
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    Name = "Lianna",
-                    Surname = "Tamm",
-                    PhoneNumber = 56069403,
-                    Adress = "Puskini 55-32",
-                    Username = "lianna.tamm@company.ee",
-                    Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
-                    Role = "Staff HR"
-                },
-                new User
-                {
-                    Id = 2,
-                    Name = "Irina",
-                    Surname = "Loki",
-                    PhoneNumber =55630285,
-                    Adress = "E.Vilde 23-12",
-                    Username = "irina.loki@company.ee",
-                    Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
-                    Role = "Junior HR"
-                }
-            );
-
-
-            
+            modelBuilder.UseIdentityColumns();
     }
 }
  

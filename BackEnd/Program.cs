@@ -20,6 +20,7 @@ var dataSource = dataSourceBuilder.Build();
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(dataSource));
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

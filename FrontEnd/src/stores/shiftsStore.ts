@@ -54,8 +54,8 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   };
 
   const updateShift = async (shift: Shift) => {
-    try {
-      const apiUpdateShift = useApi<Shift>('shifts/' + shift.id, {
+  
+      const apiAddShift = useApi<Shift>('shifts/' + shift.id, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -64,9 +64,9 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
         body: JSON.stringify(shift),
       });
   
-      await apiUpdateShift.request();
+      await apiAddShift.request();
   
-      if (apiUpdateShift.response.value) {
+      if (apiAddShift.response.value) {
         load(); // Refresh the shifts after a successful update
        
         const notificationsStore = useNotificationsStore();
@@ -76,10 +76,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
           type: 'Shift Updated',
         });
       }
-    } catch (error) {
-      console.error('Error updating shift:', error);
-      // Handle the error (e.g., display an error message)
-    }
+    
   };
   
   const deleteShift = async (shift: Shift) => {

@@ -8,6 +8,7 @@ import NotificationHistoryVue from '@/views/NotificationHistory.vue';
 import EmployeeFullInfo from '@/views/EmployeeFullInfo.vue';
 import LoginVue from '@/views/Login.vue';
 import { useAuthStore } from '@/stores/authStore';
+import HRFullInfo from '@/views/HRFullInfo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -51,6 +52,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Log in',
     component: LoginVue,
+  },
+  {
+    path: '/hrfullinfo',
+    name: 'Get HR full info',
+    component: HRFullInfo,
   },
 ];
 
