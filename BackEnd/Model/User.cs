@@ -16,7 +16,7 @@ namespace BackEnd.Model
             [Column("surname")]
             public string Surname {get;set;} = "";
             [Column("phonenumber")]
-            public int PhoneNumber {get;set;}
+            public string? PhoneNumber {get;set;}
             [Column("adress")]
             public string Adress {get;set;} = "";
             [Column("username")]
