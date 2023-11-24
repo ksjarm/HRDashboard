@@ -7,6 +7,7 @@
           type="text"
           class="bg-transparent outline-none w-full pl-2 text-gray-500"
           placeholder="Search"
+          v-if="isAuthenticated"
         />
       </div>
       <div class="flex items-center">
@@ -15,6 +16,7 @@
             src="./assets/user-profile-image.jpg"
             alt="User Profile"
             class="h-8 w-8 cursor-pointer"
+            v-if="isAuthenticated"
             @click="redirectToAccountSettings"
           />
         </div>
@@ -22,10 +24,11 @@
     </nav>
     <div class="flex">
       <nav
-        class="w-14 sm:w-60 sm:h-270 bg-indigo-200 flex flex-col justify-start items-start"
+        class="w-14 sm:w-60 lg:h-190 xl:h-200 bg-indigo-200 flex flex-col justify-start items-start"
       >
         <router-link
-          to="/"
+          to="/dashboard"
+          v-if="isAuthenticated"
           class="text-dark-500 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-12 py-2 sm:py-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full flex"
           active-class="bg-white-900 text-white"
         >
@@ -33,6 +36,7 @@
         </router-link>
         <router-link
           to="/employees"
+          v-if="isAuthenticated"
           class="text-dark-300 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-12 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >
@@ -40,6 +44,7 @@
         </router-link>
         <router-link
           to="/shedule"
+          v-if="isAuthenticated"
           class="text-dark-300 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-14 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >
@@ -47,20 +52,23 @@
         </router-link>
         <router-link
           to="/notifications"
+          v-if="isAuthenticated"
           class="text-dark-300 hover-bg-dark-700 hover:text-purple-500 px-3 sm:px-10 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >
           Notifications
         </router-link>
         <router-link
-          to="/login"
+          to="/"
+          v-if="isAuthenticated"
+          @click="signOut"
           class="text-dark-300 hover:bg-dark-700 hover:text-purple-500 px-3 sm:px-17 py-2 sm:py-4 ml-4 sm:ml-3 mb-4 sm:text-lg text-base font-medium border-white border-2 rounded-full"
           active-class="bg-white-900 text-white"
         >
           Logout
         </router-link>
       </nav>
-      <div class="flex-1 p-8">
+      <div class="flex-1">
         <router-view />
       </div>
     </div>
@@ -70,6 +78,17 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useAuthStore } from './stores/authStore';
+import { storeToRefs } from 'pinia';
+
+const authStore = useAuthStore();
+const { logout } = authStore;
+const { isAuthenticated } = storeToRefs(authStore);
+
+const signOut = () => {
+  logout();
+  router.push({ name: 'Log in' });
+};
 
 const router = useRouter();
 const secondNavClass = ref('sm:w-60 sm:h-250'); // Default class for second nav
@@ -97,6 +116,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.appstart {
+  height: 100vh;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

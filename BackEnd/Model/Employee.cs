@@ -25,7 +25,7 @@ public record Employee
     public string? Adress {get;init;}
     [Column("position")]
     public string? Position {get;init;}
-     [Column("salary")]
+    [Column("salary")]
     public int? Salary {get;init;}
     [Column("status")]
     public Status Status {get;init;}

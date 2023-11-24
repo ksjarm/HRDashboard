@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using HRDashboardApplication.Model;
 using static HRDashboardApplication.Model.Employee;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HRDashboardApplication.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
@@ -83,5 +86,20 @@ public class EmployeesController : ControllerBase
         int currentEmployeeCount = _context.EmployeeList!.Count();
         return Ok(currentEmployeeCount);
     }
+    [HttpGet("{id}/shifts")]
+    public IActionResult GetEmployeeShifts(int? id)
+    {
+    var employee = _context.EmployeeList!.Include(e => e.EmployeeShifts).FirstOrDefault(e => e.Id == id);
 
+    if (employee == null)
+    {
+        return NotFound($"Employee with ID {id} not found.");
+    }
+
+    var employeeShifts = employee.EmployeeShifts;
+
+    return Ok(employeeShifts);
+}
+
+    
 }

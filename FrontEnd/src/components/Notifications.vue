@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="text-center">
@@ -8,18 +7,25 @@
     </div>
     <div class="notifications-container">
       <div v-if="notifications.length > 0">
-        <div v-for="notification in notifications" 
-          :key="notification.notificationId" 
-            class="notification-block">
+        <div
+          v-for="notification in notifications"
+          :key="notification.notificationId"
+          class="notification-block"
+        >
           <div class="date-time">
             <strong>{{ formatDate(notification.date) }}</strong>
             <p>{{ formatTime(notification.date) }}</p>
           </div>
           <div class="type-message">
             <strong>{{ notification.type }}:</strong>
-            <p> {{ notification.message }}</p>            
+            <p>{{ notification.message }}</p>
           </div>
-          <button class="delete-button" @click="deleteNotification(notification)">X</button>
+          <button
+            class="delete-button"
+            @click="deleteNotification(notification)"
+          >
+            X
+          </button>
         </div>
       </div>
       <div v-else>
@@ -32,19 +38,34 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useNotificationsStore } from '@/stores/notificationsStore';
-import { Notification } from '@/modules/notifications'; 
+import { Notification } from '@/modules/notifications';
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+
+const router = useRouter();
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
 
 const notificationsStore = useNotificationsStore();
 const notifications = ref(notificationsStore.notifications);
 
 onMounted(async () => {
-  await notificationsStore.load(); 
-  notifications.value.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
+  await notificationsStore.load();
+  notifications.value.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 });
 
 const deleteNotification = async (notification: Notification) => {
   await notificationsStore.deleteNotification(notification);
-  notifications.value = notifications.value.filter(n => n.notificationId !== notification.notificationId);
+  notifications.value = notifications.value.filter(
+    (n) => n.notificationId !== notification.notificationId,
+  );
 };
 
 const formatDate = (date: Date) => {
@@ -54,14 +75,12 @@ const formatDate = (date: Date) => {
 const formatTime = (date: Date) => {
   return new Date(date).toLocaleTimeString();
 };
-
 </script>
 
 <style scoped>
 .notifications-container {
   display: flex;
   flex-direction: column;
-  
 }
 
 .notification-block {
@@ -76,9 +95,9 @@ const formatTime = (date: Date) => {
 
 .date-time {
   padding: 16px;
-  border-right: 1px solid #ccc; 
-  flex-basis: 20%; 
-  text-align: center; 
+  border-right: 1px solid #ccc;
+  flex-basis: 20%;
+  text-align: center;
 }
 
 .type-message {
@@ -87,7 +106,7 @@ const formatTime = (date: Date) => {
 }
 
 .date-time strong {
-  margin-bottom: 8px; 
+  margin-bottom: 8px;
 }
 .delete-button {
   position: absolute;

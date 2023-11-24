@@ -6,15 +6,19 @@
     <div>
       <button @click="toggleWeekends">Toggle Weekends</button>
     </div>
-   
-    <button @click="openShiftModal" class="btn-create-shift">Create New Shift</button>
+
+    <button @click="openShiftModal" class="btn-create-shift">
+      Create New Shift
+    </button>
 
     <div v-if="confirmationModalVisible" class="modal-overlay">
-      <div class="modal ">
+      <div class="modal">
         <div class="modal-header">
           <h2>Confirm Action</h2>
-          <button @click="closeConfirmationModal" class="close-button">Close</button>
-        </div >
+          <button @click="closeConfirmationModal" class="close-button">
+            Close
+          </button>
+        </div>
         <p>Do you want to delete or edit the shift?</p>
         <div class="button-container">
           <button @click="deleteShift" class="btn-delete">Delete Shift</button>
@@ -26,63 +30,73 @@
     <div v-if="shiftModalVisible" class="modal-overlay">
       <div class="modal">
         <div class="modal-header">
-        <h2>Create New Shift</h2>
-      <button @click="closeShiftModal" class="close-button">Close</button>
-      </div>
-      <input v-model="newShift.title" placeholder="Title" maxlength="50" />
-
-      <label class="shift-type-label">
-        <input v-model="newShift.valik" type="radio" value="Onetime" />
-        <span>One-Time Shift</span>
-      </label>
-
-      <label class="shift-type-label">
-        <input v-model="newShift.valik" type="radio" value="Recurring" />
-        <span>Recurring Shift</span>
-      </label>
-
-      <div v-if="newShift.valik === 'Recurring'">
-        <label>Start Date:</label>
-        <input v-model="newShift.startDate" type="date" />
-        <label>End Date:</label>
-        <input v-model="newShift.endDate" type="date" />
-
-        <!-- Dropdown list for selecting a single weekday -->
-        <label class="weekday-label">Select Weekday:</label>
-        <div class="weekday-input">
-        <select v-model="newShift.selectedWeekDay" class="full-width">
-          <option v-for="day in weekdays" :key="day" :value="day">{{ day }}</option>
-        </select>
+          <h2>Create New Shift</h2>
+          <button @click="closeShiftModal" class="close-button">Close</button>
         </div>
-      </div>
+        <input v-model="newShift.title" placeholder="Title" maxlength="50" />
 
-      <div v-if="newShift.valik === 'Onetime'">
-        <label>Date:</label>
-        <input v-model="newShift.date" type="date" />
-      </div>
+        <label class="shift-type-label">
+          <input v-model="newShift.valik" type="radio" value="Onetime" />
+          <span>One-Time Shift</span>
+        </label>
 
-      <label>Shift Time:</label>
-      <input v-model="newShift.startTime" type="time" placeholder="Start Time" />
-      <input v-model="newShift.endTime" type="time" placeholder="End Time" />
-      <div v-if="validationError" class="validation-error">{{ validationError }}</div>
-      <button
-      @click="validateAndAddShift"
-        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-        Add shift
-      </button>
+        <label class="shift-type-label">
+          <input v-model="newShift.valik" type="radio" value="Recurring" />
+          <span>Recurring Shift</span>
+        </label>
+
+        <div v-if="newShift.valik === 'Recurring'">
+          <label>Start Date:</label>
+          <input v-model="newShift.startDate" type="date" />
+          <label>End Date:</label>
+          <input v-model="newShift.endDate" type="date" />
+
+          <!-- Dropdown list for selecting a single weekday -->
+          <label class="weekday-label">Select Weekday:</label>
+          <div class="weekday-input">
+            <select v-model="newShift.selectedWeekDay" class="full-width">
+              <option v-for="day in weekdays" :key="day" :value="day">
+                {{ day }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div v-if="newShift.valik === 'Onetime'">
+          <label>Date:</label>
+          <input v-model="newShift.date" type="date" />
+        </div>
+
+        <label>Shift Time:</label>
+        <input
+          v-model="newShift.startTime"
+          type="time"
+          placeholder="Start Time"
+        />
+        <input v-model="newShift.endTime" type="time" placeholder="End Time" />
+        <div v-if="validationError" class="validation-error">
+          {{ validationError }}
+        </div>
+        <button
+          @click="validateAndAddShift"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+          Add shift
+        </button>
       </div>
     </div>
-  
+
     <FullCalendar
       class="demo-app-calendar"
       :options="calendarOptions"
       :events="calendarOptions.events"
     >
       <template v-slot:eventContent="arg">
-        <b v-if="!shiftModalVisible" @click="handleEventClick(arg)">{{ arg.event.title }}</b>
-       <b v-else>{{ arg.event.title }}</b>
+        <b v-if="!shiftModalVisible" @click="handleEventClick(arg)">{{
+          arg.event.title
+        }}</b>
+        <b v-else>{{ arg.event.title }}</b>
       </template>
     </FullCalendar>
   </div>
@@ -98,6 +112,13 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Shift } from '@/modules/shift';
 import { watch } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
 
 const shiftsStore = useShiftsStore();
 const { shifts } = storeToRefs(shiftsStore);
@@ -119,7 +140,8 @@ const confirmationModalVisible = ref(false);
 let selectedShift: Shift | null = null;
 
 const handleEventClick = (arg: any) => {
-  selectedShift = shifts.value.find((s) => s.id === parseInt(arg.event.id)) || null;
+  selectedShift =
+    shifts.value.find((s) => s.id === parseInt(arg.event.id)) || null;
   openConfirmationModal();
 };
 
@@ -164,7 +186,15 @@ const formatToISOTime = (dateString: string): string => {
   const minutes = String(date.getMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
 };
-const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const weekdays = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
 const validationError = ref('');
 
@@ -179,7 +209,11 @@ const validateAndAddShift = async () => {
 };
 
 const validateInput = () => {
-  if (!newShift.value.title || !newShift.value.startTime || !newShift.value.endTime) {
+  if (
+    !newShift.value.title ||
+    !newShift.value.startTime ||
+    !newShift.value.endTime
+  ) {
     validationError.value = 'Please fill in all required fields.';
     return false;
   }
@@ -187,7 +221,15 @@ const validateInput = () => {
   return true;
 };
 const addNewShift = async () => {
-  const { title, valik, startDate, endDate, selectedWeekDay, startTime, endTime } = newShift.value;
+  const {
+    title,
+    valik,
+    startDate,
+    endDate,
+    selectedWeekDay,
+    startTime,
+    endTime,
+  } = newShift.value;
 
   if (valik === 'Onetime') {
     const newShiftData = {
@@ -201,14 +243,16 @@ const addNewShift = async () => {
 
     await addAndDisplayShift(newShiftData);
   } else {
-    const selectedWeekdays = Array.isArray(selectedWeekDay) ? selectedWeekDay : [selectedWeekDay];
+    const selectedWeekdays = Array.isArray(selectedWeekDay)
+      ? selectedWeekDay
+      : [selectedWeekDay];
     const recurringShifts = generateRecurringShifts(
-      title, 
+      title,
       startDate,
       endDate,
       selectedWeekdays,
       startTime,
-      endTime
+      endTime,
     );
 
     for (const shift of recurringShifts) {
@@ -223,12 +267,12 @@ const toggleWeekends = () => {
   updateCalendarEvents();
 };
 const generateRecurringShifts = (
-  title: string, 
+  title: string,
   startDate: string,
   endDate: string,
   selectedWeekdays: string[],
   startTime: string,
-  endTime: string
+  endTime: string,
 ) => {
   const shifts = [];
   const currentDate = new Date(startDate);
@@ -294,7 +338,7 @@ function formatTime(timeString: string): string {
   if (parts.length === 2) {
     return `${parts[0]}:${parts[1]}`;
   }
-  return timeString; 
+  return timeString;
 }
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -307,45 +351,48 @@ const calendarOptions = ref({
   weekends: false,
   events: [] as any[],
   eventClick: handleEventClick,
-  dateClick:handleDateClick,
+  dateClick: handleDateClick,
 });
 
 onMounted(() => {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
   shiftsStore.load();
   updateCalendarEvents();
 });
 
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
-    id: shift.id, 
+    id: shift.id,
     title: shift.title,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
   }));
 };
 
-
-const openShiftModal = (payload?: MouseEvent, defaultDate: string | null = null) => {
+const openShiftModal = (
+  payload?: MouseEvent,
+  defaultDate: string | null = null,
+) => {
   if (payload) {
     payload.preventDefault();
   }
   shiftModalVisible.value = true;
-  document.body.style.overflow = 'hidden'; 
+  document.body.style.overflow = 'hidden';
 
   newShift.value.date = defaultDate || new Date().toISOString().slice(0, 10);
-  newShift.value.startDate = defaultDate || new Date().toISOString().slice(0, 10);;
-  newShift.value.endDate = defaultDate || new Date().toISOString().slice(0, 10);;
+  newShift.value.startDate =
+    defaultDate || new Date().toISOString().slice(0, 10);
+  newShift.value.endDate = defaultDate || new Date().toISOString().slice(0, 10);
   newShift.value.valik = 'Onetime';
-
 };
-
 
 const closeShiftModal = () => {
   shiftModalVisible.value = false;
   validationError.value = '';
-  document.body.style.overflow = ''; 
+  document.body.style.overflow = '';
 };
-
 
 watch(shifts, () => {
   updateCalendarEvents();
@@ -384,23 +431,20 @@ watch(shifts, () => {
   margin: 0;
 }
 .blurred {
-  filter: blur(5px); 
+  filter: blur(5px);
 }
 
-
-
-
 .modal {
-    background: #f8f8f8; /* Light gray background */
-    padding: 15px;
-    border-radius: 12px; /* More rounded corners */
-    width: 500px;
-    z-index: 3; /* Ensure the modal is above the modal overlay */
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Increased space between positions */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
-  }
+  background: #f8f8f8; /* Light gray background */
+  padding: 15px;
+  border-radius: 12px; /* More rounded corners */
+  width: 500px;
+  z-index: 3; /* Ensure the modal is above the modal overlay */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Increased space between positions */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
+}
 
 .close-button {
   background: none;
@@ -440,7 +484,7 @@ watch(shifts, () => {
   background-color: #fff;
 }
 .calendar-container {
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 .btn-remove-shift {
   background-color: red;
@@ -458,59 +502,59 @@ watch(shifts, () => {
 }
 
 .event-list-item {
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 input {
-    padding: 12px; /* Increased padding */
-    background-color: #f0f0f0; /* Lighter gray background for input fields */
-    border: none; /* Remove the border */
-    border-radius: 8px; /* More rounded corners */
-    width: 100%;
-    box-sizing: border-box;
-  }
+  padding: 12px; /* Increased padding */
+  background-color: #f0f0f0; /* Lighter gray background for input fields */
+  border: none; /* Remove the border */
+  border-radius: 8px; /* More rounded corners */
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
-  .radio-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-  .radio-label input {
-    margin-right: 5px;
-  }
-  .shift-type-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.radio-label input {
+  margin-right: 5px;
+}
+.shift-type-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-  .shift-type-label input {
-    vertical-align: middle;
-    margin-right: -450px;
-  }
+.shift-type-label input {
+  vertical-align: middle;
+  margin-right: -450px;
+}
 
-  .shift-type-label span {
-    vertical-align: middle;
-  }
-  .weekday-label {
-    margin-top: 10px; /* Add space between the select weekday and the labels above */
-  }
-  .weekday-input {
-    margin-top: 5px; /* Adjust the margin as needed */
-  }
-  .full-width {
-    width: 100%; /* Adjust the width and consider any padding or margin */
-    padding: 6px; /* Add padding to match the input fields */
-    border-radius: 8px; /* Add border-radius for rounded corners */
-    background-color: #f0f0f0; /* Lighter gray background for consistency */
-    border: 1px solid #ccc; /* Remove the default border */
-  }
-  button-container {
+.shift-type-label span {
+  vertical-align: middle;
+}
+.weekday-label {
+  margin-top: 10px; /* Add space between the select weekday and the labels above */
+}
+.weekday-input {
+  margin-top: 5px; /* Adjust the margin as needed */
+}
+.full-width {
+  width: 100%; /* Adjust the width and consider any padding or margin */
+  padding: 6px; /* Add padding to match the input fields */
+  border-radius: 8px; /* Add border-radius for rounded corners */
+  background-color: #f0f0f0; /* Lighter gray background for consistency */
+  border: 1px solid #ccc; /* Remove the default border */
+}
+button-container {
   display: flex;
   justify-content: center;
 }
@@ -530,5 +574,4 @@ input {
 .btn-edit {
   background-color: #4299e1;
 }
-  
 </style>

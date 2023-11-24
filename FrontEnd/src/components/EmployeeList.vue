@@ -60,6 +60,10 @@ import { useEmployeesStore } from '@/stores/employeesStore';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
 
 const employeesStore = useEmployeesStore();
 const { employees } = storeToRefs(employeesStore);
@@ -67,6 +71,9 @@ const employeesNameFilter = ref<string>('');
 defineProps<{ title: String }>();
 
 onMounted(() => {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
   employeesStore.load();
 });
 

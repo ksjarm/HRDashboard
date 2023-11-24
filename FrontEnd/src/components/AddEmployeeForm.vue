@@ -1,5 +1,7 @@
 <template>
-  <div class="flex justify-center labelDiv bg-indigo-200">Add Employee</div>
+  <div class="flex justify-center labelDiv bg-indigo-200 mt-2 ml-2 mr-2">
+    Add Employee
+  </div>
   <div
     class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-6 minusmargin"
   >
@@ -61,7 +63,6 @@
             <label for="phoneNumber">Phone number</label>
             <input
               id="phoneNumber"
-              type="number"
               name="phoneNumber"
               v-model="props.employee.phoneNumber"
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -136,6 +137,18 @@
 import { Employee } from '@/modules/employee';
 import { useEmployeesStore } from '@/stores/employeesStore';
 import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
+import { storeToRefs } from 'pinia';
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
+
+onMounted(() => {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
+});
 
 const props = defineProps<{ employee: Employee }>();
 
@@ -171,7 +184,7 @@ const submitForm = () => {
   align-items: center;
 }
 .minusmargin {
-  margin-top: -80px;
+  margin-top: -30px;
 }
 .labelDiv {
   font-size: xx-large;
