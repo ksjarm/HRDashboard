@@ -3,14 +3,17 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
 import { useNotificationsStore } from '@/stores/notificationsStore';
-
+import { useAuthStore } from '@/stores/authStore';
 
 export const useEmployeesStore = defineStore('employeesStore', () => {
-  const apiGetEmployees = useApi<Employee[]>('employees');
+  const authStore = useAuthStore();
   const employees = ref<Employee[]>([]);
   let allEmployees: Employee[] = [];
 
   const loadEmployees = async () => {
+    const apiGetEmployees = useApi<Employee[]>('employees', {
+      headers: { Authorization: 'Bearer ' + authStore.token },
+    });
     await apiGetEmployees.request();
     if (apiGetEmployees.response.value) {
       return apiGetEmployees.response.value!;
@@ -19,6 +22,7 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
   };
   const load = async () => {
     allEmployees = await loadEmployees();
+    console.log('im here');
     employees.value = allEmployees;
   };
 
@@ -30,6 +34,7 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     const apiAddEmployee = useApi<Employee>('employees', {
       method: 'POST',
       headers: {
+        Authorization: 'Bearer ' + authStore.token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -44,7 +49,7 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
       const notificationsStore = useNotificationsStore();
       const newNotification = {
         message: `New employee added: ${employee.name} ${employee.surname}`,
-        date: new Date(), 
+        date: new Date(),
         type: 'Employee Added',
       };
       await notificationsStore.addNotifications(newNotification);
@@ -55,6 +60,7 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     const apiAddEmployee = useApi<Employee>('employees/' + employee.id, {
       method: 'PUT',
       headers: {
+        Authorization: 'Bearer ' + authStore.token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -78,6 +84,7 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
   const deleteEmployee = async (employee: Employee) => {
     const deleteEmployeeRequest = useApiRawRequest(`employees/${employee.id}`, {
       method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + authStore.token },
     });
 
     const res = await deleteEmployeeRequest();
@@ -115,6 +122,23 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     'employees/currentEmployeeCount',
   );
 
+  const getEmployeeShiftsById = async (employeeId: number) => {
+    const getEmployeeShifts = useApiRawRequest(
+      `employees/${employeeId}/shifts`,
+      {
+        method: 'GET',
+      },
+    );
+    const res = await getEmployeeShifts();
+
+    if (res.status === 200) {
+      const data = await res.json();
+      return data;
+    }
+
+    return [];
+  };
+
   const getCurrentEmployeeCount = async () => {
     await apiGetCurrentEmployeeCount.request();
     if (apiGetCurrentEmployeeCount.response.value) {
@@ -132,5 +156,6 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     deleteEmployee,
     filterEmployeesByName,
     getCurrentEmployeeCount,
+    getEmployeeShiftsById,
   };
 });

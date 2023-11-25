@@ -9,6 +9,8 @@ public class DataContext : DbContext {
     public DbSet<Employee>? EmployeeList { get; set; }
     public DbSet<Shift>? ShiftList { get; set; }
     public DbSet<Notification> NotificationsList { get; set; }
+    public DbSet<EmployeeShift> EmployeeShiftsList { get; set; }
+    public DbSet<User> UserList { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
@@ -63,16 +65,44 @@ public class DataContext : DbContext {
                 Salary = 1500,
                 Status = Status.Active,
             });
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "lilianna.tamm@company.ee",
+                    // parool on test1
+                    Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
+                    Name = "Lilianna",
+                    Surname = "Tamm",
+                    PhoneNumber = "55967283",
+                    Adress = "Akadeemia tee 12-16",
+                    Role = "Staff HR"
+                    
+                },
+                new User
+                {
+                    Id = 2,
+                    Username = "roland.tuvi@company.ee",
+                    Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
+                    Name = "Roland",
+                    Surname = "Tuvi",
+                    PhoneNumber = "476586030",
+                    Adress = "Akadeemia tee 17-12",
+                    Role = "Junior HR"
+                }  
+            );
+
         
         modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
             new Shift {
                 Id = 1,
                 Title = "Evening shift",
-                Date = "2023-11-21",
+                Date = "2023-12-21",
                 StartTime = "13:00",
                 EndTime = "21:00",
-                Valik=Valik.Onetime,
+                Valik= Valik.Onetime,
                 
             },
             new Shift {
@@ -86,13 +116,11 @@ public class DataContext : DbContext {
             new Shift {
                 Id = 3,
                 Title = "All day shift",
-                Date = "2023-11-09",
+                Date = "2023-12-09",
                 StartTime = "13:00",
                 EndTime = "21:00",
                 Valik=Valik.Onetime,
             });
-
-
 
 
        modelBuilder.Entity<EmployeeShift>().HasData(

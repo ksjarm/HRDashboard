@@ -2,7 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using HRDashboardApplication.Model;
 using static HRDashboardApplication.Model.Employee;
-using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,23 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
     .AllowAnyHeader();
 }));
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            RoleClaimType = ClaimTypes.Role,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
+    });
+
+
 
 var app = builder.Build();
 
@@ -53,6 +73,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

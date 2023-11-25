@@ -8,7 +8,7 @@
         <h1 class="role">{{ employee?.position }}</h1>
       </div>
       <div>
-        <h1 class="role">Shifts done this month:</h1>
+        <h1 class="role">Shifts done: {{ shiftsDone }}</h1>
       </div>
     </div>
     <div id="narrow" class="">
@@ -46,8 +46,8 @@
     <h1 class="upcomingShifts">Upcoming shifts:</h1>
   </div>
   <div id="upcomingShifts">
-    <DataTable>
-      <Column field="date" header="Date"> </Column>
+    <DataTable :value="employeeShifts">
+      <Column field="shift.date" header="Date"> </Column>
       <Column field="startTime" header="Start time"> </Column>
       <Column field="endTime" header="End time"> </Column>
     </DataTable>
@@ -55,25 +55,38 @@
 </template>
 
 <script setup lang="ts">
+import { useEmployeeShiftsStore } from '@/stores/employeeShiftsStore';
 import { useEmployeesStore } from '@/stores/employeesStore';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/authStore';
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
 
 const route = useRouter();
 const employeeId = ref<number | null>(null);
 const employeesStore = useEmployeesStore();
+const employeesShiftsStore = useEmployeeShiftsStore();
+const { employeeShifts } = storeToRefs(employeesShiftsStore);
 
-// Fetch the employee details based on the ID from the route parameters
+onMounted(async () => {
+  if (!isAuthenticated.value) {
+    route.push({ name: 'Log in' });
+  }
+  await employeesShiftsStore.load();
+  const id = route.currentRoute.value.query.id;
+  employeeId.value = id ? parseInt(id as string, 10) : null;
+});
+
 const employee = computed(() => {
   const id = employeeId.value;
   return id ? employeesStore.getEmployeeById(id) : null;
 });
-
-onMounted(() => {
-  // Get the employee ID from the route parameters
-  const id = route.currentRoute.value.query.id;
-  employeeId.value = id ? parseInt(id as string, 10) : null;
-});
+const shiftsDone = (employeeId: number) => {
+  employeesStore.getEmployeeShiftsById(employeeId);
+};
 </script>
 
 <style>
@@ -94,10 +107,6 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
 }
-#upcomingShifts {
-  display: flex;
-  flex: 1;
-}
 .upcomingShifts {
   font-size: xx-large;
   margin-right: 20px;
@@ -109,7 +118,8 @@ onMounted(() => {
   margin-left: 20px;
 }
 .profileimg {
-  margin-top: 70px;
+  margin-top: 45px;
+  margin-bottom: 15px;
   border: solid;
   border-radius: 25px;
   padding: 10px;
@@ -117,7 +127,7 @@ onMounted(() => {
 .role {
   text-align: center;
   margin-top: 10px;
-  font-size: large;
+  font-size: x-large;
 }
 .info {
   border: solid;

@@ -1,5 +1,5 @@
-import { Employee } from "./employee";
-import { Shift } from "./shift";
+import { Employee } from './employee';
+import { Shift } from './shift';
 
 export interface EmployeeShift {
     employeeId: number;

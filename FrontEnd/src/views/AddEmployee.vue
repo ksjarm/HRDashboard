@@ -16,7 +16,7 @@ const employee: Ref<Employee> = ref({
   email: '',
   phoneNumber: '',
   adress: '',
-  position: '',
+  position: 'Vendor',
   salary: 0,
   status: 'Active',
   photo: '',

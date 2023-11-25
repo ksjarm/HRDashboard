@@ -6,10 +6,13 @@ import SheduleVue from '@/components/Shedule.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import NotificationHistoryVue from '@/views/NotificationHistory.vue';
 import EmployeeFullInfo from '@/views/EmployeeFullInfo.vue';
+import LoginVue from '@/views/Login.vue';
+import { useAuthStore } from '@/stores/authStore';
+import HRFullInfo from '@/views/HRFullInfo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
     props: { title: 'Dashboard' },
@@ -45,11 +48,34 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Get full info',
     component: EmployeeFullInfo,
   },
+  {
+    path: '/',
+    name: 'Log in',
+    component: LoginVue,
+  },
+  {
+    path: '/hrfullinfo',
+    name: 'Get HR full info',
+    component: HRFullInfo,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, _, next) => {
+  const useAuth = useAuthStore();
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (useAuth.isAuthenticated) {
+      next();
+      return;
+    }
+    next('/login');
+  } else {
+    next();
+  }
 });
 
 export default router;

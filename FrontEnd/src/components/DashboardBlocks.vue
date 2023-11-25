@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container p-8">
     <div class="div1">
       <h1 class="div1Text">Welcome to HR Dashboard!👋</h1>
     </div>
@@ -14,12 +14,10 @@
       <div class="schedule">
         <div class="today-date">{{ today.toLocaleDateString() }}</div>
         <div class="shifts">
-         <!-- <div v-for="shift in todayShifts" :key="shift.id">
-            Employee Name: {{ shift.startTime }} - {{ shift.endTime }} ({{
-              shift.title
-            }})
+          <div v-for="shift in todayShifts" :key="shift.id">
+            {{ shift.startTime }} - {{ shift.endTime }} {{ shift.title }}
           </div>
-          <div v-if="todayShifts.length === 0">No shifts for today.</div>-->
+          <div v-if="todayShifts.length === 0">No shifts for today.</div>
         </div>
       </div>
     </div>
@@ -31,12 +29,26 @@
     </div>
     <div class="div2">
       <div class="div2Text">⚡Notifications</div>
-      <div v-if="lastTwoNotifications.length === 0"> Notifications not found </div>
-      <div class="notification-block" v-for="notification in lastTwoNotifications" :key="notification.notificationId">
-        <div>{{new Date(notification.date).toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }) }}  {{ notification.type }}</div>
+      <div v-if="lastTwoNotifications.length === 0">
+        Notifications not found
       </div>
-    </div>     
-    </div>  
+      <div
+        class="notification-block"
+        v-for="notification in lastTwoNotifications"
+        :key="notification.notificationId"
+      >
+        <div>
+          {{
+            new Date(notification.date).toLocaleDateString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          }}
+          {{ notification.type }}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -56,6 +68,12 @@ import {
   Title,
 } from 'chart.js';
 import { Bar } from 'vue-chartjs';
+import { useAuthStore } from '@/stores/authStore';
+import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
+
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.register(
@@ -73,21 +91,25 @@ const employeesStore = useEmployeesStore();
 const employeesNameFilter = ref<string>('');
 const today = new Date();
 const shiftsStore = useShiftsStore();
+const router = useRouter();
 
 const notificationsStore = useNotificationsStore();
 
-/*const todayShifts = computed(() => {
+const todayShifts = computed(() => {
   return shiftsStore.shifts.filter((shift) => {
-    const shiftDate = new Date(shift.date);
+    const shiftDate = new Date(shift.date as string);
     return shiftDate.toDateString() === today.toDateString();
   });
-});*/
+});
 
 const lastTwoNotifications = computed(() => {
-  return notificationsStore.notifications.slice(-3).reverse(); 
+  return notificationsStore.notifications.slice(-3).reverse();
 });
 
 onMounted(() => {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
   employeesStore.load();
   shiftsStore.load();
   notificationsStore.load();
@@ -216,7 +238,7 @@ watch(employeesNameFilter, (name) => {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-gap: 10px;
-  height: 1000px;
+  height: 100vh;
 }
 
 .div1 {
@@ -272,9 +294,10 @@ watch(employeesNameFilter, (name) => {
 }
 .shifts {
   font-weight: normal;
+  text-align: left;
   margin-left: 20px;
 }
-.notification-block{
+.notification-block {
   background-color: rgba(199, 210, 254, 0.294);
   padding: 10px;
   border-radius: 8px;

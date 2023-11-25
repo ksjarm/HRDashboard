@@ -1,4 +1,4 @@
-import { EmployeeShift } from "./employeeShift";
+import { EmployeeShift } from './employeeShift';
 
 export interface Shift {
     id: number;
