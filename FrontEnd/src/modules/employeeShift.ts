@@ -4,8 +4,8 @@ import { Shift } from "./shift";
 export interface EmployeeShift {
     employeeId: number;
     shiftId: number;
-    employee: Employee | null;
-    shift: Shift | null;
+    employee?: Employee;
+    shift?: Shift;
   }
   
   export interface State {
