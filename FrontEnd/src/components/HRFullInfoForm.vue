@@ -63,13 +63,15 @@ onMounted(() => {
     margin-left: 10px;
     border: solid;
     border-radius: 25px;
-    border-color: rgba(199, 210, 254);
+    border-color: rgba(199, 210, 254, 0.294);
+    border-width: 8px 8px 8px 8px;
     padding: 10px;
   }
   .infoHR {
     display: flex;
     border: solid;
-    border-color: rgba(199, 210, 254);
+    border-color: rgba(199, 210, 254, 0.294);
+    background-color: rgba(199, 210, 254, 0.294);
     border-radius: 25px;
     margin-top: 30px;
     margin-right: 60px;

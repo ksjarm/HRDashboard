@@ -93,8 +93,11 @@ const shiftsDone = (employeeId: number) => {
 #parent {
   display: flex;
   border: solid;
-  border-color: black;
+  border-color: #ccccff;
   border-radius: 25px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
 }
 #narrow {
   width: 500px;
