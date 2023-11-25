@@ -1,132 +1,80 @@
 <template>
-    <div id="parent1">
-      <div id="wide1" class="">
-        <h1 class="label1">Your Profile</h1>
-        <h1 class="label1">{{ user?.name }} {{ user?.surname }}</h1>
-        <img src="../assets/user-profile-image.jpg" class="h-50 profileimg1" />
-        <!-- <div>
-          <h1 class="role">{{ user?.position }}</h1>
-        </div> -->
-        <div>
-          <h1 class="role1">Shifts done this month:</h1>
-        </div>
+    <div id="parent">
+      <div id="wide" class="">
+        <h1 class="infoLabel">Your Profile</h1>
+        <h1 class="label">{{ user?.name }} {{ user?.surname }}</h1>
+        <h1 class="infoLabel">Role: {{ user?.role }}</h1>
+        <img src="../assets/user-profile-image.jpg" class="h-50 profileimgHR" />
       </div>
-      <div id="narrow1" class="">
-        <div class="info1">
-          <h1 class="infoLabel1">Name: {{ user?.name }}</h1>
+      <div id="narrowHR" class="">
+        <div class="infoHR">
+          <h1 class="infoLabel"><span style="font-weight: bold;">Name: </span>{{ user?.name }}</h1>
         </div>
-        <div class="info1">
-          <h1 class="infoLabel1">Surname: {{ user?.surname }}</h1>
+        <div class="infoHR">
+          <h1 class="infoLabel"><span style="font-weight: bold;">Surname: </span>{{ user?.surname }}</h1>
         </div>
-        <div class="info1">
-          <h1 class="infoLabel1">Gender: {{ user?.gender }}</h1>
+        <div class="infoHR">
+          <h1 class="infoLabel"><span style="font-weight: bold;">Phone Number: </span>{{ user?.phoneNumber }}</h1>
         </div>
-        <div class="info1">
-          <h1 class="infoLabel1">Date of Birth: {{ user?.dateOfBirth }}</h1>
+        <div class="infoHR">
+          <h1 class="infoLabel"><span style="font-weight: bold;">Address: </span>{{ user?.adress }}</h1>
         </div>
-        <div class="info1">
-          <h1 class="infoLabel1">Email: {{ user?.email }}</h1>
+        <div class="infoHR">
+          <h1 class="infoLabel"><span style="font-weight: bold;">Username: </span>{{ user?.username }}</h1>
         </div>
-        <div class="info1">
-          <h1 class="infoLabel1">Phone number: {{ user?.phoneNumber }}</h1>
-        </div>
-        <div class="finalinfo1"></div>
+        <div class="finalinfo"></div>
       </div>
-    </div>
-    <div>
-      <h1 class="upcomingShifts1">Upcoming shifts:</h1>
-    </div>
-    <div id="upcomingShifts1">
-      <DataTable>
-        <Column field="date" header="Date"> </Column>
-        <Column field="startTime" header="Start time"> </Column>
-        <Column field="endTime" header="End time"> </Column>
-      </DataTable>
     </div>
   </template>
   
   <script setup lang="ts">
-  import { useUsersStore } from '@/stores/usersStore';
-  import { onMounted, ref, computed } from 'vue';
-  import { useRouter } from 'vue-router';
-  
-  const route = useRouter();
-  const userId = ref<number | null>(null);
-  const usersStore = useUsersStore();
-  
-  const user = computed(() => {
-    const id = userId.value;
-    return id ? usersStore.getUserById(id) : null;
-  });
-  
-  onMounted(() => {
-    const id = route.currentRoute.value.query.id;
-    userId.value = id ? parseInt(id as string, 10) : null;
-  });
+import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/authStore';
+import { useUsersStore } from '@/stores/usersStore';
+import { useRouter } from 'vue-router';
+import { User } from '@/modules/user';
+
+const router = useRouter();
+const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(auth);
+
+const usersStore = useUsersStore();
+
+const user = ref<User | null>(null);
+
+onMounted(() => {
+  if (!isAuthenticated.value) {
+    router.push({ name: 'Log in' });
+  }
+  usersStore.load();
+  user.value = usersStore.users.find((u) => u.username === auth.user?.username) || null;
+  console.log('user', user.value)
+});
   </script>
   
   <style>
-  #parent1 {
-    display: flex;
-    border: solid;
-    border-color: rgba(199, 210, 254);
-    border-radius: 25px;
-  }
-  #narrow1 {
-    width: 500px;
+  #narrowHR {
+    width: 650px;
     /* Just so it's visible */
   }
-  #wide1 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  #upcomingShifts1 {
-    display: flex;
-    flex: 1;
-  }
-  .upcomingShifts1 {
-    font-size: xx-large;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    margin-top: 20px;
-  }
-  .label1 {
-    font-size: xx-large;
-    margin-left: 20px;
-  }
-  .profileimg1 {
-    margin-top: 70px;
+  .profileimgHR {
+    margin-top: 30px;
+    margin-left: 10px;
     border: solid;
     border-radius: 25px;
     border-color: rgba(199, 210, 254);
     padding: 10px;
   }
-  .role1 {
-    text-align: center;
-    margin-top: 10px;
-    font-size: large;
-  }
-  .info1 {
+  .infoHR {
+    display: flex;
     border: solid;
     border-color: rgba(199, 210, 254);
     border-radius: 25px;
-    margin-top: 20px;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-  }
-  .finalinfo1 {
-    margin-top: 20px;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-  }
-  .infoLabel1 {
-    font-size: x-large;
-    margin-left: 10px;
+    margin-top: 30px;
+    margin-right: 60px;
+    justify-content: left;
+    align-items: left;
   }
   </style>
   

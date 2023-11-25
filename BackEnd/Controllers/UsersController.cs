@@ -26,6 +26,14 @@ namespace BackEnd.Controllers
             _config = config;
             _context = context;
         }
+
+        [HttpGet] public IActionResult Get() => Ok(_context.UserList);
+        
+        [HttpGet("{id}")] public IActionResult GetDetails(int? id) {
+        var user = _context.UserList!.Find(id);
+        if (user == null) return NotFound();
+        return Ok(user);
+    }
     
         [HttpPost("login")]
         public IActionResult Login([FromBody] User login)

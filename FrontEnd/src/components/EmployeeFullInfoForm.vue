@@ -1,7 +1,7 @@
 <template>
   <div id="parent">
     <div id="wide" class="">
-      <h1 class="label">Employee Profile</h1>
+      <h1 class="infoLabel">Employee Profile</h1>
       <h1 class="label">{{ employee?.name }} {{ employee?.surname }}</h1>
       <img src="../assets/profileimg2.png" class="h-50 profileimg" />
       <div>
@@ -112,9 +112,11 @@ const shiftsDone = (employeeId: number) => {
   margin-right: 20px;
   margin-bottom: 20px;
   margin-top: 20px;
+  margin-left: 20px;
 }
 .label {
   font-size: xx-large;
+  font-weight: bold;
   margin-left: 20px;
 }
 .profileimg {
@@ -130,11 +132,12 @@ const shiftsDone = (employeeId: number) => {
   font-size: x-large;
 }
 .info {
+  display: flex;
   border: solid;
   border-radius: 25px;
   margin-top: 20px;
-  justify-content: center;
-  align-items: center;
+  justify-content: left;
+  align-items: left;
   width: 400px;
 }
 .finalinfo {
