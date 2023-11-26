@@ -43,11 +43,11 @@ const usersStore = useUsersStore();
 
 const user = ref<User | null>(null);
 
-onMounted(() => {
+onMounted(async () => {
   if (!isAuthenticated.value) {
     router.push({ name: 'Log in' });
   }
-  usersStore.load();
+  await usersStore.load();
   user.value = usersStore.users.find((u) => u.username === auth.user?.username) || null;
   console.log('user', user.value)
 });
