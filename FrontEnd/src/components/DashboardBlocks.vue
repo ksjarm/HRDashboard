@@ -288,7 +288,7 @@ watch(employeesNameFilter, (name) => {
   height: 100px;
 }
 .today-date {
-  background-color: rgba(199, 210, 254);
+  background-color: #ccccff;
   text-align: center;
   font-size: 150%;
 }
