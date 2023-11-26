@@ -150,12 +150,16 @@ let selectedShift: Shift | null = null;
 const editShiftModalVisible = ref(false);
 
 const editShift = () => {
+  console.log('Edit Shift Clicked');
+  console.log('Selected Shift:', selectedShift);
   openEditShiftModal();
   closeConfirmationModal();
 };
 
 const openEditShiftModal = () => {
+  console.log('Opening Edit Shift Modal');
   if (selectedShift) {
+    console.log('Selected Shift:', selectedShift);
     // Populate the editing form with the details of the selected shift
     newShift.value.title = selectedShift.title;
     newShift.value.date = selectedShift.date || '';
