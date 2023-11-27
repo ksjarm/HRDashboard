@@ -34,6 +34,8 @@
           :key="notification.notificationId"
           class="notification-block"
         >
+        <span v-if="notification.isNew" class="hot-dot"></span>
+
           <div class="date-time">
             <strong>{{ formatDate(notification.date) }}</strong>
             <p>{{ formatTime(notification.date) }}</p>
@@ -109,9 +111,12 @@ const formatTime = (date: Date) => {
 const startDate = ref('');
 const endDate = ref('');
 const messageFilter = ref('');
+const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000;;
 
 const filteredNotifications = computed(() => {
-  return notifications.value.filter(notification => {
+  const now = new Date().getTime();
+  return notifications.value
+    .filter(notification => {
     const notificationDate = new Date(notification.date).getTime();
     const start = startDate.value ? new Date(startDate.value).getTime() : -Infinity;
     const end = endDate.value ? new Date(endDate.value).getTime() : Infinity;
@@ -121,12 +126,26 @@ const filteredNotifications = computed(() => {
     return notificationDate >= start 
       && notificationDate <= end
       && (!messageFilter.value || messageLower.includes(messageFilterLower));
-  });
+  })
+  .map(notification => {
+      const notificationDate = new Date(notification.date).getTime();
+      const isNew = now - notificationDate < TWO_HOURS_IN_MS;
+      return { ...notification, isNew };
+    });
+
 });
 
 </script>
 
 <style scoped>
+.hot-dot {
+  height: 10px;
+  width: 10px;
+  background-color: rgb(141, 108, 218); 
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 10px;
+}
 .filters {
   display: flex;
   align-items: center;
@@ -162,7 +181,7 @@ const filteredNotifications = computed(() => {
 
 .heading {
   margin: 0;
-  
+  font-weight: bold;  
 }  
 
 .confirmation-overlay {
@@ -215,6 +234,7 @@ const filteredNotifications = computed(() => {
 
 .notification-block {
   display: flex;
+  align-items: center;
   position: relative;
   border: 1px solid #ccc;
   border-radius: 8px;
