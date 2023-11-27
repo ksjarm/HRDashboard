@@ -1,14 +1,23 @@
 <template>
-  <div
-  class="min-h-screen bg-white-50 py-12 px-4 sm:px-6 lg:px=8 text-dark-300">
-    <div class="text-center">
-      <div class="bg-indigo-200 flex-1">
-        <h1 class="font-bold mb-10 mt-10 heading">Notifications History</h1>
+  <div class="container">
+    <h1 class="heading">Notifications History</h1>
+    <div class="header">
+      
+      <div class="filters">
+        <div class="date-filters">
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date" v-model="startDate" placeholder="Start date">
+
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date" v-model="endDate" placeholder="End date">
+        </div>
+        <input type="text" v-model="messageFilter" placeholder="Filter by words">
       </div>
       <div class="button-container">
-      <button @click="showConfirmation = true" class="delete-all-btn">Delete All Notifications</button>
+        <button @click="showConfirmation = true" class="delete-all-btn">Delete All Notifications</button>
+      </div>
     </div>
-  </div>
+
     <div v-if="showConfirmation" class="confirmation-overlay">
       <div class="confirmation-dialog">
         <h2>Confirm Deletion</h2>
@@ -17,10 +26,11 @@
         <button @click="showConfirmation = false">No</button>
       </div>
     </div>
+    
     <div class="notifications-container">
-      <div v-if="notifications.length > 0">
+      <div v-if="filteredNotifications.length > 0">
         <div
-          v-for="notification in notifications"
+          v-for="notification in filteredNotifications"
           :key="notification.notificationId"
           class="notification-block"
         >
@@ -48,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref , computed} from 'vue';
 import { useNotificationsStore } from '@/stores/notificationsStore';
 import { Notification } from '@/modules/notifications';
 import { useAuthStore } from '@/stores/authStore';
@@ -57,10 +67,8 @@ import { storeToRefs } from 'pinia';
 
 
 const router = useRouter();
-
 const auth = useAuthStore();
 const { isAuthenticated } = storeToRefs(auth);
-
 const notificationsStore = useNotificationsStore();
 const notifications = ref(notificationsStore.notifications);
 
@@ -97,9 +105,66 @@ const formatDate = (date: Date) => {
 const formatTime = (date: Date) => {
   return new Date(date).toLocaleTimeString();
 };
+
+const startDate = ref('');
+const endDate = ref('');
+const messageFilter = ref('');
+
+const filteredNotifications = computed(() => {
+  return notifications.value.filter(notification => {
+    const notificationDate = new Date(notification.date).getTime();
+    const start = startDate.value ? new Date(startDate.value).getTime() : -Infinity;
+    const end = endDate.value ? new Date(endDate.value).getTime() : Infinity;
+    const messageLower = notification.message.toLowerCase();
+    const messageFilterLower = messageFilter.value.toLowerCase();
+
+    return notificationDate >= start 
+      && notificationDate <= end
+      && (!messageFilter.value || messageLower.includes(messageFilterLower));
+  });
+});
+
 </script>
 
 <style scoped>
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+}
+.date-filters {
+  display: flex;
+  flex-direction: column; 
+  gap: 5px; 
+}
+.date-filters label {
+  font-size: 0.9em;
+  color: #333;
+}
+.filters input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1; 
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.heading {
+  margin: 0;
+  
+}  
+
 .confirmation-overlay {
   position: fixed;
   top: 0;
@@ -140,6 +205,8 @@ const formatTime = (date: Date) => {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px; 
+  padding-left: 15px;
+  
 }
 .notifications-container {
   display: flex;

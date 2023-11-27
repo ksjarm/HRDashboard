@@ -91,9 +91,9 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
     notifications.value = [];
   };
 
-  const filterNotificationsByMessage = (employeesNameFilter: string) => {
+  const filterNotificationsByMessage = (notificationsFilter: string) => {
     notifications.value = allNotifications.filter((x) =>
-      x.message.startsWith(employeesNameFilter),
+      x.message.startsWith(notificationsFilter),
     );
   };
 
