@@ -39,4 +39,9 @@ public class NotificationsController : ControllerBase {
 
         return NoContent();
     }
+    [HttpDelete("deleteAll")] public IActionResult DeleteAllNotifications() {
+        _context.NotificationsList.RemoveRange(_context.NotificationsList);
+        _context.SaveChanges();
+        return NoContent();
+    }
 }
