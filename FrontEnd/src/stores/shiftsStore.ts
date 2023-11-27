@@ -10,7 +10,6 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   const shifts = ref<Shift[]>([]);
   let allShifts: Shift[] = [];
 
-  
   const loadShifts = async () => {
     const apiGetShifts = useApi<Shift[]>('shifts', {
       headers: { Authorization: 'Bearer ' + authStore.token },
@@ -48,7 +47,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       const notificationsStore = useNotificationsStore();
       await notificationsStore.addNotifications({
         message: `Shift added: ${shift.title}`,
-        date: new Date(), 
+        date: new Date(),
         type: 'Shift Added',
       });
     }
@@ -63,12 +62,12 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       },
       body: JSON.stringify(shift),
     });
-  
+
     try {
       const response = await apiUpdateShift();
       if (response.ok) {
         load(); // Load shifts after successful update
-  
+
         const notificationsStore = useNotificationsStore();
         await notificationsStore.addNotifications({
           message: `Shift updated: ${shift.title}`,
@@ -84,8 +83,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       // Handle the error, e.g., notify the user or log it
     }
   };
-  
-  
+
   const deleteShift = async (shift: Shift) => {
     const deleteShiftRequest = useApiRawRequest(`shifts/${shift.id}`, {
       method: 'DELETE',
@@ -105,7 +103,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       if (id !== -1) {
         shifts.value.splice(id, 1);
       }
-      
+
       const notificationsStore = useNotificationsStore();
       await notificationsStore.addNotifications({
         message: `Shift deleted: ${shift.title}`,
@@ -114,8 +112,6 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       });
     }
   };
-
-
 
   return {
     shifts,

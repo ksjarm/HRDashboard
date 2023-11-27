@@ -18,7 +18,7 @@ public record Employee
     [Column("dateOfBirth")]
     public string? DateOfBirth {get;init;}
     [Column("email")]
-    public string? Email {get; init;}
+    public string? Email {get; set;}
     [Column("phonenumber")]
     public string? PhoneNumber {get;init;}
     [Column("adress")]

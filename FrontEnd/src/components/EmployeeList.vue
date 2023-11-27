@@ -87,7 +87,7 @@ const remove = (employee: Employee) => {
 const getFullInfo = (employee: Employee) => {
   router.push({
     name: 'Get full info',
-    query: { id: String(employee.id) },
+    query: { id: Number(employee.id) },
   });
 };
 

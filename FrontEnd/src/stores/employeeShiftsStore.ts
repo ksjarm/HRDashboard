@@ -1,5 +1,5 @@
 import { EmployeeShift } from '@/modules/employeeShift';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import useApi, { useApiRawRequest } from '@/modules/api';
 
@@ -7,7 +7,6 @@ export const useEmployeeShiftsStore = defineStore('employeeShiftsStore', () => {
   const apiGetEmployeeShifts = useApi<EmployeeShift[]>('employeeShifts');
   const employeeShifts = ref<EmployeeShift[]>([]);
   let allEmployeeShifts: EmployeeShift[] = [];
-  const employeeId = ref<number | null>(null);
 
   const loadEmployeeShifts = async () => {
     await apiGetEmployeeShifts.request();
@@ -89,19 +88,12 @@ export const useEmployeeShiftsStore = defineStore('employeeShiftsStore', () => {
       }
     }
   };
-  const shiftsDone = computed(() => {
-    const today = new Date();
 
-    if (employeeId.value) {
-      return employeeShifts.value.filter(
-        (shift) =>
-          shift.employeeId === employeeId.value &&
-          new Date(shift.shift.date) <= today,
-      ).length;
-    }
-
-    return 0;
-  });
+  const getShiftsByEmployeeId = (employeeId: number): EmployeeShift[] => {
+    return employeeShifts.value.filter(
+      (shift) => shift.employeeId === employeeId,
+    );
+  };
 
   return {
     employeeShifts,
@@ -109,6 +101,6 @@ export const useEmployeeShiftsStore = defineStore('employeeShiftsStore', () => {
     addEmployeeShift,
     updateEmployeeShift,
     deleteEmployeeShift,
-    shiftsDone,
+    getShiftsByEmployeeId,
   };
 });
