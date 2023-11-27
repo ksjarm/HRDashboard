@@ -1,8 +1,20 @@
 <template>
-  <div>
+  <div
+  class="min-h-screen bg-white-50 py-12 px-4 sm:px-6 lg:px=8 text-dark-300">
     <div class="text-center">
       <div class="bg-indigo-200 flex-1">
         <h1 class="font-bold mb-10 mt-10 heading">Notifications History</h1>
+      </div>
+      <div class="button-container">
+      <button @click="showConfirmation = true" class="delete-all-btn">Delete All Notifications</button>
+    </div>
+  </div>
+    <div v-if="showConfirmation" class="confirmation-overlay">
+      <div class="confirmation-dialog">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete all notifications?</p>
+        <button @click="deleteAllNotifications">Yes</button>
+        <button @click="showConfirmation = false">No</button>
       </div>
     </div>
     <div class="notifications-container">
@@ -43,6 +55,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
+
 const router = useRouter();
 
 const auth = useAuthStore();
@@ -68,6 +81,15 @@ const deleteNotification = async (notification: Notification) => {
   );
 };
 
+const showConfirmation = ref(false);
+
+const deleteAllNotifications = async () => {
+  
+  await notificationsStore.deleteAllNotifications();
+notifications.value = [];
+showConfirmation.value = false;
+};
+
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString();
 };
@@ -78,6 +100,47 @@ const formatTime = (date: Date) => {
 </script>
 
 <style scoped>
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);  
+  z-index: 1000;
+}
+.confirmation-dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1001; 
+  text-align: center;
+}
+.confirmation-dialog h2 {
+  margin-bottom: 15px;
+}
+.confirmation-dialog button {
+  margin: 10px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.confirmation-dialog button:hover {
+  background-color: #333; 
+  color: #fff; 
+  border-color: #444; 
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px; 
+}
 .notifications-container {
   display: flex;
   flex-direction: column;
@@ -92,19 +155,30 @@ const formatTime = (date: Date) => {
   margin-bottom: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
+.delete-all-btn {
+  background-color: #ff4d4d; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-weight: bold;
+  margin-top: 20px; 
+  transition: background-color 0.3s; 
+}
+.delete-all-btn:hover {
+  background-color: #cc0000; 
+}
 .date-time {
   padding: 16px;
   border-right: 1px solid #ccc;
   flex-basis: 20%;
   text-align: center;
 }
-
 .type-message {
   padding: 16px;
   flex-grow: 1;
 }
-
 .date-time strong {
   margin-bottom: 8px;
 }

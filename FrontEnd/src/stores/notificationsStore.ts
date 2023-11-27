@@ -83,6 +83,14 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
     }
   };
 
+  const deleteAllNotifications = async () => {
+    const deleteAllRequest = useApiRawRequest('notifications/deleteAll', {
+      method: 'DELETE',
+    });
+    await deleteAllRequest();
+    notifications.value = [];
+  };
+
   const filterNotificationsByMessage = (employeesNameFilter: string) => {
     notifications.value = allNotifications.filter((x) =>
       x.message.startsWith(employeesNameFilter),
@@ -97,6 +105,7 @@ export const useNotificationsStore = defineStore('notificationsStore', () => {
     addNotifications,
     updateNotifications,
     deleteNotification,
+    deleteAllNotifications,
     filterNotificationsByMessage,
   };
 });
