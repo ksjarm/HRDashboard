@@ -115,18 +115,23 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000;;
 
 const filteredNotifications = computed(() => {
   const now = new Date().getTime();
-  return notifications.value
-    .filter(notification => {
-    const notificationDate = new Date(notification.date).getTime();
-    const start = startDate.value ? new Date(startDate.value).getTime() : -Infinity;
-    const end = endDate.value ? new Date(endDate.value).getTime() : Infinity;
-    const messageLower = notification.message.toLowerCase();
-    const messageFilterLower = messageFilter.value.toLowerCase();
 
-    return notificationDate >= start 
-      && notificationDate <= end
-      && (!messageFilter.value || messageLower.includes(messageFilterLower));
-  })
+  return notifications.value
+  .filter(notification => {
+      const notificationDate = new Date(notification.date);
+
+      let start = startDate.value ? new Date(startDate.value) : null;
+      let end = endDate.value ? new Date(endDate.value) : null;
+      if (end) {
+        end.setHours(23, 59, 59, 999);
+      }
+      const messageLower = notification.message.toLowerCase();
+      const messageFilterLower = messageFilter.value.toLowerCase();
+
+      return (!start || notificationDate >= start) 
+        && (!end || notificationDate <= end)
+        && (!messageFilter.value || messageLower.includes(messageFilterLower));
+    })
   .map(notification => {
       const notificationDate = new Date(notification.date).getTime();
       const isNew = now - notificationDate < TWO_HOURS_IN_MS;
