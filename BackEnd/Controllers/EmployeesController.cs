@@ -44,8 +44,9 @@ public class EmployeesController : ControllerBase
     public IActionResult Create([FromBody] Employee employee)
     {
         var dbEmployee = _context.EmployeeList!.Find(employee.Id);
-        if (dbEmployee ==  null)
+        if (dbEmployee == null)
         {
+            employee.Email = employee.Name + "." + employee.Surname + "@" + "company.ee";
             _context.Add(employee);
             _context.SaveChanges();
 

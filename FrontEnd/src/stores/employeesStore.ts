@@ -46,9 +46,10 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
       allEmployees.push(apiAddEmployee.response.value!);
       employees.value = allEmployees;
 
+      const addedEmployee = apiAddEmployee.response.value;
       const notificationsStore = useNotificationsStore();
       const newNotification = {
-        message: `New employee added: ${employee.name} ${employee.surname}`,
+        message: `New employee added: ${addedEmployee.name} ${addedEmployee.surname}`,
         date: new Date(),
         type: 'Employee Added',
       };
