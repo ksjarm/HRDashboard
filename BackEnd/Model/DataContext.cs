@@ -93,8 +93,6 @@ public class DataContext : DbContext {
                 }  
             );
 
-        
-        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
             new Shift {
                 Id = 1,
