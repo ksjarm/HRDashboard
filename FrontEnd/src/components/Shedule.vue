@@ -470,6 +470,7 @@ watch(shifts, () => {
   margin-bottom: 10px;
 }
 .modal-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -495,6 +496,7 @@ watch(shifts, () => {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
 }
 .close-button {
+  position: absolute;
   background: none;
   border: none;
   cursor: pointer;
