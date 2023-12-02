@@ -4,34 +4,21 @@ using employeeproject.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HRDashboardApplication.Model;
-[Table("employee")]
-public record Employee
-{
-    [Column("id")]
-    public int Id { get; init; }
-    [Column("name")]
-    public string? Name {get;init;}
-    [Column("surname")]
-    public string? Surname {get;init;}
-    [Column("gender")]
-    public Gender? Gender {get;init;}
-    [Column("dateOfBirth")]
-    public string? DateOfBirth {get;init;}
-    [Column("email")]
-    public string? Email {get; init;}
-    [Column("phonenumber")]
-    public string? PhoneNumber {get;init;}
-    [Column("adress")]
-    public string? Adress {get;init;}
-    [Column("position")]
-    public string? Position {get;init;}
-    [Column("salary")]
-    public int? Salary {get;init;}
-    [Column("status")]
-    public Status Status {get;init;}
-    [Column("photo")]
-    public string? Photo {get;init;}
-    [JsonIgnore] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; } = new List<EmployeeShift>();
+[Table("employee")] public record Employee {
+    [Column("id")] public int Id { get; set; }
+    [Column("name")] public string? Name { get; set; }
+    [Column("surname")] public string? Surname { get; set; }
+    [Column("gender")] public Gender? Gender { get; set; }
+    [Column("dateOfBirth")] public string? DateOfBirth { get; set; }
+    [Column("email")] public string? Email { get; set; }
+    [Column("phonenumber")] public string? PhoneNumber { get; set; }
+    [Column("adress")] public string? Adress { get; set; }
+    [Column("position")] public string? Position { get; set; }
+    [Column("salary")] public int? Salary { get; set; }
+    [Column("status")] public Status Status { get; set; }
+    [Column("photo")] public string? Photo { get; set; }
+    [Column("shiftIds")] public List<int>? ShiftIds { get; set; }
+    [JsonIgnore] [Column("employeeShifts")] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; }
 }
 [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Status {

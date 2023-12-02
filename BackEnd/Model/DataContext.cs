@@ -16,13 +16,6 @@ public class DataContext : DbContext {
 
         modelBuilder.HasPostgresEnum<Status>();
 
-        modelBuilder.Entity<EmployeeShift>().ToTable("EmployeeShift")
-            .HasKey(key => new { key.EmployeeId, key.ShiftId });
-
-         modelBuilder.Entity<Employee>().ToTable("Employees").HasKey(x => x.Id);
-         modelBuilder.Entity<Shift>().ToTable("Shifts").HasKey(x => x.Id);
-         modelBuilder.Entity<Notification>().ToTable("Notifications").HasKey(x => x.NotificationId);
-
         modelBuilder.Entity<Employee>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Employee>().HasData(
             new Employee {
@@ -37,6 +30,7 @@ public class DataContext : DbContext {
                 Position = "Warehouse worker",
                 Salary = 1200,
                 Status = Status.Active,
+                ShiftIds = new List<int>(){2}
                 //Photo = "../assets/profileimg2.png"
             },
             new Employee {
@@ -51,6 +45,7 @@ public class DataContext : DbContext {
                 Position = "Vendor",
                 Salary = 1500,
                 Status = Status.OnMaternityLeave,
+                ShiftIds = new List<int>(){1}
             },
             new Employee {
                 Id = 3,
@@ -66,33 +61,27 @@ public class DataContext : DbContext {
                 Status = Status.Active,
             });
 
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    Username = "lilianna.tamm@company.ee",
-                    // parool on test1
-                    Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
-                    Name = "Lilianna",
-                    Surname = "Tamm",
-                    PhoneNumber = "55967283",
-                    Adress = "Akadeemia tee 12-16",
-                    Role = "Staff HR"
-                    
-                },
-                new User
-                {
-                    Id = 2,
-                    Username = "roland.tuvi@company.ee",
-                    Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
-                    Name = "Roland",
-                    Surname = "Tuvi",
-                    PhoneNumber = "476586030",
-                    Adress = "Akadeemia tee 17-12",
-                    Role = "Junior HR"
-                }  
-            );
-
+        modelBuilder.Entity<User>().HasData(
+            new User {
+                Id = 1,
+                Username = "lilianna.tamm@company.ee", // parool on test1
+                Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
+                Name = "Lilianna",
+                Surname = "Tamm",
+                PhoneNumber = "55967283",
+                Adress = "Akadeemia tee 12-16",
+                Role = "Staff HR" 
+            },
+            new User {
+                Id = 2,
+                Username = "roland.tuvi@company.ee",
+                Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
+                Name = "Roland",
+                Surname = "Tuvi",
+                PhoneNumber = "476586030",
+                Adress = "Akadeemia tee 17-12",
+                Role = "Junior HR"
+            });
         
         modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
@@ -103,7 +92,7 @@ public class DataContext : DbContext {
                 StartTime = "13:00",
                 EndTime = "21:00",
                 Valik= Valik.Onetime,
-                
+                EmployeeIds = new List<int>(){2}
             },
             new Shift {
                 Id = 2,
@@ -112,6 +101,7 @@ public class DataContext : DbContext {
                 StartTime = "8:00",
                 EndTime = "16:00",
                 Valik=Valik.Onetime,
+                EmployeeIds = new List<int>(){1}
             },
             new Shift {
                 Id = 3,
@@ -122,13 +112,21 @@ public class DataContext : DbContext {
                 Valik=Valik.Onetime,
             });
 
-
-       modelBuilder.Entity<EmployeeShift>().HasData(
-       new EmployeeShift { EmployeeId = 1, ShiftId = 1 },
-       new EmployeeShift { EmployeeId = 2, ShiftId = 2 },
-       new EmployeeShift { EmployeeId = 3, ShiftId = 3 }
-       );
-
+        modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
+        modelBuilder.Entity<EmployeeShift>()
+            .HasOne(se => se.Employee)
+            .WithMany(e => e.EmployeeShifts)
+            .HasForeignKey(se => se.EmployeeId)
+            .OnDelete(DeleteBehavior.Cascade);        
+        modelBuilder.Entity<EmployeeShift>()
+            .HasOne(se => se.Shift)
+            .WithMany(s => s.EmployeeShifts)
+            .HasForeignKey(se => se.ShiftId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<EmployeeShift>().HasData(
+            new EmployeeShift() { EmployeeId = 1, ShiftId = 2 },
+            new EmployeeShift() { EmployeeId = 2, ShiftId = 1 }
+        );
 
         modelBuilder.Entity<Notification>().Property(p => p.NotificationId).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Notification>().HasData(
