@@ -3,32 +3,20 @@ using System.Text.Json.Serialization;
 
 namespace employeeproject.Model;
 
-public class Shift {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-     public string? Title { get; set;}
-    public string? Date { get; set;}
-    public string? StartTime { get; set; }
-     public string? EndTime { get; set; }
-     public Valik Valik { get; set; }
-       public string? StartDate { get; set; }
-   public string? EndDate { get; set; }
-     public string? SelectedWeekDay { get; set; }
-     
-     [JsonIgnore] public virtual ICollection<EmployeeShift> EmployeeShift { get; set; }=new List<EmployeeShift>();
-      [NotMapped]
-        public IEnumerable<string?> AssignedEmployeesNames
-        {
-            get
-            {
-                return EmployeeShift.Select(es => es.Employee?.Name).Where(name => name != null);
-            }
-        }
-
+[Table("shift")] public class Shift {
+    [Column("id")] public int Id { get; set; }
+    [Column("title")] public string? Title { get; set;}
+    [Column("date")] public string? Date { get; set;}
+    [Column("startTime")] public string? StartTime { get; set; }
+    [Column("endTime")] public string? EndTime { get; set; }
+    [Column("valik")] public Valik Valik { get; set; }
+    [Column("startDate")] public string? StartDate { get; set; }
+    [Column("endDate")] public string? EndDate { get; set; }
+    [Column("selectedWeekDay")] public string? SelectedWeekDay { get; set; }
+    [Column("employeeIds")] public List<int>? EmployeeIds { get; set; }
+    [JsonIgnore] [Column("employeeShifts")] public virtual ICollection<EmployeeShift>? EmployeeShifts { get; set; }
 }
-[JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum Valik {
-        Onetime=1,
-        Recurring=2
-
-    }
+[JsonConverter(typeof(JsonStringEnumConverter))] public enum Valik {
+    Onetime=1,
+    Recurring=2
+}

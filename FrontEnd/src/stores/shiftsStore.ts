@@ -28,7 +28,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   const getShiftById = (id: number) => {
     return allShifts.find((shift) => shift.id === id);
   };
-
+  
   const addShift = async (shift: Shift) => {
     const apiAddShift = useApi<Shift>('shifts', {
       method: 'POST',

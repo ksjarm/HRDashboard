@@ -4,11 +4,9 @@ using HRDashboardApplication.Model;
 
 namespace employeeproject.Model;
 
-public class EmployeeShift {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-     public int EmployeeId { get; set; }
-     public int ShiftId { get; set; }
-
-    [JsonIgnore] public virtual Employee? Employee { get; set; }
-    [JsonIgnore]  public virtual Shift? Shift { get; set; }
+[Table("employeeShift")] public class EmployeeShift {
+    [Column("employeeId")] public int EmployeeId { get; set; }
+    [Column("shiftId")] public int ShiftId { get; set; }
+    [JsonIgnore] [Column("employee")] public virtual Employee? Employee { get; set; }
+    [JsonIgnore] [Column("shift")] public virtual Shift? Shift { get; set; }
 }
