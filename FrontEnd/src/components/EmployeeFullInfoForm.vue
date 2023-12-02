@@ -3,7 +3,16 @@
     <div id="wide" class="">
       <h1 class="infoLabel">Employee Profile</h1>
       <h1 class="label">{{ employee?.name }} {{ employee?.surname }}</h1>
-      <img src="../assets/profileimg2.png" class="h-50 profileimg" />
+      <img
+        v-if="employee?.gender == 'Male'"
+        src="../assets/profileimg2.png"
+        class="h-50 profileimg"
+      />
+      <img
+        v-if="employee?.gender == 'Female'"
+        src="../assets/femaleuser.jpg"
+        class="h-50 profileimg"
+      />
       <div>
         <h1 class="role">{{ employee?.position }}</h1>
       </div>
