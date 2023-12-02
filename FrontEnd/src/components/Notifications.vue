@@ -11,17 +11,17 @@
           <label for="end-date">End Date:</label>
           <input type="date" id="end-date" v-model="endDate" placeholder="End date">
         </div>
-        <input type="text" v-model="messageFilter" placeholder="Filter by words">
+        <input type="text" v-model="messageFilter" placeholder="Filter">
       </div>
       <div class="button-container">
-        <button @click="showConfirmation = true" class="delete-all-btn">Delete All Notifications</button>
+        <button @click="showConfirmation = true" class="delete-all-btn">Clear All Notifications</button>
       </div>
     </div>
 
     <div v-if="showConfirmation" class="confirmation-overlay">
       <div class="confirmation-dialog">
         <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete all notifications?</p>
+        <p>Are you sure you want to clear all notifications?</p>
         <button @click="deleteAllNotifications">Yes</button>
         <button @click="showConfirmation = false">No</button>
       </div>

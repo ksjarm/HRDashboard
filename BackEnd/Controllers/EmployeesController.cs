@@ -22,7 +22,8 @@ namespace HRDashboardApplication.Controllers;
     [HttpPost] public IActionResult Create([FromBody] Employee employee) {
         var dbEmployee = _context.EmployeeList!.Find(employee.Id);
         if (dbEmployee !=  null) return Conflict("Employee with given Id already exists.");
-    
+        employee.Email = employee.Name + "." + employee.Surname + "@" + "company.ee";
+
         if (employee.ShiftIds != null) {
             var employeeShifts = new List<EmployeeShift>();
             foreach (var shiftId in employee.ShiftIds) {

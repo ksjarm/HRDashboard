@@ -8,7 +8,7 @@
         <h1 class="role">{{ employee?.position }}</h1>
       </div>
       <div>
-        <h1 class="role">Shifts done: {{ shiftsDone }}</h1>
+        <h1 class="role">Shifts total: {{ shiftsDone }}</h1>
       </div>
     </div>
     <div id="narrow" class="">
@@ -42,21 +42,12 @@
       <div class="finalinfo"></div>
     </div>
   </div>
-  <div>
-    <h1 class="upcomingShifts">Upcoming shifts:</h1>
-  </div>
-  <div id="upcomingShifts">
-    <DataTable :value="employeeShifts">
-      <Column field="shift.date" header="Date"> </Column>
-      <Column field="startTime" header="Start time"> </Column>
-      <Column field="endTime" header="End time"> </Column>
-    </DataTable>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { useEmployeeShiftsStore } from '@/stores/employeeShiftsStore';
 import { useEmployeesStore } from '@/stores/employeesStore';
+import { useShiftsStore } from '@/stores/shiftsStore';
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -70,11 +61,13 @@ const employeeId = ref<number | null>(null);
 const employeesStore = useEmployeesStore();
 const employeesShiftsStore = useEmployeeShiftsStore();
 const { employeeShifts } = storeToRefs(employeesShiftsStore);
+const shiftsStore = useShiftsStore();
 
 onMounted(async () => {
   if (!isAuthenticated.value) {
     route.push({ name: 'Log in' });
   }
+  await shiftsStore.load();
   await employeesShiftsStore.load();
   const id = route.currentRoute.value.query.id;
   employeeId.value = id ? parseInt(id as string, 10) : null;
@@ -84,9 +77,15 @@ const employee = computed(() => {
   const id = employeeId.value;
   return id ? employeesStore.getEmployeeById(id) : null;
 });
-const shiftsDone = (employeeId: number) => {
-  employeesStore.getEmployeeShiftsById(employeeId);
-};
+const shiftsDone = computed(() => {
+  if (employeeId.value) {
+    return employeeShifts.value.filter((shift) => {
+      return shift.employeeId === employeeId.value;
+    }).length;
+  }
+
+  return 0;
+});
 </script>
 
 <style>

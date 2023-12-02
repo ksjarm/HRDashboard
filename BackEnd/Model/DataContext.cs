@@ -61,27 +61,32 @@ public class DataContext : DbContext {
                 Status = Status.Active,
             });
 
-        modelBuilder.Entity<User>().HasData(
-            new User {
-                Id = 1,
-                Username = "lilianna.tamm@company.ee", // parool on test1
-                Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
-                Name = "Lilianna",
-                Surname = "Tamm",
-                PhoneNumber = "55967283",
-                Adress = "Akadeemia tee 12-16",
-                Role = "Staff HR" 
-            },
-            new User {
-                Id = 2,
-                Username = "roland.tuvi@company.ee",
-                Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
-                Name = "Roland",
-                Surname = "Tuvi",
-                PhoneNumber = "476586030",
-                Adress = "Akadeemia tee 17-12",
-                Role = "Junior HR"
-            });
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "lilianna.tamm@company.ee", // parool on test1
+                    Password = "St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=",
+                    Name = "Lilianna",
+                    Surname = "Tamm",
+                    PhoneNumber = "55967283",
+                    Adress = "Akadeemia tee 12-16",
+                    Role = "Staff HR"
+                    
+                },
+                new User
+                {
+                    Id = 2,
+                    Username = "roland.tuvi@company.ee",
+                    Password = "zWoe4T9h2Hj9G4dyUtWwcKwV6zMR1Q0yr3Uch+xSze8=", // test2
+                    Name = "Roland",
+                    Surname = "Tuvi",
+                    PhoneNumber = "476586030",
+                    Adress = "Akadeemia tee 17-12",
+                    Role = "Junior HR"
+                }  
+            );
+
         
         modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
         modelBuilder.Entity<Shift>().HasData(
@@ -107,6 +112,14 @@ public class DataContext : DbContext {
                 Id = 3,
                 Title = "All day shift",
                 Date = "2023-12-09",
+                StartTime = "13:00",
+                EndTime = "21:00",
+                Valik=Valik.Onetime,
+            },
+              new Shift {
+                Id = 4,
+                Title = "All day shift",
+                Date = "2023-12-12",
                 StartTime = "13:00",
                 EndTime = "21:00",
                 Valik=Valik.Onetime,

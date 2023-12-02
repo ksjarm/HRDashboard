@@ -11,9 +11,3 @@ export interface EmployeeShift {
   export interface State {
     employeeShifts: EmployeeShift[];
   }
-  
-  
-  
-  
-  
-  
