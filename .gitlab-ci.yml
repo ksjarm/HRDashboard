@@ -32,9 +32,9 @@ build:back-end:
 
 build:front-end:
   image:
-    name: docker:24.0.7-alpine3.18
+    name: docker:24.0.7-dind-alpine3.18
   services:
-    - docker:24.0.7-alpine3.18
+    - docker:24.0.7-dind-alpine3.18
   only:
     - master
     - main
