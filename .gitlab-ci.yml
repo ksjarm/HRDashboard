@@ -72,7 +72,7 @@ api_test:
     - docker-compose up --abort-on-container-exit --exit-code-from newman
     - docker-compose down -v
   after_script:
-    - docker logout ${ITB2203_REGISTRY}
+    - docker logout ${DOCKER_REGISTRY}
   stage: api_test
   tags:
     - itb2203
