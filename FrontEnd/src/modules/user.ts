@@ -1,12 +1,12 @@
 export interface User {
-  id: number;
-  name: string;
-  surname: string;
-  phoneNumber: string;
-  adress: string;
+  id?: number;
+  name?: string;
+  surname?: string;
+  phoneNumber?: string;
+  adress?: string;
   username: string;
   password: string;
-  role: string;
+  role?: string;
   rememberMe: boolean;
 }
 
