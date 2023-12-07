@@ -97,94 +97,76 @@
       "item": [
         {
           "name": "Get Shifts",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "name": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/api/shifts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+                  "pm.test(\"Response body is an array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an(\"array\");",
+                  "});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
-            }
-          },
-          "response": [
-            {
-              "status": "200",
-              "code": 200,
-              "name": "Status code is 200",
-              "tests": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {",
-                      "    pm.response.to.have.status(200);",
-                      "});",
-                      "pm.test(\"Response body is an array\", function () {",
-                      "    var jsonData = pm.response.json();",
-                      "    pm.expect(jsonData).to.be.an(\"array\");",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ]
-            }
-          ]
+						}
+					},
+					"response": []
         },
         {
           "name": "Get Shift",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "name": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{url}}/api/shifts/{{shiftId}}",
-              "host": ["{{url}}"],
-              "path": ["api", "shifts", "{{shiftId}}"]
-            }
-          },
-          "response": [
-            {
-              "status": "200",
-              "code": 200,
-              "name": "Status code is 200",
-              "tests": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {",
-                      "    pm.response.to.have.status(200);",
-                      "});",
-                      "pm.test(\"Response body contains shift details\", function () {",
-                      "    var jsonData = pm.response.json();",
-                      "    pm.expect(jsonData).to.have.property(\"title\");",
-                      "    pm.expect(jsonData).to.have.property(\"date\");",
-                      "    pm.expect(jsonData).to.have.property(\"startTime\");",
-                      "    pm.expect(jsonData).to.have.property(\"endTime\");",
-                      "    pm.expect(jsonData).to.have.property(\"valik\");",
-                      "    pm.expect(jsonData).to.have.property(\"id\");",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ]
-            }
-          ]
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Shift data is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.eql(1);",
+									"    pm.expect(jsonData.title).to.eql(\"Evening shift\");",
+									"    pm.expect(jsonData.date).to.eql(\"2023-12-21\");",
+									"    pm.expect(jsonData.startTime).to.eql(\"13:00\");",
+                  "    pm.expect(jsonData.endTime).to.eql(\"21:00\");",
+									"    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/products/{{product2Id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"{{product2Id}}"
+							]
+						}
+					},
+					"response": []
         }
       ]      
     }
