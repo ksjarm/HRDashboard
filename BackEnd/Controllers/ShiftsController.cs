@@ -69,7 +69,7 @@ namespace BackEnd.Controllers;
         else existingShift.EmployeeShifts!.Clear();
 
         _context.SaveChanges();
-        return NoContent();
+        return Ok(existingShift);
     }
     [HttpDelete("{id}")] public IActionResult Delete(int? id) {
         var shift = _context.ShiftList?.Find(id);
