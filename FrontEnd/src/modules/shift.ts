@@ -11,7 +11,8 @@ export interface Shift {
   endDate?: string;
   selectedWeekDay?: string;
   employeeShifts?: EmployeeShift[];
-  assignedEmployeesNames?: string[];
+  employeeIds?: number[];
+  selectedEmployeeId?: number | null; 
 }
 
 export interface State {

@@ -398,7 +398,6 @@ const updateCalendarEvents = () => {
     title: shift.title,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
-    assignedEmployeesNames: shift.assignedEmployeesNames,
   }));
 };
 

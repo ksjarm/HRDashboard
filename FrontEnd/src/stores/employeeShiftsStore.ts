@@ -21,6 +21,7 @@ export const useEmployeeShiftsStore = defineStore('employeeShiftsStore', () => {
     console.log(allEmployeeShifts);
     employeeShifts.value = allEmployeeShifts;
   };
+  
 
   const addEmployeeShift = async (employeeShift: EmployeeShift) => {
     // Implement the logic to add an employee shift through your API here
