@@ -7,7 +7,7 @@
   },
   "item": [
     {
-      "name": "Employee Controller Tests",
+      "name": "Employees Controller Tests",
       "item": [
         {
           "name": "Add Employee 1",
@@ -91,6 +91,102 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Shifts Controller Tests",
+      "item": [
+        {
+          "name": "Get Shifts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/shifts",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts"]
+            }
+          },
+          "response": [
+            {
+              "status": "200",
+              "code": 200,
+              "name": "Status code is 200",
+              "tests": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Response body is an array\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an(\"array\");",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Get Shift",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/shifts/{{shiftId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "{{shiftId}}"]
+            }
+          },
+          "response": [
+            {
+              "status": "200",
+              "code": 200,
+              "name": "Status code is 200",
+              "tests": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Response body contains shift details\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property(\"title\");",
+                      "    pm.expect(jsonData).to.have.property(\"date\");",
+                      "    pm.expect(jsonData).to.have.property(\"startTime\");",
+                      "    pm.expect(jsonData).to.have.property(\"endTime\");",
+                      "    pm.expect(jsonData).to.have.property(\"valik\");",
+                      "    pm.expect(jsonData).to.have.property(\"id\");",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]      
     }
   ]
 }

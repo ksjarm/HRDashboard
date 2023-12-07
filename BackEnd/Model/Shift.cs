@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace employeeproject.Model;
-//docker automaatne commit proov
+
 [Table("shift")] public class Shift {
     [Column("id")] public int Id { get; set; }
     [Column("title")] public string? Title { get; set;}
