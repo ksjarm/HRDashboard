@@ -426,19 +426,7 @@
 								"exec": [
 									"pm.test(\"Status code is 204\", function () {",
 									"    pm.response.to.have.status(204);",
-									"});",
-                  "pm.test(\"Shift data is updated\", function () {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.title).to.eql(\"Updated Shift\");",
-                  "    pm.expect(jsonData.date).to.eql(\"2023-12-30\");",
-                  "    pm.expect(jsonData.startTime).to.eql(\"12:00\");",
-                  "    pm.expect(jsonData.endTime).to.eql(\"20:00\");",
-                  "    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
-
-                  "    pm.expect(jsonData.employeeIds).to.be.an(\"array\");",
-                  "    pm.expect(jsonData.employeeIds[0]).to.eql(2);",
-                  "    pm.expect(jsonData.employeeIds[1]).to.eql(3);",
-                  "});"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -458,6 +446,44 @@
 						},
 						"url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "{{shiftId}}"]
+						}
+					},
+					"response": []
+        },
+        {
+          "name": "Check That Shift Was Updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+                  "pm.test(\"Shift data is updated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.title).to.eql(\"Updated Shift\");",
+                  "    pm.expect(jsonData.date).to.eql(\"2023-12-30\");",
+                  "    pm.expect(jsonData.startTime).to.eql(\"12:00\");",
+                  "    pm.expect(jsonData.endTime).to.eql(\"20:00\");",
+                  "    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
+
+                  "    pm.expect(jsonData.employeeIds).to.be.an(\"array\");",
+                  "    pm.expect(jsonData.employeeIds[0]).to.eql(2);",
+                  "    pm.expect(jsonData.employeeIds[1]).to.eql(3);",
+                  "});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
 						}
