@@ -155,15 +155,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/api/products/{{product2Id}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"products",
-								"{{product2Id}}"
-							]
+							"raw": "{{url}}/api/shifts/1",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "1"]
 						}
 					},
 					"response": []
