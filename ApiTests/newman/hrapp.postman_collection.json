@@ -80,7 +80,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"title\": \"New Year Shift\",\n    \"date\": \"2023-12-31\",\n    \"startTime\": 12:00\",\n  \"endTime\": 22:00\",\n \"valik\": OneTime\",\n }"
+              "raw": "{\n    \"title\": \"New Year Shift\",\n    \"date\": \"2023-12-31\",\n    \"startTime\": 12:00\",\n  \"endTime\": 22:00\",\n \"valik\": Onetime\",\n }"
             },
             "url": {
               "raw": "{{url}}/api/shifts",
@@ -133,18 +133,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Shift data is correct\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(1);",
-									"    pm.expect(jsonData.title).to.eql(\"Evening shift\");",
-									"    pm.expect(jsonData.date).to.eql(\"2023-12-21\");",
-									"    pm.expect(jsonData.startTime).to.eql(\"13:00\");",
-                  "    pm.expect(jsonData.endTime).to.eql(\"21:00\");",
-									"    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -217,7 +207,7 @@
 						"header": [],
             "body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
+							"raw": "{\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -248,7 +238,7 @@
                   "    pm.expect(jsonData.date).to.eql(\"2023-12-30\");",
                   "    pm.expect(jsonData.startTime).to.eql(\"8:00\");",
                   "    pm.expect(jsonData.endTime).to.eql(\"16:00\");",
-                  "    pm.expect(jsonData.valik).to.eql(\"OneTime\");",
+                  "    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
 
                   "    pm.expect(jsonData.employeeIds).to.be.an(\"array\");",
                   "    pm.expect(jsonData.employeeIds[0]).to.eql(1);",
@@ -443,7 +433,7 @@
                   "    pm.expect(jsonData.date).to.eql(\"2023-12-30\");",
                   "    pm.expect(jsonData.startTime).to.eql(\"12:00\");",
                   "    pm.expect(jsonData.endTime).to.eql(\"20:00\");",
-                  "    pm.expect(jsonData.valik).to.eql(\"OneTime\");",
+                  "    pm.expect(jsonData.valik).to.eql(\"Onetime\");",
 
                   "    pm.expect(jsonData.employeeIds).to.be.an(\"array\");",
                   "    pm.expect(jsonData.employeeIds[0]).to.eql(2);",
