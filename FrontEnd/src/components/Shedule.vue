@@ -49,7 +49,13 @@
           <input v-model="newShift.valik" type="radio" value="Recurring" />
           <span>Recurring Shift</span>
         </label>
-       
+        <label>Select Employee:</label>
+<select v-model="selectedEmployeeId" class="full-width">
+  <option v-for="employee in employees" :key="employee.id" :value="employee.id">
+    {{ employee.name }}
+  </option>
+</select>
+
         <div v-if="newShift.valik === 'Recurring'">
           <label>Start Date:</label>
           <input v-model="newShift.startDate" type="date" />
@@ -97,23 +103,22 @@
       :events="calendarOptions.events"
     >
     <template v-slot:eventContent="arg">
-    <div class="custom-event-content" @click="handleEventClick(arg)">
-      <b v-if="!shiftModalVisible">
-        {{ arg.event.title }} - <br />
-        Assigned Employees:
-        {{
-          arg.event.extendedProps.assignedEmployeesNames?.join(', ') || 'None'
-        }}
-      </b>
-      <b v-else>{{ arg.event.title }}</b>
-    </div>
-  </template>
+  <div class="custom-event-content" @click="handleEventClick(arg)">
+    <b v-if="!shiftModalVisible">
+      {{ arg.event.title.split('\n')[0] }} - <br />
+       {{ arg.event.title.split('\n')[1] }}
+    </b>
+    <b v-else>{{ arg.event.title }}</b>
+  </div>
+</template>
+
     </FullCalendar>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useShiftsStore } from '@/stores/shiftsStore';
+import { useEmployeesStore } from '@/stores/employeesStore';
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import FullCalendar from '@fullcalendar/vue3';
@@ -133,6 +138,10 @@ const { isAuthenticated } = storeToRefs(auth);
 const shiftsStore = useShiftsStore();
 const { shifts} = storeToRefs(shiftsStore);
 
+
+const employeesStore = useEmployeesStore();
+const { employees} = storeToRefs(employeesStore);
+
 defineProps<{ title: String }>();
 
 const shiftModalVisible = ref(false);
@@ -145,10 +154,13 @@ const newShift = ref({
   startDate: new Date().toISOString().slice(0, 10),
   endDate: new Date().toISOString().slice(0, 10),
   selectedWeekDay: '',
+  employeeIds: [],
 });
 const confirmationModalVisible = ref(false);
 let selectedShift: Shift | null = null;
 const editShiftModalVisible = ref(false);
+
+const selectedEmployeeId = ref(null);
 
 const editShift = () => {
   console.log('Edit Shift Clicked');
@@ -182,11 +194,42 @@ const validateAndAddOrEditShift = async () => {
 
   if (editShiftModalVisible.value && selectedShift) {
     shiftsStore.updateShift(selectedShift);
-    closeShiftModal(); 
+    closeShiftModal();
   } else {
-    addNewShift();
+    if (selectedEmployeeId.value) {
+      newShift.value.employeeIds = [selectedEmployeeId.value];
+    }
+
+    if (newShift.value.valik === 'Onetime') {
+      // Handle one-time shift
+      addNewShift();
+    } else if (newShift.value.valik === 'Recurring') {
+      // Handle recurring shift
+      if (newShift.value.selectedWeekDay && newShift.value.startDate && newShift.value.endDate) {
+        const selectedWeekdays = Array.isArray(newShift.value.selectedWeekDay)
+          ? newShift.value.selectedWeekDay
+          : [newShift.value.selectedWeekDay];
+        const recurringShifts = generateRecurringShifts(
+          newShift.value.title,
+          newShift.value.startDate,
+          newShift.value.endDate,
+          selectedWeekdays,
+          newShift.value.startTime,
+          newShift.value.endTime,
+        );
+
+        for (const shift of recurringShifts) {
+          await addAndDisplayShift(shift);
+        }
+        closeShiftModal();
+        resetNewShiftForm();
+      } else {
+        validationError.value = 'Please select the week day, start date, and end date for recurring shifts.';
+      }
+    }
   }
 };
+
 
 const handleEventClick = (arg: any) => {
   selectedShift =
@@ -328,7 +371,7 @@ const addAndDisplayShift = async (shift: Shift) => {
   while (shifts.value.some((existingShift) => existingShift.id === shift.id)) {
     shift.id = generateUniqueId();
   }
-
+  shift.employeeIds = newShift.value.employeeIds;
   await shiftsStore.addShift(shift);
   updateCalendarEvents();
 };
@@ -395,10 +438,23 @@ onMounted(() => {
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
     id: shift.id,
-    title: shift.title,
+    title: `${shift.title}\nAssigned to: ${getEmployeeNames(shift.employeeIds) || 'None'}`,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
   }));
+};
+
+const getEmployeeNames = (employeeIds: any): string => {
+  if (!Array.isArray(employeeIds)) {
+    return 'None';
+  }
+
+  return employeeIds
+    .map((employeeId) => {
+      const employee = employees.value.find((emp) => emp.id === employeeId);
+      return employee ? employee.name : 'None';
+    })
+    .join(', ');
 };
 
 const openShiftModal = (

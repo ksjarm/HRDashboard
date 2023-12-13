@@ -54,35 +54,29 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   };
 
   const updateShift = async (shift: Shift) => {
-    const apiUpdateShift = useApiRawRequest('shifts/' + shift.id, {
+    const apiUpdateShift = useApi<Shift>('shifts/' + shift.id, {
       method: 'PUT',
       headers: {
         Authorization: 'Bearer ' + authStore.token,
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(shift),
     });
-
-    try {
-      const response = await apiUpdateShift();
-      if (response.ok) {
-        load(); // Load shifts after successful update
-
-        const notificationsStore = useNotificationsStore();
-        await notificationsStore.addNotifications({
-          message: `Shift updated: ${shift.title}`,
-          date: new Date(),
-          type: 'Shift Updated',
-        });
-      } else {
-        console.error('Failed to update shift. Unexpected response:', response);
-        // Handle the failure scenario, e.g., notify the user
-      }
-    } catch (error) {
-      console.error('Error updating shift:', error);
-      // Handle the error, e.g., notify the user or log it
+  
+    await apiUpdateShift.request();
+    if (apiUpdateShift.response.value) {
+      // No need to call load() here, as it already updates shifts.value
+      const notificationsStore = useNotificationsStore();
+      await notificationsStore.addNotifications({
+        message: `Shift updated: ${shift.title}`,
+        date: new Date(),
+        type: 'Shift Updated',
+      });
     }
   };
+  
+  
 
   const deleteShift = async (shift: Shift) => {
     const deleteShiftRequest = useApiRawRequest(`shifts/${shift.id}`, {
