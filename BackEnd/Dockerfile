@@ -20,6 +20,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0.13-alpine3.18
 WORKDIR /app
 COPY --from=builder /publish .
 
+EXPOSE 80
+
 RUN addgroup -S runner && adduser -S runner -G runner
 USER runner
 ENTRYPOINT ["dotnet", "HRDashboardApplication.dll"]
