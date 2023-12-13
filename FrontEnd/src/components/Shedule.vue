@@ -201,10 +201,10 @@ const validateAndAddOrEditShift = async () => {
     }
 
     if (newShift.value.valik === 'Onetime') {
-      // Handle one-time shift
+
       addNewShift();
     } else if (newShift.value.valik === 'Recurring') {
-      // Handle recurring shift
+
       if (newShift.value.selectedWeekDay && newShift.value.startDate && newShift.value.endDate) {
         const selectedWeekdays = Array.isArray(newShift.value.selectedWeekDay)
           ? newShift.value.selectedWeekDay
@@ -229,7 +229,6 @@ const validateAndAddOrEditShift = async () => {
     }
   }
 };
-
 
 const handleEventClick = (arg: any) => {
   selectedShift =
@@ -482,6 +481,7 @@ const closeShiftModal = () => {
   } else {
     shiftModalVisible.value = false;
     validationError.value = '';
+    selectedEmployeeId.value = null;
     document.body.style.overflow = '';
   }
 };
@@ -540,6 +540,8 @@ watch(shifts, () => {
   filter: blur(5px);
 }
 .modal {
+  max-height: 80vh; 
+  overflow-y: auto; 
   background: #f8f8f8; 
   padding: 15px;
   border-radius: 12px; 
