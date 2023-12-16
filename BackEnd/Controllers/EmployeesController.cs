@@ -24,6 +24,10 @@ namespace HRDashboardApplication.Controllers;
         if (dbEmployee !=  null) return Conflict("Employee with given Id already exists.");
         employee.Email = employee.Name + "." + employee.Surname + "@" + "company.ee";
 
+        if(employee.Position == null || employee.Position == ""){
+            return BadRequest();
+        }
+
         if (employee.ShiftIds != null) {
             var employeeShifts = new List<EmployeeShift>();
             foreach (var shiftId in employee.ShiftIds) {
