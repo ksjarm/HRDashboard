@@ -6,7 +6,7 @@ using employeeproject.Model;
 
 namespace HRDashboardApplication.Controllers;
 
-[Authorize] [ApiController] [Route("api/[controller]")] public class EmployeesController : ControllerBase {
+ [ApiController] [Route("api/[controller]")] public class EmployeesController : ControllerBase {
     private readonly DataContext _context;
     public EmployeesController(DataContext context) => _context = context;
 

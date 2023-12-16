@@ -14,7 +14,7 @@ namespace HRDashboardApplication.Model;
     [Column("phonenumber")] public string? PhoneNumber { get; set; }
     [Column("adress")] public string? Adress { get; set; }
     [Column("position")] public string? Position { get; set; }
-    [Column("salary")] public int? Salary { get; set; }
+    [Column("salary")] public int? Salary { get; set; }          
     [Column("status")] public Status Status { get; set; }
     [Column("photo")] public string? Photo { get; set; }
     [Column("shiftIds")] public List<int>? ShiftIds { get; set; }

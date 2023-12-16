@@ -4,20 +4,25 @@
       <h1 class="infoLabel">Employee Profile</h1>
       <h1 class="label">{{ employee?.name }} {{ employee?.surname }}</h1>
       <img
-        v-if="employee?.gender == 'Male'"
-        src="../assets/profileimg2.png"
+        v-if="employee?.name == 'Erik'"
+        src="../assets/Capture.png"
         class="h-50 profileimg"
       />
       <img
-        v-if="employee?.gender == 'Female'"
-        src="../assets/femaleuser.jpg"
+        v-if="employee?.name == 'Rene'"
+        src="../assets/Capture2.png"
+        class="h-50 profileimg"
+      />
+      <img
+        v-if="employee?.name == 'Mari'"
+        src="../assets/Capture3.png"
         class="h-50 profileimg"
       />
       <div>
         <h1 class="role">{{ employee?.position }}</h1>
       </div>
       <div>
-        <h1 class="role">Shifts total: {{ shiftsDone }}</h1>
+        <h1 class="role">Shifts done: {{ pastFilteredShifts }}</h1>
       </div>
     </div>
     <div id="narrow" class="">
@@ -51,6 +56,15 @@
       <div class="finalinfo"></div>
     </div>
   </div>
+  <div class="text-center mt-5 ml-5 mr-5">
+    <h1 class="text-left mb-5 font-bold sizeFont">Upcoming Shifts</h1>
+    <DataTable :value="futureFilteredShifts">
+      <Column field="title" header="Title" />
+      <Column field="date" header="Date" />
+      <Column field="startTime" header="Start time" />
+      <Column field="endTime" header="End Time"></Column>
+    </DataTable>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -66,12 +80,13 @@ const auth = useAuthStore();
 const { isAuthenticated } = storeToRefs(auth);
 
 const route = useRouter();
-const employeeId = ref<number | null>(null);
+const employeeId = ref<number>(1);
 const employeesStore = useEmployeesStore();
 const employeesShiftsStore = useEmployeeShiftsStore();
 const { employeeShifts } = storeToRefs(employeesShiftsStore);
 const shiftsStore = useShiftsStore();
 
+const { shifts } = storeToRefs(shiftsStore);
 onMounted(async () => {
   if (!isAuthenticated.value) {
     route.push({ name: 'Log in' });
@@ -79,14 +94,22 @@ onMounted(async () => {
   await shiftsStore.load();
   await employeesShiftsStore.load();
   const id = route.currentRoute.value.query.id;
-  employeeId.value = id ? parseInt(id as string, 10) : null;
+  employeeId.value = parseInt(id as string, 10);
+  if (id) {
+    await employeesStore.getEmployeeShiftsById(employeeId.value);
+  }
 });
 
 const employee = computed(() => {
   const id = employeeId.value;
   return id ? employeesStore.getEmployeeById(id) : null;
 });
-const shiftsDone = computed(() => {
+
+const totalShifts = computed(() => {
+  console.log('bb' + employeesStore.getEmployeeShiftsById(employeeId.value));
+  return employeesStore.getEmployeeShiftsById(employeeId.value);
+});
+/* const shiftsDone = computed(() => {
   if (employeeId.value) {
     return employeeShifts.value.filter((shift) => {
       return shift.employeeId === employeeId.value;
@@ -94,6 +117,37 @@ const shiftsDone = computed(() => {
   }
 
   return 0;
+}); */
+
+const futureFilteredShifts = computed(() => {
+  const id = employeeId.value;
+  const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+  if (id && shifts.value) {
+    return shifts.value.filter((shift) => {
+      return (
+        shift.employeeIds &&
+        shift.employeeIds.includes(id) &&
+        shift.date >= today
+      );
+    });
+  }
+  return [];
+});
+const pastFilteredShifts = computed(() => {
+  const id = employeeId.value;
+  const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+  if (id && shifts.value) {
+    return shifts.value.filter((shift) => {
+      return (
+        shift.employeeIds &&
+        shift.employeeIds.includes(id) &&
+        shift.date < today
+      );
+    }).length;
+  }
+  return [];
 });
 </script>
 
@@ -160,5 +214,8 @@ const shiftsDone = computed(() => {
 .infoLabel {
   font-size: x-large;
   margin-left: 10px;
+}
+.sizeFont {
+  font-size: xx-large;
 }
 </style>

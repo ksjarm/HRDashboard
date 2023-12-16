@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-dark-300">
+  <div class="bg-gray-50 pt-4 px-4 sm:px-6 lg:px-8 text-dark-300">
     <div class="text-center">
       <h1 class="font-bold schedule-header">{{ title }}</h1>
     </div>
@@ -49,7 +49,7 @@
           <input v-model="newShift.valik" type="radio" value="Recurring" />
           <span>Recurring Shift</span>
         </label>
-       
+
         <div v-if="newShift.valik === 'Recurring'">
           <label>Start Date:</label>
           <input v-model="newShift.startDate" type="date" />
@@ -96,18 +96,19 @@
       :options="calendarOptions"
       :events="calendarOptions.events"
     >
-    <template v-slot:eventContent="arg">
-    <div class="custom-event-content" @click="handleEventClick(arg)">
-      <b v-if="!shiftModalVisible">
-        {{ arg.event.title }} - <br />
-        Assigned Employees:
-        {{
-          arg.event.extendedProps.assignedEmployeesNames?.join(', ') || 'None'
-        }}
-      </b>
-      <b v-else>{{ arg.event.title }}</b>
-    </div>
-  </template>
+      <template v-slot:eventContent="arg">
+        <div class="custom-event-content" @click="handleEventClick(arg)">
+          <b v-if="!shiftModalVisible">
+            {{ arg.event.title }} - <br />
+            Assigned Employees:
+            {{
+              arg.event.extendedProps.assignedEmployeesNames?.join(', ') ||
+              'None'
+            }}
+          </b>
+          <b v-else>{{ arg.event.title }}</b>
+        </div>
+      </template>
     </FullCalendar>
   </div>
 </template>
@@ -131,7 +132,7 @@ const auth = useAuthStore();
 const { isAuthenticated } = storeToRefs(auth);
 
 const shiftsStore = useShiftsStore();
-const { shifts} = storeToRefs(shiftsStore);
+const { shifts } = storeToRefs(shiftsStore);
 
 defineProps<{ title: String }>();
 
@@ -141,7 +142,7 @@ const newShift = ref({
   date: new Date().toISOString().slice(0, 10),
   startTime: '',
   endTime: '',
-  valik: 'Onetime', 
+  valik: 'Onetime',
   startDate: new Date().toISOString().slice(0, 10),
   endDate: new Date().toISOString().slice(0, 10),
   selectedWeekDay: '',
@@ -182,7 +183,7 @@ const validateAndAddOrEditShift = async () => {
 
   if (editShiftModalVisible.value && selectedShift) {
     shiftsStore.updateShift(selectedShift);
-    closeShiftModal(); 
+    closeShiftModal();
   } else {
     addNewShift();
   }
@@ -215,7 +216,7 @@ const handleDateClick = (arg: any) => {
   openShiftModal();
 
   const dateStr = formatToISODate(arg.date);
-  const timeStr = formatToISOTime(arg.date); 
+  const timeStr = formatToISOTime(arg.date);
   newShift.value.date = dateStr;
   newShift.value.startDate = dateStr;
   newShift.value.endDate = dateStr;
@@ -391,7 +392,6 @@ onMounted(() => {
   updateCalendarEvents();
 });
 
-
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
     id: shift.id,
@@ -437,11 +437,11 @@ watch(shifts, () => {
 
 <style scoped>
 .custom-event-content {
-  max-width: 200px; 
-  max-height: 100px; 
+  max-width: 200px;
+  max-height: 100px;
   overflow: hidden;
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .event-title {
   font-weight: bold;
@@ -449,7 +449,7 @@ watch(shifts, () => {
 .assigned-employees {
   margin-top: 5px;
   font-size: 0.9em;
-  color: #555; 
+  color: #555;
 }
 .modal-overlay {
   position: fixed;
@@ -461,9 +461,9 @@ watch(shifts, () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px); 
-  z-index: 2; 
-  pointer-events: auto; 
+  backdrop-filter: blur(5px);
+  z-index: 2;
+  pointer-events: auto;
 }
 .validation-error {
   color: red;
@@ -485,15 +485,15 @@ watch(shifts, () => {
   filter: blur(5px);
 }
 .modal {
-  background: #f8f8f8; 
+  background: #f8f8f8;
   padding: 15px;
-  border-radius: 12px; 
+  border-radius: 12px;
   width: 500px;
-  z-index: 3; 
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 15px; 
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  gap: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 .close-button {
   position: absolute;
@@ -504,10 +504,10 @@ watch(shifts, () => {
   color: #333;
 }
 .close-button:hover {
-  color: #ff0000; 
+  color: #ff0000;
 }
 .demo-app-calendar {
-  position: relative;
+  height: 650px;
   z-index: 1;
 }
 .schedule-header {
@@ -550,9 +550,9 @@ watch(shifts, () => {
 }
 input {
   padding: 12px;
-  background-color: #f0f0f0; 
-  border: none; 
-  border-radius: 8px; 
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -581,17 +581,17 @@ label {
   vertical-align: middle;
 }
 .weekday-label {
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 .weekday-input {
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 .full-width {
   width: 100%;
-  padding: 6px; 
-  border-radius: 8px; 
-  background-color: #f0f0f0; 
-  border: 1px solid #ccc; 
+  padding: 6px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
 }
 button-container {
   display: flex;
