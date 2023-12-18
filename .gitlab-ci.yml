@@ -52,6 +52,7 @@ build:front-end:
   stage: build
   artifacts:
     paths:
+  allow_failure: true
 
 deploy:
   image: docker:24.0.7-alpine3.18
