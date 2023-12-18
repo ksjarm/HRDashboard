@@ -458,13 +458,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test(\"Response body is an array\", function () {",
-                  "    var jsonData = pm.response.json();",
-                  "    pm.expect(jsonData).to.be.an(\"array\");",
+                  "pm.test(\"Status code is 403\", function () {",
+                  "    pm.response.to.have.status(403);",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -483,6 +478,108 @@
               "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Shift Without Schedule Access",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 403\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken1}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/shifts/1",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Shift Without Schedule Access",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 403\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken1}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t2, 3\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/shifts/1",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Shift Without Schedule Access",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 403\", function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/shifts/1",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "1"]
             }
           },
           "response": []
