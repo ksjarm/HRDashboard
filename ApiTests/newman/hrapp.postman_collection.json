@@ -58,7 +58,7 @@
                   "    pm.expect(jsonData.surname).to.eql(\"Banana\");",
                   "    pm.expect(jsonData.gender).to.eql(\"Female\");",
                   "    pm.expect(jsonData.position).to.eql(\"Vendor\");",
-                  "    pm.expect(jsonData.salary).to.eql(\"2000\");",
+                  "    pm.expect(jsonData.salary).to.eql(2000);",
                   "    pm.expect(jsonData.status).to.eql(\"Active\");",
 
                   "    pm.environment.set(\"employeeId\", jsonData.id);",

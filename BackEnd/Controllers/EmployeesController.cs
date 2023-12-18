@@ -28,7 +28,7 @@ namespace HRDashboardApplication.Controllers;
             return BadRequest();
         }
 
-        if (employee.ShiftIds != null) {
+        if (employee.ShiftIds != null && employee.ShiftIds[0] != 0) {
             var employeeShifts = new List<EmployeeShift>();
             foreach (var shiftId in employee.ShiftIds) {
                 if (_context.EmployeeList!.Find(shiftId) == null) return NotFound($"Shift with ID {shiftId} not found.");
@@ -63,7 +63,7 @@ namespace HRDashboardApplication.Controllers;
         existingEmployee.Photo = employee.Photo;
         existingEmployee.ShiftIds = employee.ShiftIds;
 
-        if (employee.ShiftIds != null) {
+        if (employee.ShiftIds != null && employee.ShiftIds[0] != 0) {
             existingEmployee.EmployeeShifts!.Clear();
             foreach (var shiftId in employee.ShiftIds) {
                 var shift = _context.EmployeeList!.Find(shiftId);
