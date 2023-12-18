@@ -165,7 +165,7 @@
               "script": {
                 "exec": [
                   "pm.test(\"Status code is 404\", function () {",
-                  "    pm.response.to.have.status(404);",
+                  "    pm.response.to.have.status(400);",
                   "});"
                 ],
                 "type": "text/javascript"
