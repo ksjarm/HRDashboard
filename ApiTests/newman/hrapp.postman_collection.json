@@ -573,7 +573,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{authToken1}}"
               }
             ],
             "url": {
