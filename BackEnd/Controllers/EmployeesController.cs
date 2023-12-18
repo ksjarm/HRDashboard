@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using HRDashboardApplication.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using employeeproject.Model;
 
 namespace HRDashboardApplication.Controllers;

@@ -413,6 +413,49 @@
       "name": "Shifts Controller Tests",
       "item": [
         {
+          "name": "Authenticate User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\": \"lilianna.tamm@company.ee\",\n\t\"password\": \"test1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/authenticate",
+              "host": ["{{url}}"],
+              "path": ["api", "authenticate"]
+            }
+          },
+          "response": [
+            {
+              "name": "Save Token to Environment",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"Token is present\", function () {",
+                      "    pm.expect(pm.response.json()).to.have.property(\"token\");",
+                      "    pm.environment.set(\"authToken\", pm.response.json().token);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Get Shifts",
           "event": [
             {
@@ -434,7 +477,12 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
@@ -460,7 +508,12 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/1000",
               "host": ["{{url}}"],
@@ -486,7 +539,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"id\": 1,\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\"\n}",
@@ -521,7 +579,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
@@ -575,7 +638,12 @@
           ],
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"title\": \"New Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2\n\t]\n}",
@@ -620,7 +688,12 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
@@ -646,7 +719,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"id\": 1,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
@@ -681,7 +759,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"id\": 1000,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
@@ -716,7 +799,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
@@ -751,7 +839,12 @@
           ],
           "request": {
             "method": "PUT",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t2, 3\n\t]\n}",
@@ -798,7 +891,12 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
@@ -824,7 +922,12 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/1000",
               "host": ["{{url}}"],
@@ -850,7 +953,12 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
@@ -876,7 +984,12 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
