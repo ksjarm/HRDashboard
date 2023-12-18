@@ -76,7 +76,7 @@
     </nav>
     <div class="flex">
       <nav
-        class="w-14 sm:w-60 lg:h-190 xl:h-200 bg-indigo-200 flex flex-col justify-start items-start"
+        class="w-14 sm:w-60 lg:h-230 xl:h-250 bg-indigo-200 flex flex-col justify-start items-start"
       >
         <router-link
           to="/dashboard"
