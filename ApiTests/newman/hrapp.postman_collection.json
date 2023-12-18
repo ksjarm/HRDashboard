@@ -220,9 +220,9 @@
               }
             },
             "url": {
-              "raw": "{{url}}/api/shifts/{{employeeId}}",
+              "raw": "{{url}}/api/employees/{{employeeId}}",
               "host": ["{{url}}"],
-              "path": ["api", "shifts", "{{employeeId}}"]
+              "path": ["api", "employees", "{{employeeId}}"]
             }
           },
           "response": []
