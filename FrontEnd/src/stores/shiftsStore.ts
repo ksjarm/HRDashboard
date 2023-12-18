@@ -15,12 +15,14 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
       headers: { Authorization: 'Bearer ' + authStore.token },
     });
     await apiGetShifts.request();
+    
     if (apiGetShifts.response.value) {
       return apiGetShifts.response.value!;
     }
     return [];
   };
   const load = async () => {
+    
     allShifts = await loadShifts();
     shifts.value = allShifts;
   };
@@ -33,6 +35,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
     const apiAddShift = useApi<Shift>('shifts', {
       method: 'POST',
       headers: {
+        Authorization: 'Bearer ' + authStore.token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -81,6 +84,7 @@ export const useShiftsStore = defineStore('shiftsStore', () => {
   const deleteShift = async (shift: Shift) => {
     const deleteShiftRequest = useApiRawRequest(`shifts/${shift.id}`, {
       method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + authStore.token },
     });
 
     const res = await deleteShiftRequest();

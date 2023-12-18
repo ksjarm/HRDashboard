@@ -11,6 +11,7 @@ public class DataContext : DbContext {
     public DbSet<Notification> NotificationsList { get; set; }
     public DbSet<EmployeeShift> EmployeeShiftsList { get; set; }
     public DbSet<User> UserList { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
@@ -30,7 +31,7 @@ public class DataContext : DbContext {
                 Position = "Warehouse worker",
                 Salary = 1200,
                 Status = Status.Active,
-                ShiftIds = new List<int>(){2}
+                ShiftIds = new List<int>(){2, 5, 6, 7, 8}
                 //Photo = "../assets/profileimg2.png"
             },
             new Employee {
@@ -71,7 +72,8 @@ public class DataContext : DbContext {
                     Surname = "Tamm",
                     PhoneNumber = "55967283",
                     Adress = "Akadeemia tee 12-16",
-                    Role = "Staff HR"
+                    Role = "Staff HR",
+                    Permissions="schedule_access"
                     
                 },
                 new User
@@ -83,12 +85,12 @@ public class DataContext : DbContext {
                     Surname = "Tuvi",
                     PhoneNumber = "476586030",
                     Adress = "Akadeemia tee 17-12",
-                    Role = "Junior HR"
+                    Role = "Junior HR",
                 }  
             );
 
         
-        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 4);
+        modelBuilder.Entity<Shift>().Property(p => p.Id).HasIdentityOptions(startValue: 8);
         modelBuilder.Entity<Shift>().HasData(
             new Shift {
                 Id = 1,
@@ -123,7 +125,44 @@ public class DataContext : DbContext {
                 StartTime = "13:00",
                 EndTime = "21:00",
                 Valik=Valik.Onetime,
-            });
+            },
+            new Shift {
+                Id = 5,
+                Title = "All day shift",
+                Date = "2024-01-09",
+                StartTime = "13:00",
+                EndTime = "21:00",
+                Valik=Valik.Onetime,
+                EmployeeIds = new List<int>(){1}
+            },
+            new Shift {
+                Id = 6,
+                Title = "All day shift",
+                Date = "2024-01-10",
+                StartTime = "15:00",
+                EndTime = "22:00",
+                Valik=Valik.Onetime,
+                EmployeeIds = new List<int>(){1}
+            },
+            new Shift {
+                Id = 7,
+                Title = "All day shift",
+                Date = "2024-12-15",
+                StartTime = "17:00",
+                EndTime = "02:00",
+                Valik=Valik.Onetime,
+                EmployeeIds = new List<int>(){1}
+            },
+            new Shift {
+                Id = 8,
+                Title = "All day shift",
+                Date = "2023-12-12",
+                StartTime = "17:00",
+                EndTime = "02:00",
+                Valik=Valik.Onetime,
+                EmployeeIds = new List<int>(){1}
+            }
+            );
 
         modelBuilder.Entity<EmployeeShift>().HasKey(key => new { key.EmployeeId, key.ShiftId });
         modelBuilder.Entity<EmployeeShift>()

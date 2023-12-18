@@ -23,7 +23,13 @@ export const useAuthStore = defineStore('userStore', () => {
     if (apiLogin.response.value && apiLogin.response.value.token) {
       token.value = apiLogin.response.value.token;
 
-      user.value = loginUser;
+      // Assuming that the API response includes permissions
+      const permissions = apiLogin.response.value.permissions;
+
+      user.value = {
+        ...loginUser,
+        permissions,
+      };
 
       return true;
     }

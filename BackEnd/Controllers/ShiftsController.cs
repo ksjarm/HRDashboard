@@ -1,11 +1,12 @@
 using employeeproject.Model;
 using HRDashboardApplication.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Controllers;
 
-[ApiController] [Route("api/[controller]")] public class ShiftsController : ControllerBase {
+[ApiController] [Route("api/[controller]")]  [Authorize(Policy = "RequireScheduleAccess")] public class ShiftsController : ControllerBase {
     private readonly DataContext _context;
     public ShiftsController(DataContext context) => _context = context;   
 

@@ -8,6 +8,7 @@ export interface User {
   password: string;
   role?: string;
   rememberMe: boolean;
+  permissions?: string;
 }
 
 export interface AuthResponse {
