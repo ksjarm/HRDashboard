@@ -413,7 +413,82 @@
       "name": "Shifts Controller Tests",
       "item": [
         {
-          "name": "Authenticate User",
+          "name": "Authenticate User Without Schedule Access",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Token is present\", function () {",
+                    "    var jsonData = pm.response.json();",
+                    "    pm.environment.set(\"authToken1\", jsonData.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\": \"roland.tuvi@company.ee\",\n\t\"password\": \"test2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/users/login",
+              "host": ["{{url}}"],
+              "path": ["api", "users", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Shifts Without Schedule Access",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response body is an array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken1}}"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/shifts",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authenticate User With Schedule Access",
           "event": [
             {
               "listen": "test",
