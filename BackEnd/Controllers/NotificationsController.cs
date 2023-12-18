@@ -22,10 +22,11 @@ public class NotificationsController : ControllerBase {
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetDetails), new { id = notification.NotificationId }, notification);
         }
-        return Conflict();
+        return Conflict("Shift with given Id already exists.");
     }
     [HttpPut("{id}")]public IActionResult UpdateNotification(int? id, [FromBody]  Notification notification)
     {
+        if (id != notification.NotificationId) return BadRequest("The ID in the URL does not match the ID in the request body.");
         if (id != notification.NotificationId || !_context.NotificationsList!.Any(e => e.NotificationId == id)) return NotFound();
         _context.Update(notification);
         _context.SaveChanges();

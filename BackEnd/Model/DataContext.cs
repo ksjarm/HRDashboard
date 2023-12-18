@@ -145,21 +145,21 @@ public class DataContext : DbContext {
         modelBuilder.Entity<Notification>().HasData(
             new Notification {
                 NotificationId = 1,
-                Message = "Annual performance reviews coming up",
+                Message = "Shift added: Evening Shift",
                 Date = new DateTime(2023, 11, 1, 14, 0, 0),
-                Type = "Reminder"
+                Type = "Shift added"
             },
             new Notification {
                 NotificationId = 2,
-                Message = "You changed employee{id} adress",
+                Message = "Employee updated: Rene Dall",
                 Date = new DateTime(2023, 11, 2, 9, 30, 0),
                 Type = "Employee Update"
             },
             new Notification {
                 NotificationId = 3,
-                Message = "You changed employee{id} shift ",
+                Message = "Shift updated: All day shift ",
                 Date = new DateTime(2023, 11, 3, 16, 45, 0),
-                Type = "Shift Change"
+                Type = "Shift Updated"
             });
             modelBuilder.UseIdentityColumns();
     }
