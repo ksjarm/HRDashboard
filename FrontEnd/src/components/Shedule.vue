@@ -1,8 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-dark-300">
-    <div class="text-center">
+<div v-if=" hasScheduleAccess">
+      <!-- Your existing content for authenticated users with schedule access -->
+      <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 text-dark-300">
+        <div class="text-center">
       <h1 class="font-bold schedule-header">{{ title }}</h1>
     </div>
+    
     <div>
       <button @click="toggleWeekends">Toggle Weekends</button>
     </div>
@@ -50,12 +53,11 @@
           <span>Recurring Shift</span>
         </label>
         <label>Select Employee:</label>
-<select v-model="selectedEmployeeId" class="full-width">
-  <option v-for="employee in employees" :key="employee.id" :value="employee.id">
-    {{ employee.name }}
-  </option>
-</select>
-
+          <select v-model="selectedEmployeeId" class="full-width">
+          <option v-for="employee in employees" :key="employee.id" :value="employee.id">
+           {{ employee.name }}
+          </option>
+          </select>
         <div v-if="newShift.valik === 'Recurring'">
           <label>Start Date:</label>
           <input v-model="newShift.startDate" type="date" />
@@ -106,20 +108,31 @@
   <div class="custom-event-content" @click="handleEventClick(arg)">
     <b v-if="!shiftModalVisible">
       {{ arg.event.title.split('\n')[0] }} - <br />
-       {{ arg.event.title.split('\n')[1] }}
+      <span :style="{ color: arg.event.title.split('\n')[1] === 'Assigned to: None' ? 'red' : 'inherit' }">
+        {{ arg.event.title.split('\n')[1] }}
+      </span>
     </b>
     <b v-else>{{ arg.event.title }}</b>
   </div>
 </template>
 
     </FullCalendar>
-  </div>
+ </div>
+    </div>
+    <div v-else>
+      <!-- Display an "Access Denied" message -->
+      <div class="access-denied-message">
+        <h1>Access Denied</h1>
+        <p>You do not have permission to access this page. Please log in.</p>
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { useShiftsStore } from '@/stores/shiftsStore';
 import { useEmployeesStore } from '@/stores/employeesStore';
-import { onMounted, ref } from 'vue';
+//import { useUsersStore } from '@/stores/usersStore';
+import {  Ref,     computed,     onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -133,16 +146,32 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const auth = useAuthStore();
-const { isAuthenticated } = storeToRefs(auth);
+const { isAuthenticated, user } = auth;
+
+//const usersStore = useUsersStore();
+//const { users} = storeToRefs(usersStore);
+
+const hasScheduleAccess = computed(() => {
+  console.log('isAuthenticated:', isAuthenticated);
+  console.log('user:', user);
+
+  if (user?.permissions) {
+    console.log('user permissions:', user.permissions);
+    return user.permissions === 'schedule_access';
+  } else {
+    console.log('Permissions not available in user object.');
+    return false;
+  }
+});
 
 const shiftsStore = useShiftsStore();
 const { shifts} = storeToRefs(shiftsStore);
-
 
 const employeesStore = useEmployeesStore();
 const { employees} = storeToRefs(employeesStore);
 
 defineProps<{ title: String }>();
+
 
 const shiftModalVisible = ref(false);
 const newShift = ref({
@@ -160,7 +189,8 @@ const confirmationModalVisible = ref(false);
 let selectedShift: Shift | null = null;
 const editShiftModalVisible = ref(false);
 
-const selectedEmployeeId = ref(null);
+const selectedEmployeeId: Ref<number | null> = ref(null);
+
 
 const editShift = () => {
   console.log('Edit Shift Clicked');
@@ -179,9 +209,23 @@ const openEditShiftModal = () => {
     newShift.value.startDate = selectedShift.startDate || '';
     newShift.value.endDate = selectedShift.endDate || '';
     newShift.value.selectedWeekDay = selectedShift.selectedWeekDay || '';
-
+    selectedEmployeeId.value = (selectedShift.employeeIds && selectedShift.employeeIds[0]) || null;
     editShiftModalVisible.value = true;
     document.body.style.overflow = 'hidden';
+    
+    if (newShift.value.valik === 'Recurring') {
+      if (!newShift.value.startDate) {
+        newShift.value.startDate = selectedShift.date || '';
+      }
+      if (!newShift.value.endDate) {
+        newShift.value.endDate = selectedShift.date || '';
+      }
+      if (!newShift.value.selectedWeekDay) {
+        // Set a default weekday based on the date, you might need to adjust this logic
+        const date = new Date(newShift.value.startDate);
+        newShift.value.selectedWeekDay = weekdays[date.getDay()];
+      }
+    }
   }
 };
 
@@ -191,13 +235,14 @@ const validateAndAddOrEditShift = async () => {
   if (!validateInput()) {
     return;
   }
+  let employeeId: number | null = selectedEmployeeId.value as number | null;
 
   if (editShiftModalVisible.value && selectedShift) {
     shiftsStore.updateShift(selectedShift);
     closeShiftModal();
   } else {
-    if (selectedEmployeeId.value) {
-      newShift.value.employeeIds = [selectedEmployeeId.value];
+    if (employeeId!==null) {
+      newShift.value.employeeIds = [employeeId];
     }
 
     if (newShift.value.valik === 'Onetime') {
@@ -227,6 +272,7 @@ const validateAndAddOrEditShift = async () => {
         validationError.value = 'Please select the week day, start date, and end date for recurring shifts.';
       }
     }
+    selectedEmployeeId.value = null;
   }
 };
 
@@ -426,13 +472,13 @@ const calendarOptions = ref({
 });
 
 onMounted(() => {
-  if (!isAuthenticated.value) {
+  if (!isAuthenticated) {
     router.push({ name: 'Log in' });
   }
   shiftsStore.load();
+  employeesStore.load();
   updateCalendarEvents();
 });
-
 
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
@@ -482,6 +528,7 @@ const closeShiftModal = () => {
     shiftModalVisible.value = false;
     validationError.value = '';
     selectedEmployeeId.value = null;
+    resetNewShiftForm();
     document.body.style.overflow = '';
   }
 };
@@ -491,6 +538,19 @@ watch(shifts, () => {
 </script>
 
 <style scoped>
+.access-denied-message {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 24px;
+    color: #e53e3e; /* Red color */
+    font-weight: bold;
+  }
+
+  .access-denied-message p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555; /* Dark gray color */
+  }
 .custom-event-content {
   max-width: 200px; 
   max-height: 100px; 

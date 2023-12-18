@@ -78,7 +78,7 @@ import { ref, watch, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 
 const auth = useAuthStore();
-const user: User = { username: '', password: '', rememberMe: false };
+const user: User = { username: '', password: '', rememberMe: false, permissions: '' };
 const { isAuthenticated } = storeToRefs(auth);
 
 let showError = ref(false);

@@ -9,6 +9,7 @@ import EmployeeFullInfo from '@/views/EmployeeFullInfo.vue';
 import LoginVue from '@/views/Login.vue';
 import { useAuthStore } from '@/stores/authStore';
 import HRFullInfo from '@/views/HRFullInfo.vue';
+import UserList from '@/views/UserList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -37,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/shedule',
     name: 'Shedule',
     component: SheduleVue,
+    meta: {
+      requiresAuth: true,
+      
+    },
   },
   {
     path: '/notifications',
@@ -54,10 +59,16 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginVue,
   },
   {
+    path: '/userlist',
+    name: 'User list',
+    component: UserList,
+  },
+  {
     path: '/hrfullinfo',
     name: 'Get HR full info',
     component: HRFullInfo,
   },
+
 ];
 
 const router = createRouter({
@@ -67,12 +78,23 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   const useAuth = useAuthStore();
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (useAuth.isAuthenticated) {
       next();
-      return;
+    } else {
+      next('/');
     }
-    next('/login');
+  } else if (to.matched.some((record) => record.meta.requiresScheduleAccess)) {
+    const user = useAuth.user;
+
+    // Check if the user is staff HR or has schedule access
+    if (user && user.permissions === 'schedule_access') {
+      next();
+    } else {
+      // Display the message on the Schedule route
+      next({ replace: true, name: 'Shedule' }); // Replace the current route
+    }
   } else {
     next();
   }
