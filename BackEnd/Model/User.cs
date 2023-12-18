@@ -25,6 +25,8 @@ namespace BackEnd.Model
             public string Password { get; set; } = "";
             [Column("role")]
             public string Role { get; set; } = "";
+            [Column("permissions")]
+            public string? Permissions { get; set; }
 
         }
 

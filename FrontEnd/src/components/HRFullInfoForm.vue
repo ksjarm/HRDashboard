@@ -23,6 +23,11 @@
           <h1 class="infoLabel"><span style="font-weight: bold;">Username: </span>{{ user?.username }}</h1>
         </div>
         <div class="finalinfo"></div>
+        <div>
+          <button v-if="user?.role === 'Staff HR'" @click="showUserList" class="btn-blue">
+    Give Access to User
+  </button>
+      </div>
       </div>
     </div>
   </template>
@@ -51,11 +56,16 @@ onMounted(async () => {
   user.value = usersStore.users.find((u) => u.username === auth.user?.username) || null;
   console.log('user', user.value)
 });
+
+const showUserList = () => {
+  router.push({ name: 'User list' }); // Assuming you have a route named 'UserList'
+};
   </script>
   
   <style>
   #narrowHR {
     width: 650px;
+    margin-bottom: 20px;
     /* Just so it's visible */
   }
   .profileimgHR {
@@ -78,5 +88,13 @@ onMounted(async () => {
     justify-content: left;
     align-items: left;
   }
+  .btn-blue {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
   </style>
   

@@ -11,6 +11,7 @@ public class DataContext : DbContext {
     public DbSet<Notification> NotificationsList { get; set; }
     public DbSet<EmployeeShift> EmployeeShiftsList { get; set; }
     public DbSet<User> UserList { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
 
@@ -71,7 +72,8 @@ public class DataContext : DbContext {
                     Surname = "Tamm",
                     PhoneNumber = "55967283",
                     Adress = "Akadeemia tee 12-16",
-                    Role = "Staff HR"
+                    Role = "Staff HR",
+                    Permissions="schedule_access"
                     
                 },
                 new User
@@ -83,7 +85,7 @@ public class DataContext : DbContext {
                     Surname = "Tuvi",
                     PhoneNumber = "476586030",
                     Adress = "Akadeemia tee 17-12",
-                    Role = "Junior HR"
+                    Role = "Junior HR",
                 }  
             );
 

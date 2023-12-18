@@ -32,6 +32,13 @@ builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder => {
     .AllowAnyMethod()
     .AllowAnyHeader();
 }));
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireScheduleAccess", policy =>
+    {
+        policy.RequireClaim("permissions", "schedule_access");
+    });
+}); 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -54,8 +54,8 @@ export const useUsersStore = defineStore('usersStore', () => {
   };
 
   const updateUser = async (user: User) => {
-  
-      const apiAddUser = useApi<User>('users/' + user.id, {
+    try {
+      const apiUpdateUser = useApi<User>('users/' + user.id, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -64,20 +64,26 @@ export const useUsersStore = defineStore('usersStore', () => {
         body: JSON.stringify(user),
       });
   
-      await apiAddUser.request();
+      await apiUpdateUser.request();
   
-      if (apiAddUser.response.value) {
-        load(); // Refresh the shifts after a successful update
-       
+      if (apiUpdateUser.response.value) {
+        const updatedUser = apiUpdateUser.response.value!;
+  
+        load();
+  
         const notificationsStore = useNotificationsStore();
         await notificationsStore.addNotifications({
-          message: `User updated: ${user.name} ${user.surname}`,
+          message: `User updated: ${updatedUser.name} ${updatedUser.surname}`,
           date: new Date(),
           type: 'User Updated',
         });
       }
-    
+    } catch (error) {
+      console.error('Error updating user:', error);
+      // Handle error as needed
+    }
   };
+  
   
   const deleteUser = async (user: User) => {
     const deleteUserRequest = useApiRawRequest(`users/${user.id}`, {
@@ -107,6 +113,32 @@ export const useUsersStore = defineStore('usersStore', () => {
       });
     }
   };
+  const giveAccess = async (user: User) => {
+    try {
+      
+      // Check if the user already has schedule access
+      if (user.permissions === 'schedule_access') {
+        console.log('User already has access to the schedule.');
+        return;
+      }
+  
+      // Update the user's permissions to schedule_access
+      const updatedUser = { ...user, permissions: 'schedule_access' };
+      await updateUser(updatedUser);
+  
+      console.log(`Access granted to user: ${user.name} ${user.surname}`);
+    } catch (error) {
+      console.error('Error giving access to user:', error);
+      // Handle error as needed
+    }
+  };
+  
+
+  const cancelAccess = async (user: User) => {
+    // Implement logic to cancel access for the selected user
+    const updatedUser = { ...user, permissions: 'schedule_denied' };
+    await updateUser(updatedUser);
+  };
 
   return {
     users,
@@ -115,5 +147,7 @@ export const useUsersStore = defineStore('usersStore', () => {
     addUser,
     updateUser,
     deleteUser,
+    giveAccess,
+    cancelAccess,
   };
 });
