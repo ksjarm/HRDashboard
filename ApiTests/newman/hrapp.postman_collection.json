@@ -434,12 +434,15 @@
           ],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\": \"lilianna.tamm@company.ee\",\n\t\"password\": \"test1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
               }
-            ],
+            },
             "url": {
               "raw": "{{url}}/api/users/login",
               "host": ["{{url}}"],
