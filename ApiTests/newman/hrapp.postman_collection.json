@@ -419,7 +419,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n\t\"username\": \"lilianna.tamm@company.ee\",\n\t\"password\": \"test1\"\n}",
+              "raw": "{\n\t\"username\": \"lilianna.tamm@company.ee\",\n\t\"password\": \"St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -427,9 +427,9 @@
               }
             },
             "url": {
-              "raw": "{{url}}/api/authenticate",
+              "raw": "{{url}}/api/users/login",
               "host": ["{{url}}"],
-              "path": ["api", "authenticate"]
+              "path": ["api", "users", "login"]
             }
           },
           "response": [
