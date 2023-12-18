@@ -123,14 +123,25 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     'employees/currentEmployeeCount',
   );
 
+  const getCurrentEmployeeCount = async () => {
+    await apiGetCurrentEmployeeCount.request();
+    if (apiGetCurrentEmployeeCount.response.value) {
+      return apiGetCurrentEmployeeCount.response.value!;
+    }
+    return 0;
+  };
   const getEmployeeShiftsById = async (employeeId: number) => {
-    const getEmployeeShifts = useApiRawRequest(
+    const apiGetEmployeeShifts = useApiRawRequest(
       `employees/${employeeId}/shifts`,
       {
         method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + authStore.token,
+        },
       },
     );
-    const res = await getEmployeeShifts();
+    const res = await apiGetEmployeeShifts();
+    console.log('rec ' + apiGetEmployeeShifts);
 
     if (res.status === 200) {
       const data = await res.json();
@@ -138,14 +149,6 @@ export const useEmployeesStore = defineStore('employeesStore', () => {
     }
 
     return [];
-  };
-
-  const getCurrentEmployeeCount = async () => {
-    await apiGetCurrentEmployeeCount.request();
-    if (apiGetCurrentEmployeeCount.response.value) {
-      return apiGetCurrentEmployeeCount.response.value!;
-    }
-    return 0;
   };
 
   return {

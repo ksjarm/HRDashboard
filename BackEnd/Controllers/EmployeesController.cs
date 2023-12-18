@@ -6,7 +6,7 @@ using employeeproject.Model;
 
 namespace HRDashboardApplication.Controllers;
 
-[Authorize] [ApiController] [Route("api/[controller]")] public class EmployeesController : ControllerBase {
+ [ApiController] [Route("api/[controller]")] public class EmployeesController : ControllerBase {
     private readonly DataContext _context;
     public EmployeesController(DataContext context) => _context = context;
 
@@ -24,7 +24,11 @@ namespace HRDashboardApplication.Controllers;
         if (dbEmployee !=  null) return Conflict("Employee with given Id already exists.");
         employee.Email = employee.Name + "." + employee.Surname + "@" + "company.ee";
 
-        if (employee.ShiftIds != null) {
+        if(employee.Position == null || employee.Position == ""){
+            return BadRequest();
+        }
+
+        if (employee.ShiftIds != null && employee.ShiftIds[0] != 0) {
             var employeeShifts = new List<EmployeeShift>();
             foreach (var shiftId in employee.ShiftIds) {
                 if (_context.EmployeeList!.Find(shiftId) == null) return NotFound($"Shift with ID {shiftId} not found.");
@@ -59,7 +63,7 @@ namespace HRDashboardApplication.Controllers;
         existingEmployee.Photo = employee.Photo;
         existingEmployee.ShiftIds = employee.ShiftIds;
 
-        if (employee.ShiftIds != null) {
+        if (employee.ShiftIds != null && employee.ShiftIds[0] != 0) {
             existingEmployee.EmployeeShifts!.Clear();
             foreach (var shiftId in employee.ShiftIds) {
                 var shift = _context.EmployeeList!.Find(shiftId);

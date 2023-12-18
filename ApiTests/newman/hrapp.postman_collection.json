@@ -5,147 +5,550 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "9319536"
   },
+
   "item": [
+    {
+      "name": "Employees Controller Test",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response body is an array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an(\"array\");",
+                  "    pm.expect(jsonData.length).to.eql(3);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees",
+              "host": ["{{url}}"],
+              "path": ["api", "employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add New Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Employee data is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql(\"Lana\");",
+                  "    pm.expect(jsonData.surname).to.eql(\"Banana\");",
+                  "    pm.expect(jsonData.gender).to.eql(\"Female\");",
+                  "    pm.expect(jsonData.position).to.eql(\"Vendor\");",
+                  "    pm.expect(jsonData.salary).to.eql(2000);",
+                  "    pm.expect(jsonData.status).to.eql(\"Active\");",
+
+                  "    pm.environment.set(\"employeeId\", jsonData.id);",
+                  "    pm.environment.set(\"employeeName\", jsonData.name);",
+                  "    pm.environment.set(\"employeeSurname\", jsonData.surname);",
+                  "    pm.environment.set(\"employeeGender\", jsonData.gender);",
+                  "    pm.environment.set(\"employeePosition\", jsonData.position);",
+                  "    pm.environment.set(\"employeeSalary\", jsonData.salary);",
+                  "    pm.environment.set(\"employeeStatus\", jsonData.status);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Lana\",\n\t\"surname\": \"Banana\",\n\t\"gender\": \"Female\",\n\t\"dateOfBirth\": \"2002-12-30\",\n\t\"email\": \"\",\n\t\"phoneNumber\": \"556394959\",\n\t\"adress\": \"someadress-5\",\n\t\"position\": \"Vendor\",\n\t\"status\": \"Active\",\n\t\"salary\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/employees",
+              "host": ["{{url}}"],
+              "path": ["api", "employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Existing Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Employee data is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.eql(pm.environment.get(\"employeeId\"));",
+                  "    pm.expect(jsonData.name).to.eql(pm.environment.get(\"employeeName\"));",
+                  "    pm.expect(jsonData.surname).to.eql(pm.environment.get(\"employeeSurname\"));",
+                  "    pm.expect(jsonData.gender).to.eql(pm.environment.get(\"employeeGender\"));",
+                  "    pm.expect(jsonData.position).to.eql(pm.environment.get(\"employeePosition\"));",
+                  "    pm.expect(jsonData.salary).to.eql(pm.environment.get(\"employeeSalary\"));",
+                  "    pm.expect(jsonData.status).to.eql(pm.environment.get(\"employeeStatus\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/{{employeeId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Nonexistent Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/1000",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "1000"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Employee with null position",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Lana\",\n\t\"surname\": \"Banana\",\n\t\"gender\": \"Female\",\n\t\"dateOfBirth\": \"2002-12-30\",\n\t\"email\": \"\",\n\t\"phoneNumber\": \"556394959\",\n\t\"adress\": \"someadress-5\",\n\t\"position\": \"\",\n\t\"status\": \"Active\",\n\t\"salary\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/employees",
+              "host": ["{{url}}"],
+              "path": ["api", "employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Incorrect Employee (the ID in the URL does not match the ID in the request body)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1,\n\t\"name\": \"Lana\",\n\t\"surname\": \"Cherry\",\n\t\"gender\": \"Female\",\n\t\"dateOfBirth\": \"2002-12-30\",\n\t\"email\": \"\",\n\t\"phoneNumber\": \"556394959\",\n\t\"adress\": \"someadress-5\",\n\t\"position\": \"Vendor\",\n\t\"status\": \"Active\",\n\t\"salary\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/shifts/{{employeeId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "shifts", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Nonexistent Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1000,\n\t\"name\": \"Lana\",\n\t\"surname\": \"Banana\",\n\t\"gender\": \"Female\",\n\t\"dateOfBirth\": \"2002-12-30\",\n\t\"email\": \"\",\n\t\"phoneNumber\": \"556394959\",\n\t\"adress\": \"someadress-5\",\n\t\"position\": \"Vendor\",\n\t\"status\": \"Active\",\n\t\"salary\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/employees",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "1000"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": {{employeeId}},\n\t\"name\": \"Lana\",\n\t\"surname\": \"Cherry\",\n\t\"gender\": \"Female\",\n\t\"dateOfBirth\": \"2002-12-30\",\n\t\"email\": \"\",\n\t\"phoneNumber\": \"556394959\",\n\t\"adress\": \"someadress-5\",\n\t\"position\": \"Vendor\",\n\t\"status\": \"Active\",\n\t\"salary\": \"2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/employees/{{employeeId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check That Employee Was Updated",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Employee data is updated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.name).to.eql(\"Lana\");",
+                  "    pm.expect(jsonData.surname).to.eql(\"Cherry\");",
+
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/{{employeeId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Nonexistent Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/1000",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "1000"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/{{shiftId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check That Employee Was Deleted",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/employees/{{employeeId}}",
+              "host": ["{{url}}"],
+              "path": ["api", "employees", "{{employeeId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Shifts Controller Tests",
       "item": [
         {
           "name": "Get Shifts",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
                   "pm.test(\"Response body is an array\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData).to.be.an(\"array\");",
                   "});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts",
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Get Nonexistent Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/1000",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/1000",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "1000"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Add Existing Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 409\", function () {",
-									"    pm.response.to.have.status(409);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
             "body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1,\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Add Shift With Nonexistent EmployeeId",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
             "body": {
-							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+              "mode": "raw",
+              "raw": "{\n\t\"title\": \"Existing Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Add New Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
                   "pm.test(\"Shift data is correct\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.title).to.eql(\"New Shift\");",
@@ -165,217 +568,217 @@
                   "    pm.environment.set(\"shiftEndTime\", jsonData.endTime);",
                   "    pm.environment.set(\"shiftValik\", jsonData.valik);",
                   "});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"title\": \"New Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"title\": \"New Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"8:00\",\n\t\"endTime\": \"16:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts",
               "host": ["{{url}}"],
               "path": ["api", "shifts"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Get Existing Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Shift data is correct\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"shiftId\"));",
-									"    pm.expect(jsonData.title).to.eql(pm.environment.get(\"shiftTitle\"));",
-									"    pm.expect(jsonData.date).to.eql(pm.environment.get(\"shiftDate\"));",
-									"    pm.expect(jsonData.startTime).to.eql(pm.environment.get(\"shiftStartTime\"));",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Shift data is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.eql(pm.environment.get(\"shiftId\"));",
+                  "    pm.expect(jsonData.title).to.eql(pm.environment.get(\"shiftTitle\"));",
+                  "    pm.expect(jsonData.date).to.eql(pm.environment.get(\"shiftDate\"));",
+                  "    pm.expect(jsonData.startTime).to.eql(pm.environment.get(\"shiftStartTime\"));",
                   "    pm.expect(jsonData.endTime).to.eql(pm.environment.get(\"shiftEndTime\"));",
-									"    pm.expect(jsonData.valik).to.eql(pm.environment.get(\"shiftValik\"));",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/{{shiftId}}",
+                  "    pm.expect(jsonData.valik).to.eql(pm.environment.get(\"shiftValik\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Update Incorrect Shift (the ID in the URL does not match the ID in the request body)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 1,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Update Nonexistent Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": 1000,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": 1000,\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1, 2, 3\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts/1000",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "1000"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Update Shift With Nonexistent EmployeeId",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t1000\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Update Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 204\", function () {",
-									"    pm.response.to.have.status(204);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t2, 3\n\t]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"id\": {{shiftId}},\n\t\"title\": \"Updated Shift\",\n\t\"date\": \"2023-12-30\",\n\t\"startTime\": \"12:00\",\n\t\"endTime\": \"20:00\",\n\t\"valik\": \"Onetime\",\n\t\"employeeIds\": [\n\t2, 3\n\t]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
               "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Check That Shift Was Updated",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
                   "pm.test(\"Shift data is updated\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.title).to.eql(\"Updated Shift\");",
@@ -388,101 +791,101 @@
                   "    pm.expect(jsonData.employeeIds[0]).to.eql(2);",
                   "    pm.expect(jsonData.employeeIds[1]).to.eql(3);",
                   "});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/{{shiftId}}",
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Delete Nonexistent Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/1000",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/1000",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "1000"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Delete Shift",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 204\", function () {",
-									"    pm.response.to.have.status(204);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/{{shiftId}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         },
         {
           "name": "Check That Shift Was Deleted",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 404\", function () {",
-									"    pm.response.to.have.status(404);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/api/shifts/{{shiftId}}",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/shifts/{{shiftId}}",
               "host": ["{{url}}"],
               "path": ["api", "shifts", "{{shiftId}}"]
-						}
-					},
-					"response": []
+            }
+          },
+          "response": []
         }
-      ]      
+      ]
     }
   ]
 }

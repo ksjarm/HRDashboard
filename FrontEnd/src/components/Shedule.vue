@@ -168,7 +168,7 @@ const shiftsStore = useShiftsStore();
 const { shifts} = storeToRefs(shiftsStore);
 
 const employeesStore = useEmployeesStore();
-const { employees} = storeToRefs(employeesStore);
+const { employees } = storeToRefs(employeesStore);
 
 defineProps<{ title: String }>();
 
@@ -179,7 +179,7 @@ const newShift = ref({
   date: new Date().toISOString().slice(0, 10),
   startTime: '',
   endTime: '',
-  valik: 'Onetime', 
+  valik: 'Onetime',
   startDate: new Date().toISOString().slice(0, 10),
   endDate: new Date().toISOString().slice(0, 10),
   selectedWeekDay: '',
@@ -246,11 +246,13 @@ const validateAndAddOrEditShift = async () => {
     }
 
     if (newShift.value.valik === 'Onetime') {
-
       addNewShift();
     } else if (newShift.value.valik === 'Recurring') {
-
-      if (newShift.value.selectedWeekDay && newShift.value.startDate && newShift.value.endDate) {
+      if (
+        newShift.value.selectedWeekDay &&
+        newShift.value.startDate &&
+        newShift.value.endDate
+      ) {
         const selectedWeekdays = Array.isArray(newShift.value.selectedWeekDay)
           ? newShift.value.selectedWeekDay
           : [newShift.value.selectedWeekDay];
@@ -269,7 +271,8 @@ const validateAndAddOrEditShift = async () => {
         closeShiftModal();
         resetNewShiftForm();
       } else {
-        validationError.value = 'Please select the week day, start date, and end date for recurring shifts.';
+        validationError.value =
+          'Please select the week day, start date, and end date for recurring shifts.';
       }
     }
     selectedEmployeeId.value = null;
@@ -303,7 +306,7 @@ const handleDateClick = (arg: any) => {
   openShiftModal();
 
   const dateStr = formatToISODate(arg.date);
-  const timeStr = formatToISOTime(arg.date); 
+  const timeStr = formatToISOTime(arg.date);
   newShift.value.date = dateStr;
   newShift.value.startDate = dateStr;
   newShift.value.endDate = dateStr;
@@ -483,7 +486,9 @@ onMounted(() => {
 const updateCalendarEvents = () => {
   calendarOptions.value.events = shifts.value.map((shift) => ({
     id: shift.id,
-    title: `${shift.title}\nAssigned to: ${getEmployeeNames(shift.employeeIds) || 'None'}`,
+    title: `${shift.title}\nAssigned to: ${
+      getEmployeeNames(shift.employeeIds) || 'None'
+    }`,
     start: `${shift.date}T${shift.startTime}`,
     end: `${shift.date}T${shift.endTime}`,
   }));
@@ -552,11 +557,11 @@ watch(shifts, () => {
     color: #555; /* Dark gray color */
   }
 .custom-event-content {
-  max-width: 200px; 
-  max-height: 100px; 
+  max-width: 200px;
+  max-height: 100px;
   overflow: hidden;
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .event-title {
   font-weight: bold;
@@ -564,7 +569,7 @@ watch(shifts, () => {
 .assigned-employees {
   margin-top: 5px;
   font-size: 0.9em;
-  color: #555; 
+  color: #555;
 }
 .modal-overlay {
   position: fixed;
@@ -576,9 +581,9 @@ watch(shifts, () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(5px); 
-  z-index: 2; 
-  pointer-events: auto; 
+  backdrop-filter: blur(5px);
+  z-index: 2;
+  pointer-events: auto;
 }
 .validation-error {
   color: red;
@@ -600,17 +605,17 @@ watch(shifts, () => {
   filter: blur(5px);
 }
 .modal {
-  max-height: 80vh; 
-  overflow-y: auto; 
-  background: #f8f8f8; 
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #f8f8f8;
   padding: 15px;
-  border-radius: 12px; 
+  border-radius: 12px;
   width: 500px;
-  z-index: 3; 
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 15px; 
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  gap: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 .close-button {
   position: absolute;
@@ -621,10 +626,10 @@ watch(shifts, () => {
   color: #333;
 }
 .close-button:hover {
-  color: #ff0000; 
+  color: #ff0000;
 }
 .demo-app-calendar {
-  position: relative;
+  height: 650px;
   z-index: 1;
 }
 .schedule-header {
@@ -667,9 +672,9 @@ watch(shifts, () => {
 }
 input {
   padding: 12px;
-  background-color: #f0f0f0; 
-  border: none; 
-  border-radius: 8px; 
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -698,17 +703,17 @@ label {
   vertical-align: middle;
 }
 .weekday-label {
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 .weekday-input {
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 .full-width {
   width: 100%;
-  padding: 6px; 
-  border-radius: 8px; 
-  background-color: #f0f0f0; 
-  border: 1px solid #ccc; 
+  padding: 6px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
 }
 button-container {
   display: flex;
