@@ -414,46 +414,34 @@
       "item": [
         {
           "name": "Authenticate User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Token is present\", function () {",
+                    "    var jsonData = pm.response.json();",
+                    "    pm.environment.set(\"authToken\", jsonData.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n\t\"username\": \"lilianna.tamm@company.ee\",\n\t\"password\": \"St9tpNN2zrinRGNUgKWCy4JjZRFEorSQ0Zg3a/8m7k4=\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{url}}/api/users/login",
               "host": ["{{url}}"],
               "path": ["api", "users", "login"]
             }
           },
-          "response": [
-            {
-              "name": "Save Token to Environment",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test(\"Status code is 200\", function () {",
-                      "    pm.response.to.have.status(200);",
-                      "});",
-                      "pm.test(\"Token is present\", function () {",
-                      "    pm.expect(pm.response.json()).to.have.property(\"token\");",
-                      "    pm.environment.set(\"authToken\", pm.response.json().token);",
-                      "});"
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ]
-            }
-          ]
+          "response": []
         },
         {
           "name": "Get Shifts",
